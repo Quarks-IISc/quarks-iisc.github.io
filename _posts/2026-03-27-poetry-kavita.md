@@ -7,7 +7,7 @@ author: Parth Kalani
 categories: [poems]
 excerpt: "कविता में शब्दों के बीच का मौन, अव्यक्त और अज्ञेय का सौंदर्य।"
 all: true
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/kavita.jpg"
 ---
 
 

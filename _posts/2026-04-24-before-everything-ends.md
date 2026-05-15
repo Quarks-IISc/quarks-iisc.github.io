@@ -3,7 +3,7 @@ layout: post
 title: "Before Everything Ends"
 author: Aaitijhya Goswami
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/before_everything_ends.jpg"
 excerpt: "Dad, I wasn't your rising sun. A heart-wrenching dive into the shadows of expectations and the quiet peace found in finally letting go."
 ---
 

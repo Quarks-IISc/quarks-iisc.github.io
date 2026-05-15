@@ -3,7 +3,7 @@ layout: post
 title: "कुछ है कर जाना!"
 author: Abhijeet
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/kuch_hai_kar_jana.jpg"
 excerpt: "संघर्ष, टूटे सपनों और फिर से उठ खड़े होने की हिम्मत पर आधारित यह कविता हर मुसाफ़िर को उम्मीद, साहस और नई शुरुआत का संदेश देती है।"
 ---
 

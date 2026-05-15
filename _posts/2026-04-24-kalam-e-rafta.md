@@ -3,7 +3,7 @@ layout: post
 title: "कलाम-ए-रफ़्ता"
 author: Jahin Sadat Mollah
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/kalam.jpg"
 excerpt: "एक माँ की ममता और एक रूह की पुकार। मौत ने जिस्म तो मिट्टी में मिला दिया, पर क्या वो उन यादों को मिटा पाएगी जो आज भी कहकशाओं के बीच ज़िंदा हैं?"
 featured: true
 ---
