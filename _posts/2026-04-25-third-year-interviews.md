@@ -6,7 +6,7 @@ title: Introspections on the Third Step
 author: Subhanan Banerjee
 categories: [stories]
 image: "/assets/images/Stories/Third_year_interviews.jpg"
-excerpt: "Third Years"
+excerpt: "Through conversations with eight third-year undergraduates at Indian Institute of Science, Rahul captures the anxieties, ambitions, and quiet joys that define life at IISc today. Spanning research, internships, friendships, and life beyond academics, these reflections reveal students balancing the rigour of science with the search for purpose, belonging, and identity."
 all: true
 ---
 
