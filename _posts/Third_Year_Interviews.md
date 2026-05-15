@@ -5,7 +5,7 @@ title: Introspections on the Third Step
 #tags: [Example_Tag1, ExampleTag2]
 author: Subhanan Banerjee
 categories: [stories]
-image: "/assets/images/Poems/Third_year_interviews.jpeg"
+image: "/assets/images/Poems/Third_year_interviews.jpg"
 excerpt: "Third Years"
 all: true
 ---
