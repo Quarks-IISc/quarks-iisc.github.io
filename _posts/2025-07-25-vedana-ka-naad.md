@@ -3,7 +3,7 @@ layout: post
 title: "वेदना का नाद"
 author: "Anubhav Srivastava"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/vedna_ka_naad.jpg"
 excerpt: "A Hindi poem expressing deep inner sorrow under the beauty of a full moon night."
 ---
 

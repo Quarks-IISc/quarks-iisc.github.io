@@ -3,7 +3,7 @@ layout: post
 title: "I do not wish for peace"
 author: "Manas Kaushik Das"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/peace_is_not_for_me.jpg"
 excerpt: "A powerful free verse exploring guilt, anguish, and the resilient pursuit of redemption amidst an inner storm."
 ---
 

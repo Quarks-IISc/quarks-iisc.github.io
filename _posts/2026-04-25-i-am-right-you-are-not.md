@@ -3,7 +3,7 @@ layout: post
 title: "I'm right, You are Not"
 author: Manas Das
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/I_m_right_you_are_not.jpg"
 excerpt: "A melancholic reflection on love undone by doubt, silence, and misunderstanding. Through vivid natural imagery, the poem traces the slow unraveling of trust and the sorrow of two hearts that could no longer truly hear one another."
 ---
 

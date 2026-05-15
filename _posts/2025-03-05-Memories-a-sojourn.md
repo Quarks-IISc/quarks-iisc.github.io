@@ -3,7 +3,7 @@ layout: post
 title: "Memories: a sojourn"
 author: "Souvik Chakraborty"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/memories_a_sojourm.jpg"
 excerpt: "A reflection on the bygone moments that elusively peek into the undulating crevices of time."
 ---
 

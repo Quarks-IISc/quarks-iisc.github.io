@@ -3,7 +3,7 @@ layout: post
 title: "मैं मर्द हूँ ना मैं नहीं बताऊंगा"
 author: "Abhijeet"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/mai_mard_hu_mai_bataunga_nahi.jpg"
 excerpt: "पुरुषों के संघर्ष, उत्तरदायित्व और अपनी भावनाओं को छिपाने की प्रवृत्ति पर आधारित एक सशक्त कविता।"
 ---
 

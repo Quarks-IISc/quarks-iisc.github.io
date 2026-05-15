@@ -3,7 +3,7 @@ layout: post
 title: "Insignificant me"
 author: "Jahin"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Poems/insignificant_me.jpg"
 excerpt: "A romantic free verse on the feeling of insignificance in the vast cosmos, where only the love for another remains constant."
 ---
 
