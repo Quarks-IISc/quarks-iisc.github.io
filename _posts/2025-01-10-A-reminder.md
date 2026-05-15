@@ -3,7 +3,7 @@ layout: post
 title: "A reminder"
 author: "Aditi Mishra"
 categories: [poems]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/A reminder.jpeg"
 excerpt: "A free verse on faint memories and the brilliant spark of courage in the dark."
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "Memories We Carry"
 author: Shreya Pithva
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/memories_we_carry.jpg"
 excerpt: "Life at IISc is a whirlwind of deadlines and laughter, but the hardest part is realizing when a chapter is finally closing. A tribute to the people who became 'home'."
 description: "A deep reflection on the nature of memories, loss, and the importance of cherishing those we love while they are still with us."
 ---

@@ -3,7 +3,7 @@ layout: post
 title: "Everything Means Nothing To Me: Part-1"
 author: Anurag Sarkar
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/everything_means_nothing_to me_part-1.jpg"
 excerpt: "An introspective train vignette where a brief nap unfolds into reflections on memory, music, anxiety, and identity. A quiet portrait of restlessness and the search to understand oneself."
 featured: true
 ---

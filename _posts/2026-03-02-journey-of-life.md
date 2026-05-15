@@ -3,7 +3,7 @@ layout: post
 title: "The Journey of Life"
 author: "Kalidas Viswan"
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/The_journey_of_life.jpg"
 excerpt: "A thrilling account of a 1500km road trip across Andhra Pradesh, exploring the 'Grand Canyon of India' and the resilience of friendship."
 ---
 

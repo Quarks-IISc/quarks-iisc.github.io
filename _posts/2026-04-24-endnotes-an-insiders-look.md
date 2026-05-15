@@ -3,7 +3,7 @@ layout: post
 title: "Endnotes: An Insider's Look"
 author: Ryan Ray
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/Endnotes.jpeg"
 excerpt: "Beyond grades and CGPAs lies the real soul of IISc. From midnight relativity sessions to radioactive rocks in the Main Building, this is how learning actually feels."
 description: "A reflection on the transformative academic environment at IISc, beyond the official coursework and into the heart of learning."
 featured: true

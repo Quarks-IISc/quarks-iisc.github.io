@@ -3,7 +3,7 @@ layout: post
 title: "मौत तू एक कविता है"
 author: Parth Kalani
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
+image: "/assets/images/Stories/maut_tu_ek_kavita.jpg"
 excerpt: "ज़िंदगी एक अधूरी किताब है जिसका आखिरी सबक है मौत। एक पुलिसवाले की डायरी और जेल की दीवारों पर उकेरी गई वो शायरी, जो मरकर भी ज़िंदा रही।"
 description: "ज़िंदगी एक किताब है जिसका आखिरी सबक है मौत। बिना मौत देखे ज़िंदगी को समझना नामुमकिन है।"
 featured: true
