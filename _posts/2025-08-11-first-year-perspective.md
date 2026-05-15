@@ -3,8 +3,8 @@ layout: post
 title: "A first-year perspective"
 author: "Aditey, Mihir, Parth"
 categories: [stories]
-image: "/assets/images/Stories/Nature.jpeg"
-excerpt: "Change is never easy. Each year, around 160 students join IISc, coming together to form a close-knit undergraduate community..."
+image: "/assets/images/Stories/first_year.jpg"
+excerpt: "The first year at Indian Institute of Science is a whirlwind of change — new academics, new friendships, and a completely new way of life. Through conversations with students across the batch, one thing becomes clear: amidst the chaos, stress, and uncertainty, IISc gradually turns into a second home. From discovering independence to finding a community bound by curiosity and passion for science, the journey leaves every student transformed in their own unique way."
 ---
 
 **"A first-year perspective"**
@@ -224,5 +224,3 @@ in a particular subject is really about, eventually in the first 3
 semesters, so keeping an open mind towards all helps in choosing your
 major at the end. "1st semester taught me how to go about thinking when
 you are doing research", remarked Kaustav.
-
-Writers - Aditey, Mihir, Parth, Batch of 2024

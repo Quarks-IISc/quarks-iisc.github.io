@@ -3,7 +3,7 @@
 layout: post
 title: 4th Years in Conversation
 #tags: [Example_Tag1, ExampleTag2]
-author: Blank
+author: Aviral Sood
 categories: [stories]
 image: "/assets/images/Stories/Fourth_Years.jpeg"
 excerpt: "The final year at IISc’s UG program is a time of crucial decisions, deep reflection, and a mix of pride, gratitude, and uncertainty about the future, as captured through interviews with nine diverse students."

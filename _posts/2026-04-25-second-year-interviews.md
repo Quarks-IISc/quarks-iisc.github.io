@@ -5,8 +5,8 @@ title: The Mind of a Second-Year Undergraduate
 #tags: [Example_Tag1, ExampleTag2]
 author: Anurag, Avani
 categories: [stories]
-image: "/assets/images/Stories/Second_Years.jpeg"
-excerpt: '"The second-year undergrad stands at the crossroads of idealism and pragmatism, still holding onto a thread of youthful passion."'
+image: "/assets/images/Stories/second_year.png"
+excerpt: "The second-year undergrad stands at the crossroads of idealism and pragmatism, still holding onto a thread of youthful passion."
 all: true
 ---
 
