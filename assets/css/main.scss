@@ -232,9 +232,15 @@
     padding: 1.5rem 2rem; box-sizing: border-box; margin-bottom: 3rem;
     border-radius: 10px; box-shadow: var(--card-shadow); overflow: hidden;
 }
-.section-hero-header h2, .section-hero-header h1 {
-    font-family: 'Playfair Display', serif; color: var(--header-text-color); font-size: 3.5rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2); text-align: center; line-height: 1.2; margin: 0;
+.section-hero-header h2, .section-hero-header h1, .section-hero-header h2 span, .section-hero-header h1 span {
+    font-family: 'Playfair Display', serif; 
+    color: #ffffff !important; 
+    font-size: 3.5rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); 
+    text-align: center; 
+    line-height: 1.2; 
+    margin: 0;
+    border-bottom: none !important;
 }
 
 
@@ -448,7 +454,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
         min-height: 120px;
         padding: 1rem;
     }
-    .section-hero-header h2, .section-hero-header h1 {
+    .section-hero-header h2, .section-hero-header h1, .section-hero-header h2 span, .section-hero-header h1 span {
         font-size: 2.2rem;
     }
     .intro-section .powerful-intro-text {
