@@ -1,7 +1,7 @@
 ---
 #YAML part
 layout: post
-title: कविता - Expression, Free Verse
+title: कविता
 #tags: [Example_Tag1, ExampleTag2]
 author: Parth Kalani
 categories: [poems]
