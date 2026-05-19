@@ -4,7 +4,7 @@ title: "Irony of Life"
 author: "Shreya Pithva"
 categories: [poems]
 image: "/assets/images/Poems/irony_of_life.jpeg"
-excerpt: ""
+excerpt: "A reflection on life’s quiet contradictions — where sincerity is wounded, effort goes unnoticed, and loneliness hides within crowded hearts. Through vivid irony and poignant observations, the poem captures the bittersweet truth that life rarely rewards what deserves it most."
 ---
 
 
