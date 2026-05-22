@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Endnotes: An Insider's Look"
+title: "Endnotes: Beyond Grades"
 author: Ryan Ray
 categories: [stories]
 image: "/assets/images/Stories/Endnotes.jpeg"
