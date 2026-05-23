@@ -1,0 +1,71 @@
+---
+layout: default
+title: News Article
+permalink: /news-article/
+---
+
+<div class="reading-progress-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--link-color); z-index: 9999; transition: width 0.1s ease;"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div id="news-article-content">
+                <!-- Loading State -->
+                <div class="text-center py-5" id="news-article-loading">
+                    <div class="spinner-border text-muted" role="status">
+                        <span class="sr-only">Loading article...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Fetching the full story...</p>
+                </div>
+
+                <!-- Article Template (Hidden initially) -->
+                <div id="news-article-display" style="display: none;">
+                    <div class="mainheading">
+                        <h1 id="article-title" class="posttitle text-center mb-3 display-4 font-weight-bold" style="font-family: 'Playfair Display', serif;"></h1>
+                        
+                        <div class="post-top-meta text-center mb-4">
+                            <div class="post-meta-details text-muted small">
+                                <span id="article-date" class="post-date"></span>
+                                <span class="dot mx-1"></span>
+                                <span id="article-read-time" class="post-read"></span>
+                            </div>
+                        </div>
+
+                        <hr class="mb-5" style="width: 60px; border-top: 2px solid var(--border-color);">
+                    </div>
+
+                    <div id="article-body" class="article-post" style="font-size: 1.15rem; line-height: 1.8; font-family: 'Inter', sans-serif; color: var(--post-text-color);">
+                        <!-- Content injected here -->
+                    </div>
+
+                    <div id="article-external-link" class="mt-5 text-center" style="display: none;">
+                        <hr class="mb-4">
+                        <p class="text-muted">For more details, visit the official link:</p>
+                        <a id="external-link-anchor" href="#" target="_blank" rel="noopener noreferrer" class="magazine-link" style="font-size: 1.1rem; font-weight: 600;">
+                            Visit Link <span class="arrow">&xrarr;</span>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-5 pt-5 text-center">
+                        <a href="{{ site.baseurl }}/news/" class="btn btn-outline-dark btn-sm rounded-pill px-4">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to News
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ site.baseurl }}/assets/js/date-utils.js"></script>
+<script src="{{ site.baseurl }}/assets/js/news-article-loader.js"></script>
+
+<script>
+    // Simple reading progress bar
+    window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.querySelector(".reading-progress-bar").style.width = scrolled + "%";
+    });
+</script>

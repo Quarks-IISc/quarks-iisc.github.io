@@ -98,6 +98,25 @@ html.dark-mode body,
     color: var(--link-color) !important;
 }
 
+/* Dropdown Menu Dark Mode */
+.dark-mode .dropdown-menu {
+    background-color: var(--navbar-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45) !important;
+}
+.dark-mode .dropdown-item {
+    color: var(--navbar-link) !important;
+    background-color: transparent !important;
+}
+.dark-mode .dropdown-item:hover, .dark-mode .dropdown-item:focus {
+    background-color: var(--highlight-color) !important;
+    color: var(--link-color) !important;
+}
+.dark-mode .dropdown-divider {
+    border-top-color: var(--border-color) !important;
+    opacity: 0.3;
+}
+
 /* Search Bar & Modal */
 .dark-mode .bd-search .form-control {
     background-color: var(--navbar-bg) !important;

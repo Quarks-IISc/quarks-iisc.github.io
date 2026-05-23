@@ -47,28 +47,22 @@
       });
 
       const html = newsItems.length > 0 ? newsItems.map(item => {
-        const itemData = JSON.stringify({
-          title: item.title,
-          description: item.description,
-          link: item.link,
-          linkText: item.link_text,
-          image: item.image,
-          dateText: item.published_date_text,
-          type: 'News & Updates'
-        }).replace(/"/g, '&quot;');
+        const words = item.description.split(/\s+/);
+        const isLong = words.length > 100;
+        const readMoreUrl = isLong ? `/news-article/?id=${item.id}` : `/news/#${item.id}`;
 
         return `
         <li class="mb-4 pb-3 border-bottom">
           <div class="news-item-content">
             <div class="font-weight-bold" style="font-size: 1.15rem; line-height: 1.4;">
-              ${item.title}
+              <a href="${readMoreUrl}" style="color: inherit; text-decoration: none;">${item.title}</a>
             </div>
             <div class="news-desc-preview text-muted" style="font-weight: 400; font-size: 0.95rem;">
               ${item.description}
             </div>
           </div>
           <div class="mt-3 d-flex align-items-center justify-content-between flex-wrap" style="gap: 10px;">
-            <a href="javascript:void(0)" onclick="showNewsDetails(${itemData})" class="magazine-link" style="font-size: 0.95rem; padding-bottom: 2px;">Read More <span class="arrow" style="font-size: 1.2rem; margin-left: 8px;">&xrarr;</span></a>
+            <a href="${readMoreUrl}" class="magazine-link" style="font-size: 0.95rem; padding-bottom: 2px;">Read More <span class="arrow" style="font-size: 1.2rem; margin-left: 8px;">&xrarr;</span></a>
             ${item.published_date_text ? `<span class="deadline-badge"><i class="far fa-calendar-alt mr-1"></i> Posted: ${item.published_date_text}</span>` : ''}
           </div>
         </li>

@@ -159,31 +159,45 @@
           <!-- Begin Menu -->
 
           <ul class="navbar-nav ml-auto">
-            {% if page.url == "/" %}
-            <li class="nav-item active">{% else %}</li>
+            <li class="nav-item {% if page.url == "/" %}active{% endif %}">
+              <a class="nav-link" href="{{ site.baseurl }}/">Home</a>
+            </li>
 
-            <li class="nav-item">{% endif %}</li>
-
-            <li class="nav-item">
+            <li class="nav-item {% if page.url contains 'stories' %}active{% endif %}">
               <a class="nav-link" href="{{ site.baseurl }}/stories">Stories</a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if page.url contains 'poems' %}active{% endif %}">
               <a class="nav-link" href="{{ site.baseurl }}/poems">Poems</a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if page.url contains 'gallery' %}active{% endif %}">
               <a class="nav-link" href="{{ site.baseurl }}/gallery">Gallery</a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{{ site.baseurl }}/previous-editions"
-                >Previous Editions</a
+            <li class="nav-item dropdown {% if page.url contains 'aboutus' or page.url contains 'previous-editions' %}active{% endif %}">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="{{ site.baseurl }}/aboutus">About Us</a>
+                UG@IISc
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ site.baseurl }}/aboutus"
+                  >About Quarks</a
+                >
+                <div class="dropdown-divider"></div>
+                <a
+                  class="dropdown-item"
+                  href="{{ site.baseurl }}/previous-editions"
+                  >Previous Editions</a
+                >
+              </div>
             </li>
 
             <li class="nav-item d-flex align-items-center ml-2">
@@ -275,7 +289,7 @@
             <ul class="list-unstyled footer-link-list">
               <li>
                 <a href="{{ site.baseurl }}/aboutus" class="text-muted">
-                  <i class="fas fa-info-circle"></i>About Us
+                  <i class="fas fa-info-circle"></i>About Quarks
                 </a>
               </li>
               <li>
@@ -332,6 +346,9 @@
                 <a href="{{ site.baseurl }}/gallery" class="text-muted"
                   >Gallery</a
                 >
+              </li>
+              <li>
+                <a href="{{ site.baseurl }}/news/" class="text-muted">News</a>
               </li>
               <li>
                 <a href="{{ site.baseurl }}/crosswords" class="text-muted"
