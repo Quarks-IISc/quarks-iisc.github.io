@@ -1006,7 +1006,8 @@ iframe {
 }
 
 .navbar .navbar-brand {
-    margin-right: 20px; /* Adjust if needed */
+    margin-right: 10px; /* Squeezed from 15px */
+    padding-left: 0;
 }
 
 .navbar-nav {
@@ -1015,7 +1016,7 @@ iframe {
 }
 
 .navbar-nav .nav-item {
-    margin-left: 20px; /* Adjust space between menu items */
+    margin-left: 12px; /* Squeezed from 15px */
 }
 
 .navbar-toggler {
