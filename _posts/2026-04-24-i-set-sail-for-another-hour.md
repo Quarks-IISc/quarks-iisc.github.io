@@ -5,7 +5,6 @@ author: Kushal Chaudhari
 categories: [poems]
 image: "/assets/images/Poems/I_set_sail.jpg"
 excerpt: "If faith has brought me this far, then faith shall sail me yonder. A fearless step out of the night and into the rosy dawn of a new beginning."
-featured: true
 ---
 
 <div style="text-align: center;">

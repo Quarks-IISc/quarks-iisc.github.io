@@ -6,6 +6,7 @@ categories: [poems]
 image: "/assets/images/Poems/Rhythm_and_me.jpg"
 excerpt: "A poetic journey of self-discovery through rhythm and melody, plucking at new strings to find a harmony that is truly one's own."
 all: true
+featured: true
 ---
 
 <div style="text-align: center;">

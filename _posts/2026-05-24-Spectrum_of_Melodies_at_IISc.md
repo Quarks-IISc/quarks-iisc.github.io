@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/Spectrum_of_Melodies@IISc.jpg"
 excerpt: "When headphones break, the campus begins to sing. A story of finding community and private joy within the shared private playlists of Rhythmica."
 all: true
+featured: true
 ---
 
 **Spectrum of melodies@IISc**
