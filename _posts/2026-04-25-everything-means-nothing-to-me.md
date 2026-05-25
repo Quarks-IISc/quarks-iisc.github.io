@@ -5,7 +5,6 @@ author: Anurag Sarkar
 categories: [stories]
 image: "/assets/images/Stories/everything_means_nothing_to me_part-1.jpg"
 excerpt: "An introspective train vignette where a brief nap unfolds into reflections on memory, music, anxiety, and identity. A quiet portrait of restlessness and the search to understand oneself."
-featured: true
 ---
 
 I wake up from what feels like a deep slumber, my eyes focusing right up—an unfamiliar ceiling, well, not even a proper one, a curved one. The curved ceiling casually reminds me of the passionate discussion I had in the tilings course, about those beautiful tilings of the hyperbolic plane. And it also reminds me of the discussion on generalising the notion of a surface, and of distances between points in a surface – geodesics. Geodesics. They shape the World, quite literally. We divide and ration the World’s time based on some arbitrary yet significant geodesics of the World – the longitudes. I casually think about Geodesics and Geometry, of distances and tilings of weird surfaces, an emblem characteristic of my maths background.  The ceiling looks familiar. I’m in a train, I gather. And then it hits me, I had decided to visit Chennai on a whim. I am aboard the Vande Bharat, and the unnatural sheen of the walls hit my eyes. Something about the walls of Vande Bharat irks me; I can’t commit to getting used to it, just like how it cannot commit between showing a reflection of the blue seats and blurring out the details. 

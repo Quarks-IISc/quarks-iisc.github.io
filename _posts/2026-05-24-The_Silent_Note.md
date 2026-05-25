@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Silent Note
+title: ~~The Silent Noise~~
 author: Lisa Nandy
 categories: [pictures]
 image: "/assets/images/Pictures/The_Silent_Note.jpg"

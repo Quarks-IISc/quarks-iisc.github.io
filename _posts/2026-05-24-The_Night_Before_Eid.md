@@ -6,6 +6,7 @@ categories: [poems]
 image: "/assets/images/Poems/The_Night_Before_Eid.jpg"
 excerpt: "জীবনের এই নবীন অধ্যায়ে, আনন্দের আবহেও মনের একাকিত্ব আর অনুতাপের এক মরমী প্রকাশ।"
 all: true
+featured: true
 ---
 
 <div style="text-align: center; font-family: 'Inter', sans-serif;">
