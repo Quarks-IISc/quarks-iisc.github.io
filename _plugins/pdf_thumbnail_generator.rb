@@ -2,8 +2,9 @@ require 'fileutils'
 
 clubs_dir = File.join('assets', 'clubs')
 edition_dir = File.join('PreviousEditions')
+newsletter_dir = File.join('PreviousEditions', 'newsletters')
 
-[clubs_dir, edition_dir].each do |base_dir|
+[clubs_dir, edition_dir, newsletter_dir].each do |base_dir|
   Dir.glob(File.join(base_dir, '**', '*.pdf')).each do |pdf_path|
     thumb_path = pdf_path.sub(/\.pdf$/i, '.webp')
     next if File.exist?(thumb_path) && File.mtime(thumb_path) >= File.mtime(pdf_path)

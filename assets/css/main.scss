@@ -153,11 +153,11 @@
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 2px solid #ffffff;
+    border: 2px solid var(--edition-card-border);
     border-radius: 20px;
     padding: 30px;
     text-align: center;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -166,11 +166,25 @@
     color: var(--text-color);
 }
 
+/* Light mode defaults for variables used in hover */
+:root {
+    --edition-card-border: #000000;
+    --edition-card-hover-shadow: #000000;
+    --edition-card-hover-border: #000000;
+}
+
+.dark-mode {
+    --edition-card-border: #ffffff;
+    --edition-card-hover-shadow: #ffffff;
+    --edition-card-hover-border: #ffffff;
+}
+
 .card-theme-1, .card-theme-2, .card-theme-3, .card-theme-4 { --accent-color: #ffffff; }
 
 .edition-card:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 8px 8px 0px #ffffff;
+    box-shadow: 8px 8px 0px var(--edition-card-hover-shadow);
+    border-color: var(--edition-card-hover-border);
 }
 
 .edition-card a {
