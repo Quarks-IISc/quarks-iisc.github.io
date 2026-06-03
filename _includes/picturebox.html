@@ -12,18 +12,17 @@
         {% if site.lazyimages == "enabled" and include.disable_lazy != true %}
             <picture>
                 <source type="image/webp" data-srcset="{{ webp_url }}">
-                <img class="img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ post.title }}" style="width: 100%; {% if include.masonry != true %}height: 100%; object-fit: cover;{% else %}height: auto; display: block;{% endif %}" decoding="async">
-            </picture>
-        {% else %}
-            <picture>
-                <source type="image/webp" srcset="{{ webp_url }}">
-                <img class="img-fluid" src="{{ img_url }}" alt="{{ post.title }}" style="width: 100%; {% if include.masonry != true %}height: 100%; object-fit: cover;{% else %}height: auto; display: block;{% endif %}" {% if include.disable_lazy != true %}loading="lazy"{% else %}fetchpriority="high"{% endif %} decoding="async">
-            </picture>
-        {% endif %}
+                <img class="img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ post.title | remove: '~~' }}" style="width: 100%; {% if include.masonry != true %}height: 100%; object-fit: cover;{% else %}height: auto; display: block;{% endif %}" decoding="async">
+                </picture>
+                {% else %}
+                <picture>
+                <img class="img-fluid" src="{{ img_url }}" alt="{{ post.title | remove: '~~' }}" style="width: 100%; {% if include.masonry != true %}height: 100%; object-fit: cover;{% else %}height: auto; display: block;{% endif %}" {% if include.disable_lazy != true %}loading="lazy"{% else %}fetchpriority="high"{% endif %} decoding="async">
+                </picture>
+                {% endif %}
         
         <div class="picture-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%); padding: 30px 15px 15px; text-align: left; transition: all 0.3s ease; z-index: 2; transform: translateZ(0); backface-visibility: hidden;">
             <h2 class="card-title" style="font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 2px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                {{ post.title }}
+                {{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}
             </h2>
             <div class="d-flex justify-content-between align-items-end">
                 {% if post.author %}

@@ -24,7 +24,7 @@ post_class: post-template
             <div class="mainheading">
 
                 <!-- Post Title -->
-                <h1 class="posttitle text-center mb-3 display-4 font-weight-bold">{{ page.title }}</h1>
+                <h1 class="posttitle text-center mb-3 display-4 font-weight-bold">{{ page.title | markdownify | remove: '<p>' | remove: '</p>' }}</h1>
 
                 <!-- Post Excerpt/Subtitle -->
                 {% if page.excerpt %}
@@ -92,11 +92,10 @@ post_class: post-template
             {% assign img_url = img_url | replace: '//', '/' | replace: ':/', '://' %}
 
             {% if site.lazyimages == "enabled" %}
-            <img class="featured-image img-fluid lazyimg shadow-sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ page.title }}" style="width: 100%; border-radius: 12px; margin-bottom: 3rem;">
+            <img class="featured-image img-fluid lazyimg shadow-sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ page.title | remove: '~~' }}" style="width: 100%; border-radius: 12px; margin-bottom: 3rem;">
             {% else %}
-            <img class="featured-image img-fluid shadow-sm" src="{{ img_url }}" alt="{{ page.title }}" style="width: 100%; border-radius: 12px; margin-bottom: 3rem;">
+            <img class="featured-image img-fluid shadow-sm" src="{{ img_url }}" alt="{{ page.title | remove: '~~' }}" style="width: 100%; border-radius: 12px; margin-bottom: 3rem;">
             {% endif %}
-
             {% endif %}
             <!-- End Featured Image -->
 
@@ -152,10 +151,10 @@ post_class: post-template
             <!-- Prev/Next -->
             <div class="row PageNavigation d-flex justify-content-between font-weight-bold mt-5">
             {% if page.previous.url %}
-            <a class="prev d-block col-md-6" href="{{ site.baseurl }}{{ page.previous.url }}"> &laquo; {{page.previous.title}}</a>
+            <a class="prev d-block col-md-6" href="{{ site.baseurl }}{{ page.previous.url }}"> &laquo; {{page.previous.title | markdownify | remove: '<p>' | remove: '</p>' }}</a>
             {% endif %}
             {% if page.next.url %}
-            <a class="next d-block col-md-6 text-lg-right" href="{{ site.baseurl }}{{ page.next.url }}">{{page.next.title}} &raquo; </a>
+            <a class="next d-block col-md-6 text-lg-right" href="{{ site.baseurl }}{{ page.next.url }}">{{page.next.title | markdownify | remove: '<p>' | remove: '</p>' }} &raquo; </a>
             {% endif %}
             <div class="clearfix"></div>
             </div>

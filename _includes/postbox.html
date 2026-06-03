@@ -14,13 +14,12 @@
                     {% if site.lazyimages == "enabled" and include.disable_lazy != true %}
                         <picture>
                             <source type="image/webp" data-srcset="{{ webp_url }}">
-                            <img class="img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ post.title }}" style="width: 100%; height: 100%; object-fit: cover;" decoding="async">
-                        </picture>
-                    {% else %}
-                        <picture>
-                            <source type="image/webp" srcset="{{ webp_url }}">
-                            <img class="img-fluid" src="{{ img_url }}" alt="{{ post.title }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" decoding="async">
-                        </picture>
+                            <img class="img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="{{ img_url }}" alt="{{ post.title | remove: '~~' }}" style="width: 100%; height: 100%; object-fit: cover;" decoding="async">
+                            </picture>
+                            {% else %}
+                            <picture>
+                            <img class="img-fluid" src="{{ img_url }}" alt="{{ post.title | remove: '~~' }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" decoding="async">
+                            </picture>
                     {% endif %}
                     {% if post.tags %}
                         <div class="post-tag">
@@ -34,7 +33,7 @@
         </div>
         <div class="card-body">
             <h2 class="card-title">
-                <a class="text-dark" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                <a class="text-dark" href="{{ site.baseurl }}{{ post.url }}">{{ post.title | markdownify | remove: '<p>' | remove: '</p>' }}</a>
             </h2>
             
             <!-- Moved the excerpt just below the title -->

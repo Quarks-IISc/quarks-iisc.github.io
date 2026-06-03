@@ -5,7 +5,7 @@ layout: null
 [
 {% for page in site.posts %}
 {
-  "title": {{ page.title | jsonify }},
+  "title": {{ page.title | remove: '~~' | jsonify }},
   "url": {{ page.url | relative_url | jsonify }},
   "content": {{ page.content | markdownify | strip_html | strip_newlines | replace: '"','"' | replace: '"','"' | jsonify}}
 }

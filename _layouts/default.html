@@ -9,7 +9,7 @@
 
     <link rel="icon" href="{{ site.baseurl }}/assets/images/favicon.ico" />
 
-    <title>{{ page.title }} | {{site.name}}</title>
+    <title>{{ page.title | remove: '~~' }} | {{site.name}}</title>
 
     {% seo %}
 

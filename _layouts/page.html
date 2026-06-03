@@ -5,7 +5,7 @@ layout: default
 
 <section>
     <div class="section-title section-hero-header">
-        <h2><span>{{ page.title }}</span></h2>
+        <h2><span>{{ page.title | markdownify | remove: '<p>' | remove: '</p>' }}</span></h2>
     </div>
 
     <div class="article-post">
