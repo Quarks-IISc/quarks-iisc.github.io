@@ -31,7 +31,8 @@
     // target glyph size (px per cell) for the banner-fill layout
     cellDesktop: 8,
     cellTablet: 6,
-    cellMobile: 4.5,
+    cellMobile: 5.4,
+    mobileBreak: 560,    // below this width: solid glyphs (no living-text noise)
     // logo width as a fraction of banner width (wider on small screens)
     logoFracDesktop: 0.72,
     logoFracTablet: 0.8,
@@ -83,6 +84,8 @@
   };
 
   var BG_RAMP = [' ', '·', ':', '~', '*', '+'];
+  // clean block-shade ramp for phones: solid, anti-aliased letterforms
+  var MOBILE_RAMP = ' ░▒▓█'.split('');
   var FX_DEFAULTS = { ripple: true, livingText: true, tilt: true, burst: true, reveal: true };
   var FX_ITEMS = [
     { key: 'ripple', label: 'Ripple' },
@@ -246,6 +249,8 @@
     var height = rect.height || width * 0.42;
     if (!this.fill) width = Math.min(width, CONFIG.maxWidth);
     if (width < 80) { width = 800; height = 340; }
+    // on phones the woven title text is illegible — render solid letterforms
+    this.small = width < CONFIG.mobileBreak;
 
     var imgW = this.imgOK ? this.image.naturalWidth : 712;
     var imgH = this.imgOK ? this.image.naturalHeight : 167;
@@ -435,7 +440,7 @@
   };
 
   QuarksAscii.prototype.glyphForCell = function (i) {
-    if (this.fx.livingText && this.stream.length && this.streamIdx[i] >= 0) {
+    if (this.fx.livingText && !this.small && this.stream.length && this.streamIdx[i] >= 0) {
       return this.stream.charAt((this.streamIdx[i] + this.scrollOff) % this.stream.length);
     }
     return null; // caller falls back to the brightness ramp
@@ -469,6 +474,11 @@
 
   QuarksAscii.prototype.frame = function (ts) {
     this.rafId = requestAnimationFrame(this.boundFrame);
+    // throttle to ~30fps on phones to save battery / avoid heat (desktop stays 60)
+    if (this.small) {
+      if (this._lastDraw && ts - this._lastDraw < 32) return;
+      this._lastDraw = ts;
+    }
     var dt = Math.min(0.05, (ts - (this.lastTs || ts)) / 1000);
     this.lastTs = ts;
     this.now = (ts - this.startTime) / 1000;
@@ -550,7 +560,10 @@
         if (isLetter) {
           var inten = clamp(shade * (0.72 + 0.4 * base) + wave * 0.22, 0, 1);
           var custom = this.glyphForCell(i);
-          if (rk < 0.7) {
+          if (this.small) {
+            // phones: clean, bold block-shade letterforms (reveal fades via alpha)
+            glyph = MOBILE_RAMP[clamp(Math.round(lerp(1, 4, inten)), 1, 4)];
+          } else if (rk < 0.7) {
             // ink-bloom: dots condense into the glyph
             glyph = custom || lram[Math.round(lerp(2, lN, inten))];
             if (rk < 0.4) glyph = lram[1 + Math.round(rk / 0.4 * 2)]; // · : -
