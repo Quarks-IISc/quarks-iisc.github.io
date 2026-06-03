@@ -11,7 +11,9 @@ title: Home
 {% if page.url == "/" %}
 <style>
     /* Interactive ASCII masthead filling the whole banner */
-    .hero-header { overflow: hidden; }
+    /* taller banner = bigger ripple area (logo is width-based, so it stays put) */
+    .hero-header { overflow: hidden; min-height: 68vh; }
+    @media (max-width: 768px) { .hero-header { min-height: 56vh; } }
     .hero-header .hero-ascii {
         position: absolute;
         inset: 0;
@@ -30,7 +32,7 @@ title: Home
         max-width: 100%;
         user-select: none;
         -webkit-user-select: none;
-        filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.55));
+        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
     }
     .quarks-ascii-sronly {
         position: absolute;

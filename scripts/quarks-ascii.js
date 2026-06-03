@@ -64,7 +64,7 @@
     bgGhost: 0.30,
 
     // living-masthead text
-    streamScroll: 2.4,   // characters per second the ribbon scrolls
+    streamScroll: 3.5,   // characters per second the ribbon scrolls
 
     // 3-D tilt
     tiltMax: 8,          // degrees
@@ -177,7 +177,7 @@
     this.ctx = this.canvas.getContext('2d');
     this.src = root.getAttribute('data-src') || window.QUARKS_LOGO_SRC || '/assets/images/quarks_black.png';
 
-    this.dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+    this.dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
     this.reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.fill = root.hasAttribute('data-fill'); // fill the whole container (banner)
     this.fx = loadFx();
@@ -526,7 +526,7 @@
 
   QuarksAscii.prototype.render = function () {
     var ctx = this.ctx, cols = this.cols, rows = this.rows, F = this.field, Z = this.Z;
-    var cw = this.cellW, ch = this.cellH;
+    var cw = this.cellW, ch = this.cellH, dpr = this.dpr;
 
     ctx.clearRect(0, 0, cols * cw, rows * ch);
     this.buildZ();
@@ -592,7 +592,10 @@
         var qa = Math.round(alpha * 24) / 24;
         if (qa !== prevAlpha) { ctx.globalAlpha = qa; prevAlpha = qa; }
         if (fill !== prevFill) { ctx.fillStyle = fill; prevFill = fill; }
-        ctx.fillText(glyph, x * cw + cw * 0.5 + dispX, rowY + dispY);
+        // snap to the device-pixel grid so glyphs render crisp (no sub-pixel blur)
+        ctx.fillText(glyph,
+          Math.round((x * cw + cw * 0.5 + dispX) * dpr) / dpr,
+          Math.round((rowY + dispY) * dpr) / dpr);
       }
     }
 
