@@ -23,6 +23,71 @@ title: Home
     </div>
 </div>
 
+<!-- SECTION: Interactive ASCII Logo -->
+<style>
+    .quarks-ascii-section {
+        padding: 1rem 1rem 3rem;
+        text-align: center;
+    }
+    .quarks-ascii-wrap {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        cursor: crosshair;
+        line-height: 0;
+        touch-action: pan-y;
+    }
+    .quarks-ascii-wrap canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .quarks-ascii-hint {
+        position: absolute;
+        right: 0.6rem;
+        bottom: -1.6rem;
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        opacity: 0.55;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        pointer-events: none;
+        line-height: 1;
+    }
+    .quarks-ascii-wrap:hover .quarks-ascii-hint {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    .quarks-ascii-sronly {
+        position: absolute;
+        width: 1px; height: 1px;
+        padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0 0 0 0);
+        white-space: nowrap; border: 0;
+    }
+</style>
+<section class="quarks-ascii-section" id="quarks-ascii-section">
+    <div class="quarks-ascii-wrap fade-up-element"
+         data-quarks-ascii
+         data-src="{{ site.baseurl }}/assets/images/quarks_black.png"
+         role="img"
+         aria-label="QUARKS logo rendered as interactive ASCII art. Hover or touch to ripple.">
+        <canvas></canvas>
+        <span class="quarks-ascii-hint">hover &middot; click &middot; <span aria-hidden="true">&#8942;</span> customise</span>
+        <span class="quarks-ascii-sronly">QUARKS</span>
+    </div>
+</section>
+<script>
+    // Real magazine content used to weave the "living masthead" text.
+    window.QUARKS_WORDS = {{ site.posts | slice: 0, 60 | map: "title" | jsonify }};
+</script>
+<script src="{{ site.baseurl }}/scripts/quarks-ascii.js" defer></script>
+
 <!-- SECTION 1: Featured Posts -->
 <section class="featured-posts" id="featured-posts-section">
     <div class="section-title section-hero-header">
