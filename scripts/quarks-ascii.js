@@ -24,9 +24,19 @@
 
   /* ----------------------------- tunables --------------------------------- */
   var CONFIG = {
+    // grid density for the standalone (non-fill) layout
     colsDesktop: 150,
     colsTablet: 110,
     colsMobile: 74,
+    // target glyph size (px per cell) for the banner-fill layout
+    cellDesktop: 8,
+    cellTablet: 6,
+    cellMobile: 4.5,
+    // logo width as a fraction of banner width (wider on small screens)
+    logoFracDesktop: 0.72,
+    logoFracTablet: 0.8,
+    logoFracMobile: 0.88,
+    maxLogoPx: 1200,     // cap the logo width on ultrawide screens
     padX: 3,
     padYRatio: 0.4,
 
@@ -166,6 +176,7 @@
 
     this.dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
     this.reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.fill = root.hasAttribute('data-fill'); // fill the whole container (banner)
     this.fx = loadFx();
 
     this.cols = 0; this.rows = 0;
@@ -217,24 +228,59 @@
     return CONFIG.colsDesktop;
   };
 
+  QuarksAscii.prototype.cellTarget = function (w) {
+    if (w < 560) return CONFIG.cellMobile;
+    if (w < 920) return CONFIG.cellTablet;
+    return CONFIG.cellDesktop;
+  };
+
+  QuarksAscii.prototype.logoFraction = function (w) {
+    if (w < 560) return CONFIG.logoFracMobile;
+    if (w < 920) return CONFIG.logoFracTablet;
+    return CONFIG.logoFracDesktop;
+  };
+
   QuarksAscii.prototype.build = function () {
     var rect = this.root.getBoundingClientRect();
-    var width = Math.min(rect.width || this.root.clientWidth || 800, CONFIG.maxWidth);
-    if (width < 80) width = 800;
-
-    this.cols = this.targetCols(width);
-    this.cellW = width / this.cols;
-    this.cellH = this.cellW / CONFIG.charAspect;
-    this.fontSize = this.cellH * 0.96;
+    var width = rect.width || this.root.clientWidth || 800;
+    var height = rect.height || width * 0.42;
+    if (!this.fill) width = Math.min(width, CONFIG.maxWidth);
+    if (width < 80) { width = 800; height = 340; }
 
     var imgW = this.imgOK ? this.image.naturalWidth : 712;
     var imgH = this.imgOK ? this.image.naturalHeight : 167;
-    this.logoCols = this.cols - CONFIG.padX * 2;
-    this.logoRows = Math.max(4, Math.round(this.logoCols * (this.cellW / this.cellH) * (imgH / imgW)));
-    var padY = Math.max(3, Math.round(this.logoRows * CONFIG.padYRatio));
-    this.rows = this.logoRows + padY * 2;
-    this.logoX0 = CONFIG.padX;
-    this.logoY0 = padY;
+
+    if (this.fill) {
+      // ---- fill the whole banner; logo sits centred with gaps ----
+      this.cols = clamp(Math.round(width / this.cellTarget(width)), 50, 260);
+      this.cellW = width / this.cols;
+      this.cellH = this.cellW / CONFIG.charAspect;
+      this.rows = Math.max(10, Math.round(height / this.cellH));
+
+      var ratio = (this.cellW / this.cellH) * (imgH / imgW); // logoRows per logoCol
+      var capCols = Math.round(CONFIG.maxLogoPx / this.cellW);
+      this.logoCols = clamp(Math.min(Math.round(this.cols * this.logoFraction(width)), capCols), 12, this.cols - 4);
+      this.logoRows = Math.max(4, Math.round(this.logoCols * ratio));
+      var maxLogoRows = this.rows - 6;
+      if (maxLogoRows > 5 && this.logoRows > maxLogoRows) {
+        this.logoRows = maxLogoRows;
+        this.logoCols = Math.round(this.logoRows / ratio);
+      }
+      this.logoX0 = Math.round((this.cols - this.logoCols) / 2);
+      this.logoY0 = Math.round((this.rows - this.logoRows) / 2);
+    } else {
+      // ---- standalone: canvas wraps tightly around the logo ----
+      this.cols = this.targetCols(width);
+      this.cellW = width / this.cols;
+      this.cellH = this.cellW / CONFIG.charAspect;
+      this.logoCols = this.cols - CONFIG.padX * 2;
+      this.logoRows = Math.max(4, Math.round(this.logoCols * (this.cellW / this.cellH) * (imgH / imgW)));
+      var padY = Math.max(3, Math.round(this.logoRows * CONFIG.padYRatio));
+      this.rows = this.logoRows + padY * 2;
+      this.logoX0 = CONFIG.padX;
+      this.logoY0 = padY;
+    }
+    this.fontSize = this.cellH * 0.96;
 
     var cssW = this.cols * this.cellW, cssH = this.rows * this.cellH;
     this.canvas.style.width = cssW + 'px';
@@ -318,6 +364,13 @@
   };
 
   QuarksAscii.prototype.readColors = function () {
+    // explicit overrides win — used to stay light over the photo banner
+    var inkAttr = this.root.getAttribute('data-ink');
+    if (inkAttr) {
+      this.ink = toRGB(inkAttr);
+      this.glow = toRGB(this.root.getAttribute('data-glow') || inkAttr);
+      return;
+    }
     var cs = getComputedStyle(this.root);
     var text = cs.getPropertyValue('--text-color') || getComputedStyle(document.body).color || '#343a40';
     var head = cs.getPropertyValue('--heading-color') || text;
@@ -491,7 +544,7 @@
         var gx = Z[i + 1] - Z[i - 1], gy = Z[i + cols] - Z[i - cols];
         var nl = Math.sqrt(gx * gx + gy * gy + nz * nz);
         var diffuse = (-gx * lx - gy * ly + nz * lz) / nl; if (diffuse < 0) diffuse = 0;
-        var shade = 0.32 + 0.68 * diffuse;
+        var shade = 0.46 + 0.6 * diffuse;
 
         var glyph, alpha, mix;
         if (isLetter) {
@@ -504,7 +557,7 @@
           } else {
             glyph = custom || lram[Math.round(lerp(4, lN, inten))];
           }
-          alpha = clamp(0.55 + 0.45 * base, 0.4, 1) * clamp(0.55 + inten * 0.6, 0, 1) * rk;
+          alpha = clamp(0.72 + 0.3 * base, 0.6, 1) * clamp(0.7 + inten * 0.45, 0.55, 1) * rk;
           mix = clamp(inten - 0.55, 0, 1) * 0.6;
         } else {
           var amp = Math.abs(wave);

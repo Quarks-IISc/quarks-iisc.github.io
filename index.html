@@ -9,8 +9,52 @@ title: Home
 </head>
 
 {% if page.url == "/" %}
+<style>
+    /* Interactive ASCII masthead filling the whole banner */
+    .hero-header { overflow: hidden; }
+    .hero-header .hero-ascii {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: crosshair;
+        line-height: 0;
+        touch-action: pan-y;
+    }
+    .hero-ascii canvas {
+        display: block;
+        max-width: 100%;
+        user-select: none;
+        -webkit-user-select: none;
+        filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.55));
+    }
+    .quarks-ascii-sronly {
+        position: absolute;
+        width: 1px; height: 1px;
+        padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0 0 0 0);
+        white-space: nowrap; border: 0;
+    }
+</style>
 <div class="hero-header">
-    <img src="{{ site.baseurl }}/assets/images/quarks_black.png" alt="Quarks Logo" class="hero-logo" fetchpriority="high" decoding="async">
+    <div class="quarks-ascii-wrap hero-ascii"
+         data-quarks-ascii
+         data-fill="banner"
+         data-src="{{ site.baseurl }}/assets/images/quarks_black.png"
+         data-ink="#ffffff"
+         data-glow="#ffffff"
+         role="img"
+         aria-label="QUARKS — masthead of the Quarks magazine, drawn as interactive ASCII art woven from recent article titles. Hover, click or open the menu to play with it.">
+        <canvas></canvas>
+        <span class="quarks-ascii-sronly">QUARKS</span>
+        <noscript>
+            <img src="{{ site.baseurl }}/assets/images/quarks_black.png" alt="Quarks Logo" class="hero-logo">
+        </noscript>
+    </div>
 </div>
 
 <div class="intro-section text-center">
@@ -23,65 +67,6 @@ title: Home
     </div>
 </div>
 
-<!-- SECTION: Interactive ASCII Logo -->
-<style>
-    .quarks-ascii-section {
-        padding: 1rem 1rem 3rem;
-        text-align: center;
-    }
-    .quarks-ascii-wrap {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        max-width: 1180px;
-        margin: 0 auto;
-        cursor: crosshair;
-        line-height: 0;
-        touch-action: pan-y;
-    }
-    .quarks-ascii-wrap canvas {
-        display: block;
-        width: 100%;
-        height: auto;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-    .quarks-ascii-hint {
-        position: absolute;
-        right: 0.6rem;
-        bottom: -1.6rem;
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        opacity: 0.55;
-        transition: opacity 0.4s ease, transform 0.4s ease;
-        pointer-events: none;
-        line-height: 1;
-    }
-    .quarks-ascii-wrap:hover .quarks-ascii-hint {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
-    .quarks-ascii-sronly {
-        position: absolute;
-        width: 1px; height: 1px;
-        padding: 0; margin: -1px;
-        overflow: hidden; clip: rect(0 0 0 0);
-        white-space: nowrap; border: 0;
-    }
-</style>
-<section class="quarks-ascii-section" id="quarks-ascii-section">
-    <div class="quarks-ascii-wrap fade-up-element"
-         data-quarks-ascii
-         data-src="{{ site.baseurl }}/assets/images/quarks_black.png"
-         role="img"
-         aria-label="QUARKS logo rendered as interactive ASCII art. Hover or touch to ripple.">
-        <canvas></canvas>
-        <span class="quarks-ascii-hint">hover &middot; click &middot; <span aria-hidden="true">&#8942;</span> customise</span>
-        <span class="quarks-ascii-sronly">QUARKS</span>
-    </div>
-</section>
 <script>
     // Real magazine content used to weave the "living masthead" text.
     window.QUARKS_WORDS = {{ site.posts | slice: 0, 60 | map: "title" | jsonify }};
