@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Stories/Cosmic_GPS.jpg"
 excerpt: "The Global Positioning System relies on billion-light-year-distant quasars to keep your phone's location honest. Discover the unlikely connection between black holes and Google Maps."
 all: true
-featured: true
 ---
 
 **Cosmic GPS**
