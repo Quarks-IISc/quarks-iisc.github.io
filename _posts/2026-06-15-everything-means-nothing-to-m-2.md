@@ -5,6 +5,7 @@ author: Anurag Sarkar
 categories: [stories]
 image: "/assets/images/Stories/everything_means_nothing_to me_part-2.jpg"
 excerpt: "A journey back home becomes a journey inward, as the narrator revisits memories, relationships, and versions of himself left behind. Between Chennai’s familiar warmth and Bangalore’s unsettling distance, he grapples with identity, nostalgia, and the quiet ache of growing up."
+featured: true
 ---
 
 I am heading to Chennai; I always do whenever I feel like I’m losing a sense of ‘myself’. Perhaps it is because I can only perceive myself to be something bigger, something grander, someone with a stable footing when I am in Chennai. 
