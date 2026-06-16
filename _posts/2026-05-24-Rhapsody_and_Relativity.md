@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Stories/Rhapsody_and_Relativity.jpg"
 excerpt: "Why your main quest needs a side quest. Explore the deep structural similarities between music and physics, and how cross-pollinating ideas can ignite creative breakthroughs."
 all: true
-featured: true
 ---
 
 **Rhapsody and Relativity**
