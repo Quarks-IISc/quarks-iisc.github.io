@@ -4,7 +4,7 @@ title: Home is where I want to be
 #tags: [Example_Tag1, ExampleTag2]
 author: Kushal Chaudhari
 categories: [poems]
-image: "/assets/images/Poems/home-is-where-i-want-to-be.jpg"
+image: "/assets/images/Poems/home-is-where-i-want-to-be.jpeg"
 excerpt: "Life spins endlessly like a grand carousel—offering wonders, stories, and fleeting joys. Yet, after gathering all its treasures, the soul finds that the greatest comfort lies in the familiar embrace of its own home."
 all: true
 ---
