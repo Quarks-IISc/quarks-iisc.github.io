@@ -57,11 +57,11 @@ Where pleasant chimes the falling rain,  <br>
 Where calming is the morning breeze,  <br>
 Wrapped in blankets, I am at ease.  <br>
 Silently mothering the kid inside,   <br>
-The me-shaped hole makes me complete. 
+The me-shaped hole makes me complete. <br><br>
 
-When peace, not pleasure, my heart craves,   
-Leaving behind the roundabout,  
-Homeward turn my tiny steps.  
-Deep in my soul this truth I keep:  
+When peace, not pleasure, my heart craves,   <br>
+Leaving behind the roundabout,  <br>
+Homeward turn my tiny steps.  <br>
+Deep in my soul this truth I keep:<br>  
 There’s a me-shaped hole where I’m lulled to sleep.
 
