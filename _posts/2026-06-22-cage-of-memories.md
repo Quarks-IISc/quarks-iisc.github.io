@@ -11,38 +11,38 @@ all: true
 
 <div style="text-align: center;">
 
-I don’t know what made me write today  
-Maybe it came from looking at that violin  
-The violin that reminded me of those evenings  
-The evenings when you were with me...
+I don’t know what made me write today  <br>
+Maybe it came from looking at that violin  <br>
+The violin that reminded me of those evenings  <br>
+The evenings when you were with me...<br><br>
 
-It had been a long day at work  
-And somehow I found my way back  
-Back to the same place again and again  
-The place that does not exist anymore
+It had been a long day at work  <br>
+And somehow I found my way back  <br>
+Back to the same place again and again<br>  
+The place that does not exist anymore<br><br>
 
-Now I find myself near the riverbank  
-Missing that sound of the violin, as the sun sets down  
-The final rays falling like gold on my face  
-Oh, how I wish you were here right now
+Now I find myself near the riverbank  <br>
+Missing that sound of the violin, as the sun sets down<br>  
+The final rays falling like gold on my face  <br>
+Oh, how I wish you were here right now<br><br>
 
-Now the grass flutters in the wind  
-The trees swaying give me deja vu  
-How I remember chasing that butterfly down  
-The butterfly is still there, yet to be chased
+Now the grass flutters in the wind  <br>
+The trees swaying give me deja vu  <br>
+How I remember chasing that butterfly down<br>  
+The butterfly is still there, yet to be chased<br><br>
 
-Now, as I look at that old violin…  
-I tried to play it myself, just like you did  
-I realized it was out of tune  
-But that smell took me to that place, the same place
+Now, as I look at that old violin…  <br>
+I tried to play it myself, just like you did<br>  
+I realized it was out of tune  <br>
+But that smell took me to that place, the same place<br><br>
 
-That sapling we planted a few days ago…  
-Grew into a huge mango tree  
-With mangoes, shade, and leaves, all that we wanted  
-But who do I share the mangoes with?
+That sapling we planted a few days ago…  <br>
+Grew into a huge mango tree  <br>
+With mangoes, shade, and leaves, all that we wanted <br> 
+But who do I share the mangoes with? <br><br>
 
-A certain pain clenches my stomach.  
-When I see the butterfly, the mangoes, the violin, and the river  
-But the violin caught dust, and the mangoes can’t be shared  
-But the riverbank still has that smell  
+A certain pain clenches my stomach.  <br>
+When I see the butterfly, the mangoes, the violin, and the river <br> 
+But the violin caught dust, and the mangoes can’t be shared <br> 
+But the riverbank still has that smell  <br>
 And the butterfly continues to be there, yet to be chased
