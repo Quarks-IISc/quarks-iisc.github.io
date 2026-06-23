@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "People we meet on vacation"
-author: Manya Gupta
+author: Manya Ganapathy
 categories: [stories]
 image: "/assets/images/Stories/people-we-meet-on-vacation.jpg"
 excerpt: "A journey across continents begins not with a flight, but with the people who make it possible. This essay is a heartfelt reflection on unexpected connections, kindness, and the quiet support systems that turn unfamiliar places into something that feels like home."
