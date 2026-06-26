@@ -5,6 +5,7 @@ author: Manya Ganapathy
 categories: [stories]
 image: "/assets/images/Stories/people-we-meet-on-vacation.jpg"
 excerpt: "A journey across continents begins not with a flight, but with the people who make it possible. This essay is a heartfelt reflection on unexpected connections, kindness, and the quiet support systems that turn unfamiliar places into something that feels like home."
+featured: true
 ---
 
 This title is a lie, and a lie on many fronts. This is not a commentary on Emily Henry’s 2021 Goodreads Choice Awards for Romance-winning novel, nor is it a review of its 2026 film adaptation. It is not a prose reconstituted from meticulously recorded descriptions of human contact in foreign lands that remains preserved on the pages of a travel journal, and it is not an insight into the ways of the people from nations beyond. Most sinfully, perhaps, this piece is not really about a vacation at all…
