@@ -7,6 +7,7 @@ categories: [poems]
 image: "/assets/images/Poems/flower-in-bloom.jpg"
 excerpt: "A fleeting dream reveals the sorrowful tale of a flower—proud, beautiful, and painfully naive. As each petal falls, it becomes a story of love’s promises, betrayals, and the fragile hope that remains."
 all: true
+featured: true
 ---
 
 <div style="text-align: center;">
