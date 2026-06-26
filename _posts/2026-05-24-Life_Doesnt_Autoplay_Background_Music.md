@@ -6,7 +6,6 @@ categories: [poems]
 image: "/assets/images/Poems/Life_Doesnt_Autoplay_Background_Music.png"
 excerpt: "A poem on the search for life's hidden soundtrack, and the realization that sometimes the most meaningful music is the one we find within ourselves."
 all: true
-featured: true
 ---
 
 <div style="text-align: center;">
