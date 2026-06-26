@@ -7,6 +7,7 @@ categories: [poems]
 image: "/assets/images/Poems/bring-thy-walls-down.jpg"
 excerpt: "授与白真さん(Shin San)"
 all: true
+featured: true
 ---
 
 <div style="text-align: center;">
