@@ -6,5 +6,6 @@ author: "Aryan Awasthi"
 description: "Final Stand"
 categories: [pictures]
 image: "/assets/images/Pictures/Final_stand-Aryan_Awasthi.png"
+featured: true
 ---
 
