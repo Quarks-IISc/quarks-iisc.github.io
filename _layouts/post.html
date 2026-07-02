@@ -57,6 +57,7 @@ post_class: post-template
                         {% if page.last_modified_at %}
                         <span class="ml-1">(Updated: <time datetime="{{ page.last_modified_at | date_to_xmlschema }}" itemprop="dateModified">{{ page.last_modified_at | date: "%b %-d, %Y" }}</time>)</span>
                         {% endif %}
+                        {% unless page.categories contains "pictures" or page.categories contains "Pictures" %}
                         <span class="dot mx-1"></span>
                         <span class="post-read">
                             {% assign words = content | number_of_words %}
@@ -66,6 +67,7 @@ post_class: post-template
                                 {{ words | divided_by: 180 }} min read
                             {% endif %}
                         </span>
+                        {% endunless %}
                     </div>
                 </div>
 
