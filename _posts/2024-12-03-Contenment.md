@@ -6,7 +6,7 @@ tags: [Example_Tag1, ExampleTag2]
 author: Adit Vishnu
 categories: [stories]
 image: "/assets/images/Stories/Contentment.jpeg"
-excerpt: "In a world of constant consumption, the essay asks whether we can truly feel content with who we are."
+excerpt: "In a consumerist world, this piece asks whether we can truly be content with who we are and what we have."
 all: true
 ---
 

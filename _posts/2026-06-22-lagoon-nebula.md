@@ -4,6 +4,6 @@ title: "Lagoon Nebula"
 author: Chinmay Wasnik
 categories: [pictures]
 image: "/assets/images/Pictures/lagoon-nebula.jpg"
-excerpt: "A glimpse of stardust and gas painting a celestial masterpiece, reminding us of the cosmos' quiet beauty."
+excerpt: "A glimpse of cosmic clouds and stardust painting a silent celestial masterpiece."
 description: "Astrophotography"
 ---

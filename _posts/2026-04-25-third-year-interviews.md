@@ -6,7 +6,7 @@ title: Introspections on the Third Step
 author: Subhanan Banerjee
 categories: [stories]
 image: "/assets/images/Stories/Third_year_interviews.jpg"
-excerpt: "Conversations with eight third-year IISc students revealing their anxieties, ambitions, internships, and search for purpose."
+excerpt: "Conversations with third-year IISc students revealing anxieties, ambitions, and the balance between research, internships, and life beyond academics."
 all: true
 ---
 
