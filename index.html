@@ -43,10 +43,15 @@ title: Home
     }
     /* Taller images in the Featured grid (2-column layout) */
     .featured-posts .maxthumb { aspect-ratio: 4 / 3; }
-    .featured-posts .picture-card { min-height: 400px; }
+    /* Picture cards match the full post-card height (image + text box), not just the image.
+       !important overrides the inline min-height:280px baked into picturebox.html */
+    .featured-posts .picture-card { min-height: 525px !important; }
+    @media (max-width: 991px) {
+        .featured-posts .picture-card { min-height: 470px !important; }
+    }
     @media (max-width: 767px) {
         .featured-posts .maxthumb { aspect-ratio: 16 / 9; }
-        .featured-posts .picture-card { min-height: 400px; }
+        .featured-posts .picture-card { min-height: 420px !important; }
     }
 </style>
 <div class="hero-header">

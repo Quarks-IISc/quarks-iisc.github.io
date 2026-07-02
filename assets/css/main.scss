@@ -436,16 +436,20 @@
 body {
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: var(--bg-color);
+    {% if site.doodles %}
     background-image: url('../images/doodle-pattern.svg');
     background-repeat: repeat;
     background-size: 1500px 1500px;
     background-attachment: scroll;
+    {% endif %}
     color: var(--text-color);
 }
+{% if site.doodles %}
 html.dark-mode body,
 body.dark-mode {
     background-image: url('../images/doodle-pattern-dark.svg');
 }
+{% endif %}
 /* Keep the doodle pattern below these content areas */
 .announcements-scroll-container {
     background: var(--bg-color);
