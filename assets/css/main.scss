@@ -5,6 +5,8 @@
 /* We need to add display:inline in order to align the '>>' of the 'read more' link */
 .post-excerpt p { display:inline; }
 
+/* Faint doodle pattern lives on the body background — see the body rule below. */
+
 // Import partials from sass_dir (defaults to _sass)
 @import "themes", "syntax", "starsnonscss", "darkmode";
 
@@ -434,7 +436,20 @@
 body {
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: var(--bg-color);
+    background-image: url('../images/doodle-pattern.svg');
+    background-repeat: repeat;
+    background-size: 1500px 1500px;
+    background-attachment: scroll;
     color: var(--text-color);
+}
+html.dark-mode body,
+body.dark-mode {
+    background-image: url('../images/doodle-pattern-dark.svg');
+}
+/* Keep the doodle pattern below these content areas */
+.announcements-scroll-container {
+    background: var(--bg-color);
+    border-radius: 12px;
 }
 h1, h2, h3, h4, h5, h6, .navbar-brand {
     font-family: 'Playfair Display', serif !important;
