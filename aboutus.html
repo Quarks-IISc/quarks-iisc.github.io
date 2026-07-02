@@ -3,91 +3,285 @@ layout: default
 title: About Quarks
 ---
 
-<!-- Editor's Note Section -->
-<section class="editors-note text-center">
-    <div class="section-title section-hero-header">
+<!-- Editor's Note Section — creative editorial layout -->
+<style>
+    /* ===== About / Editor's Note editorial layout ===== */
+    .about-editorial {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 1rem 1rem 2rem;
+        position: relative;
+    }
+    .about-editorial .about-lede {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.8rem, 4.5vw, 3rem);
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+        color: var(--heading-color);
+        margin: 1.5rem auto 0.5rem;
+        max-width: 760px;
+    }
+    .about-editorial .about-lede .accent {
+        position: relative;
+        white-space: nowrap;
+        display: inline-block;
+    }
+    .about-editorial .about-lede .accent::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.06em;
+        height: 0.1em;
+        background: var(--link-color);
+        border-radius: 2px;
+        opacity: 0.85;
+    }
+    .about-editorial .about-kicker {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Thought bubbles */
+    .about-bubble {
+        position: relative;
+        background: rgba(128, 128, 128, 0.06);
+        border: 1px solid var(--border-color);
+        border-radius: 22px;
+        padding: 1.5rem 1.75rem;
+        margin: 2.5rem 0;
+        max-width: 78%;
+        font-size: 1.08rem;
+        line-height: 1.75;
+        color: var(--text-color);
+        box-shadow: var(--card-shadow);
+    }
+    .about-bubble.left  { margin-right: auto; border-bottom-left-radius: 4px; }
+    .about-bubble.right { margin-left: auto;  border-bottom-right-radius: 4px; }
+    /* little conversational tail */
+    .about-bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -9px;
+        width: 20px; height: 20px;
+        background: rgba(128, 128, 128, 0.06);
+        border-right: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        transform: rotate(45deg);
+    }
+    .about-bubble.left::after  { left: 34px; }
+    .about-bubble.right::after { right: 34px; }
+    .about-bubble .bubble-label {
+        display: inline-block;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--heading-color);
+        margin-bottom: 0.4rem;
+        padding-bottom: 2px;
+        border-bottom: 2px dashed var(--border-color);
+    }
+
+    /* Pull quote */
+    .about-pullquote {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+        font-weight: 700;
+        font-style: italic;
+        text-align: center;
+        line-height: 1.35;
+        color: var(--heading-color);
+        max-width: 640px;
+        margin: 3rem auto;
+        position: relative;
+    }
+    .about-pullquote::before {
+        content: "\201C";
+        font-size: 4rem;
+        line-height: 0;
+        color: var(--link-color);
+        opacity: 0.35;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    /* Playful call-to-contribute note */
+    .about-callout {
+        background: var(--highlight-color);
+        border: 2px dashed var(--link-color);
+        border-radius: 18px;
+        padding: 2rem 1.75rem;
+        margin: 3rem auto 1rem;
+        max-width: 90%;
+        text-align: center;
+    }
+    .about-callout h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.9rem;
+        color: var(--heading-color);
+        margin-bottom: 1rem;
+    }
+    .about-callout p {
+        font-size: 1.08rem;
+        line-height: 1.75;
+        color: var(--text-color);
+        max-width: 680px;
+        margin: 0 auto 1.25rem;
+    }
+    .about-chips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+        margin-top: 1rem;
+    }
+    .about-chips span {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 999px;
+        padding: 0.4rem 0.95rem;
+        font-size: 0.9rem;
+        color: var(--text-color);
+        box-shadow: var(--card-shadow);
+        transition: transform 0.2s ease;
+    }
+    .about-chips span:nth-child(even) { transform: rotate(-2deg); }
+    .about-chips span:nth-child(odd)  { transform: rotate(1.5deg); }
+    .about-chips span:hover { transform: rotate(0) scale(1.06); }
+
+    .about-mail {
+        margin-top: 2.75rem;
+        font-size: 1.05rem;
+        color: var(--text-color);
+    }
+    .about-mail a {
+        font-weight: 700;
+        color: var(--link-color);
+        text-decoration: none;
+        border-bottom: 2px solid var(--link-color);
+        padding-bottom: 1px;
+        transition: opacity 0.2s ease;
+    }
+    .about-mail a:hover { opacity: 0.7; }
+
+    /* Hand-drawn connector between bubbles */
+    .about-connector {
+        margin: -1.25rem 0 -1.25rem;
+        text-align: center;
+        color: var(--text-muted);
+        opacity: 0.6;
+        pointer-events: none;
+    }
+    .about-connector svg {
+        width: 150px;
+        height: auto;
+        transform: translateX(12%);
+    }
+    @media (max-width: 600px) {
+        .about-connector svg { width: 110px; transform: none; }
+    }
+
+    .about-signoff {
+        text-align: center;
+        margin: 2.5rem auto 0.5rem;
+    }
+    .about-signoff .closing {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--heading-color);
+        margin-bottom: 1.25rem;
+    }
+    .about-signoff .regards {
+        color: var(--text-muted);
+        font-style: italic;
+        margin-bottom: 0.15rem;
+    }
+    .about-signoff .signer {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: var(--heading-color);
+    }
+
+    @media (max-width: 600px) {
+        .about-bubble { max-width: 100%; padding: 1.25rem 1.25rem; }
+        .about-callout { max-width: 100%; }
+    }
+</style>
+
+<section class="editors-note">
+    <div class="section-title section-hero-header text-center">
         <h2><span>What is Quarks?</span></h2>
     </div>
 
+    <div class="about-editorial fade-up-element">
+        <p class="about-kicker">Our little manifesto</p>
+        <h1 class="about-lede">Humans have always liked <span class="accent">telling stories.</span></h1>
 
-    <!-- Improved Editors Note Content -->
-    <div class="editors-note-content">
-        <blockquote>
-            <p>Humans have always liked telling stories. It is a primal desire, one that has led to the creation of the various mythologies, epics, and all the art that surrounds us. The ability to capture the abstractions of our mind through words and drawings which then inspire ideas within others is what separates humans from all other living beings. We are almost limitless in our capability for self-expression. We have developed countless channels for self-expression over the years, be they sculptures, paintings, poems, dance forms, songs or, in our case, magazines! </br></br>
+        <div class="about-bubble left">
+            It is a primal desire, one that has led to the creation of the various mythologies, epics, and all the art that surrounds us. The ability to capture the abstractions of our mind through words and drawings which then inspire ideas within others is what separates humans from all other living beings. We are almost limitless in our capability for self-expression &mdash; we have developed countless channels over the years, be they sculptures, paintings, poems, dance forms, songs or, in our case, magazines!
+        </div>
 
-                Quarks is IISc’s undergraduate magazine. But what does that actually mean? To us, Quarks is a way of communication. It is a statement we make collectively, a snapshot capturing various facets of the lives of the Undergraduate students in IISc. Since its inception in 2012, Quarks has offered the IISc community and the world a glimpse into undergraduate life at the institute. As one of the oldest UG initiatives, it has mirrored the growth of the program, chronicling many firsts that came with it – the first major selection, the first Mimamsa victory, the first college fest and the first graduation ceremony. And with them, it has captured the enthusiasm that comes with starting something new, being the pioneers staring into the unknown, along with their fears and uncertainties.</br></br>
-                
-                While the UG program is still ‘new’, it is no longer in its infancy. We are preceded by a long line of seniors and alumni who have set the standard of what the Undergraduates of IISc can achieve. We must acknowledge the contributions made by them and look at how our actions will influence the UG program in the years to come. Through Quarks, we hope to be able to capture these efforts as honestly as we can. And what better way to achieve this than to collect the stories from the people currently within the program? </br></br>
-                
-                We need your help to achieve this. Tell us your stories! Tell us what you think at night before you go to sleep, tell us what you are passionate about, tell us about the best and worst days of your life, express yourself in any meaningful way possible. There is no limitation to language, length, genre or topic. If you aren’t fond of writing, draw something, or send us a picture! Send us a poorly drawn comic, or a list of dad jokes you really like, or a description of how you feel when you finally submit all your pending assignments on Teams. </br></br>
-                
-                Channel your creativity and let Quarks be your platform! We are here to watch and learn. </br></br> 
-                Thanks and Regards, <br>
-                Mihir Kapse(Coordinator)</p>
-        </blockquote>
+        <p class="about-pullquote">To us, Quarks is a way of communication.</p>
+
+        <div class="about-bubble right">
+            <span class="bubble-label">So, what <em>is</em> Quarks?</span><br>
+            It is IISc&rsquo;s undergraduate magazine &mdash; a statement we make collectively, a snapshot capturing various facets of the lives of the undergraduate students in IISc. Since its inception in 2012, Quarks has offered the IISc community and the world a glimpse into undergraduate life at the institute. As one of the oldest UG initiatives, it has mirrored the growth of the program, chronicling many firsts &mdash; the first major selection, the first Mimamsa victory, the first college fest and the first graduation ceremony &mdash; and with them, the enthusiasm of starting something new, of being the pioneers staring into the unknown, along with their fears and uncertainties.
+        </div>
+
+        <div class="about-connector" aria-hidden="true">
+            <svg viewBox="0 0 170 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="about-arrowhead" markerWidth="9" markerHeight="9" refX="5" refY="3" orient="auto">
+                        <path d="M0.5 0.5 L6 3 L0.5 5.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </marker>
+                </defs>
+                <path d="M138 14 C 152 46, 118 60, 74 62 C 52 63, 40 68, 33 80"
+                      stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                      marker-end="url(#about-arrowhead)"/>
+            </svg>
+        </div>
+
+        <div class="about-bubble left">
+            <span class="bubble-label">Standing on shoulders</span><br>
+            While the UG program is still &lsquo;new&rsquo;, it is no longer in its infancy. We are preceded by a long line of seniors and alumni who have set the standard of what the undergraduates of IISc can achieve. We must acknowledge their contributions and look at how our actions will influence the UG program in the years to come. Through Quarks, we hope to capture these efforts as honestly as we can. And what better way than to collect the stories from the people currently within the program?
+        </div>
+
+        <div class="about-callout">
+            <h3>Tell us your stories! &#9997;</h3>
+            <p>
+                Tell us what you think at night before you go to sleep, what you are passionate about, about the best and worst days of your life &mdash; express yourself in any meaningful way possible. There is no limitation to language, length, genre or topic. If you aren&rsquo;t fond of writing, draw something, or send us a picture!
+            </p>
+            <div class="about-chips">
+                <span>your stories</span>
+                <span>poetry at nights</span>
+                <span>pictures you capture</span>
+                <span>art and doodles</span>
+                <span>comics and jokes</span>
+                <span>share your experiences</span>
+                <span>expressing inner feelings</span>
+                <span>anything really!</span>
+            </div>
+            <br>
+            <p class="about-mail">
+                Send it all our way at <a href="mailto:quarks.ug@iisc.ac.in">quarks.ug@iisc.ac.in</a>
+            </p>
+        </div>
+
+        <div class="about-signoff">
+            <p class="closing">Channel your creativity and let Quarks be your platform. We are here to watch and learn.</p>
+            <!-- <p class="regards">Thanks and regards,</p> -->
+            <!-- <p class="signer">Mihir Kapse &middot; Coordinator</p> -->
+        </div>
     </div>
-
-    <div class="row justify-content-center mt-4">
-        {% include membercard.html name="Mihir Kapse" role="Coordinator" image="Mihir.jpg" %}
-    </div>
-
-    <!--
-    <p class="edition-text">
-        Check out the previous issues of Quarks:
-    </p>
-    <ul class="edition-list">
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition1.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 1</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition2.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 2</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition3.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 3</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition4.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 4</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition5.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 5</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition6.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 6</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition7.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 7</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition8.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 8</a></li>
-        <li><a href="https://quarks-iisc.github.io/PreviousEditions/edition9.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 9</a></li>
-    </ul>
--->
-
-<!-- <p class="edition-text">Check out the previous issues of Quarks:</p> -->
-<!---->
-<!-- <div class="edition-container"> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition1.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 1</a> -->
-<!--         <p>Explore our first edition!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition2.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 2</a> -->
-<!--         <p>Dive into our second edition!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition3.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 3</a> -->
-<!--         <p>Discover Edition 3!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition4.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 4</a> -->
-<!--         <p>Browse through Edition 4!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition5.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 5</a> -->
-<!--         <p>Take a look at Edition 5!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition6.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 6</a> -->
-<!--         <p>Explore Edition 6!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition7.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 7</a> -->
-<!--         <p>Edition 7 is here!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition8.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 8</a> -->
-<!--         <p>Check out Edition 8!</p> -->
-<!--     </div> -->
-<!--     <div class="edition-card"> -->
-<!--         <a href="https://quarks-iisc.github.io/PreviousEditions/edition9.pdf" target="_blank" rel="noopener noreferrer">Quarks Edition 9</a> -->
-<!--         <p>Don’t miss Edition 9!</p> -->
-<!--     </div> -->
-<!-- </div>    -->
 
 </section>
 
@@ -98,9 +292,12 @@ title: About Quarks
     <p class="text-muted mb-4"><em>Meet the passionate minds keeping the Quarks engine running for 2026—part-time editors, full-time science enthusiasts!</em></p>
     
     <div class="row justify-content-center">
+        <!-- Coordinator first -->
+        {% include membercard.html name="Mihir Kapse" role="Quarks Coordinator" image="Mihir.jpg" %}
+
         <!-- Loop through Core Team Members with extensions -->
         {% assign core_members = "Abhimanyu_A.jpg|Aditya_De.jpg|Ananth.jpg|Anirudh_Gupta.jpg|Aviral.jpg|Debosmita.jpg|Jahin.jpg|Kabyadeep.jpg|Kalidas.jpg|Kushal.jpg|Lisa.png|Manya.jpg|Sankalp.jpg|Shreya_Pithva.jpg|Soham.jpg|Souharda.jpg" | split: "|" %}
-        
+
         {% for member_file in core_members %}
             {% assign filename_parts = member_file | split: "." %}
             {% assign member_base = filename_parts | first %}
