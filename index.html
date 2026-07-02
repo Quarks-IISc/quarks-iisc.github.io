@@ -41,6 +41,13 @@ title: Home
         overflow: hidden; clip: rect(0 0 0 0);
         white-space: nowrap; border: 0;
     }
+    /* Taller images in the Featured grid (2-column layout) */
+    .featured-posts .maxthumb { aspect-ratio: 4 / 3; }
+    .featured-posts .picture-card { min-height: 400px; }
+    @media (max-width: 767px) {
+        .featured-posts .maxthumb { aspect-ratio: 16 / 9; }
+        .featured-posts .picture-card { min-height: 400px; }
+    }
 </style>
 <div class="hero-header">
     <div class="quarks-ascii-wrap hero-ascii"
@@ -64,7 +71,7 @@ title: Home
         Quarks is the undergraduate magazine of IISc, offering a glimpse into our vibrant student community.
     </p>
     <div class="mt-4 d-flex justify-content-center align-items-center flex-wrap" style="gap: 7rem;">
-        <a href="#recent-posts-section" class="magazine-link">Check out Latest posts <span class="arrow">&xrarr;</span></a>
+        <a href="{{ site.baseurl }}/previous-editions" class="magazine-link">Check out latest newsletter <span class="arrow">&xrarr;</span></a>
         <a href="#site-footer" class="magazine-link">Subscribe to our newsletter <span class="arrow">&xrarr;</span></a>
     </div>
 </div>
@@ -80,10 +87,20 @@ title: Home
     <div class="section-title section-hero-header">
         <h2><span>FEATURED</span></h2>
     </div>
-    <div class="row fade-up-element">
+    <div class="row listrecent fade-up-element">
         {% assign featured_posts = site.posts | where: "featured", true %}
         {% for post in featured_posts limit:8 %}
-            {% include featuredbox.html %}
+            <div class="col-lg-6 col-md-6 mb-30px">
+                {% assign is_picture = false %}
+                {% if post.categories contains "pictures" or post.categories contains "Pictures" %}
+                    {% assign is_picture = true %}
+                {% endif %}
+                {% if is_picture %}
+                    {% include picturebox.html disable_lazy=true %}
+                {% else %}
+                    {% include postbox.html disable_lazy=true %}
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
 </section>

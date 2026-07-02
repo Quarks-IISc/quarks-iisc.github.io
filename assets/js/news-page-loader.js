@@ -40,6 +40,9 @@
           published_date: f['Published Date'] || '',
           published_date_text: typeof formatHumanDate === 'function' ? formatHumanDate(f['Published Date']) : (f['Published Date'] || '')
         };
+      }).filter(item => {
+        // Drop blank Airtable records so they don't render as an empty/black box
+        return (item.title && item.title.trim()) || (item.description && item.description.trim());
       }).sort((a, b) => {
         return new Date(b.published_date) - new Date(a.published_date);
       });
@@ -106,9 +109,7 @@
 
         return `
           <div class="news-card h-100" id="${item.id}">
-            <div class="news-meta text-muted mb-2" style="font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;">
-              ${item.published_date_text || 'Recent Update'}
-            </div>
+            ${item.published_date_text ? `<div class="news-meta text-muted mb-2" style="font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;">${item.published_date_text}</div>` : ''}
             <h3 class="news-title" style="font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.2; color: var(--heading-color); transition: color 0.2s ease; margin-bottom: 1.2rem; font-size: ${isHero ? '2.5rem' : '1.75rem'};">
               ${readMoreUrl ? `<a href="${readMoreUrl}" ${targetAttr} style="color: inherit; text-decoration: none;">${item.title}</a>` : item.title}
             </h3>
@@ -131,23 +132,16 @@
         return;
       }
 
-      const latestItems = newsItems.slice(0, 3);
-      const chronicleItems = newsItems.slice(3);
+      const latestItems = newsItems.slice(0, 2);
+      const chronicleItems = newsItems.slice(2);
 
       let finalHtml = styles;
 
-      // Render LATEST NEWS
+      // Render LATEST NEWS — two equal cards, no oversized hero
       finalHtml += `<div class="col-12"><h4 class="news-section-header">Latest News</h4></div>`;
-      
-      // Hero (Item 1)
-      finalHtml += `<div class="col-12 mb-5 pb-4 news-hero fade-up-element">${renderCard(latestItems[0], 100, true)}</div>`;
-      
-      // Secondary (Items 2 & 3)
-      if (latestItems.length > 1) {
-        finalHtml += latestItems.slice(1).map(item => `
-          <div class="col-lg-6 mb-5 news-grid-item fade-up-element">${renderCard(item, 80)}</div>
-        `).join('');
-      }
+      finalHtml += latestItems.map(item => `
+        <div class="col-lg-6 mb-5 news-grid-item fade-up-element">${renderCard(item, 80)}</div>
+      `).join('');
 
       // Render CHRONICLES
       if (chronicleItems.length > 0) {
