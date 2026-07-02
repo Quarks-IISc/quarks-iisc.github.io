@@ -4,7 +4,7 @@ title: "Endings are never easy, are they?"
 author: Mihir Kapse
 categories: [poems]
 image: "/assets/images/Poems/endings_are_never_easy.jpg"
-excerpt: "The corridors feel longer today. A final cycle ride through old routes, cherishing the privilege of having something—and someone—so precious to miss."
+excerpt: "A final cycle through familiar routes, cherishing memories and the privilege of missing someone dear."
 ---
 
 <div style="text-align: center;">
