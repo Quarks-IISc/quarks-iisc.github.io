@@ -5,7 +5,6 @@ author: Krish Tundwal
 categories: [stories]
 image: "/assets/images/Stories/cacophoney-of-silence.jpg"
 excerpt: "Behind every door lies a different version of pain. As the hallway unfolds, the boundary between the observer and the wounded becomes increasingly unclear."
-featured: true
 ---
 
 the door creaks open slowly,  

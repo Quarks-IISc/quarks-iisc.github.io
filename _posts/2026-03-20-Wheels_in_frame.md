@@ -4,6 +4,7 @@ title: "Wheels in frame"
 author: "Kabyadeep Das"
 categories: [pictures]
 image: "/assets/images/Pictures/wheels_in_frame.jpg"
+featured: true
 ---
 
 Late-night campus walks always hit differently.

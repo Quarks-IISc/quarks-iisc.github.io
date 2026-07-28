@@ -5,7 +5,6 @@ author: Mihir Kapse
 categories: [stories]
 image: "/assets/images/Stories/take-a-break.jpg"
 excerpt: "The world continues spinning even when we stop. Yet, within that pause lies an opportunity to untangle our thoughts, question our assumptions, and return to life with a clearer mind."
-featured: true
 ---
 
 Let me first tell you what I mean by ‘a break’ here. A break is the state where you pause yourself enough to just exist in the real world for a long period of time. During this period, you give yourself the time to think, either just pondering or writing. It is an active process, not a passive one. You are still eating, doing some chores, and maybe some work too (which you can’t completely withdraw from). \[One more thing you can actively practice during this period is [detachment](https://thomas-oppong.medium.com/oshos-rule-for-life-the-art-of-detachment-without-running-away-from-life-f2dfb91f43af)\]

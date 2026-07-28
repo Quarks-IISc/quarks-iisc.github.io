@@ -5,6 +5,7 @@ author: "Pratibha Mahale"
 categories: [stories]
 image: "/assets/images/Stories/First_SEM_ki_jugalbandi.jpg"
 excerpt: "A humorous and nostalgic reflection on the chaotic, overwhelming, yet ultimately rewarding experience of the very first semester at IISc."
+featured: true
 ---
 
 **FiRST SEM KI जुगलबंदी**

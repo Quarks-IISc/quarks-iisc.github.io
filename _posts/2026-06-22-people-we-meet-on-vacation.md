@@ -5,7 +5,6 @@ author: Manya Ganapathy
 categories: [stories]
 image: "/assets/images/Stories/people-we-meet-on-vacation.jpg"
 excerpt: "A heartfelt essay about the unexpected connections and kindness of people who make travel meaningful."
-featured: true
 ---
 
 This title is a lie, and a lie on many fronts. This is not a commentary on Emily Henry’s 2021 Goodreads Choice Awards for Romance-winning novel, nor is it a review of its 2026 film adaptation. I[...]
