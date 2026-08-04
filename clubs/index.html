@@ -1,0 +1,599 @@
+---
+layout: default
+title: AASCEND — Clubs
+permalink: /clubs/
+---
+
+<style>
+  /* ============================================================
+       AASCEND — a snaking pipeline of the clubs, cascading down.
+       Sits inside the standard section-hero-header layout so it
+       matches the rest of the site. A sparse scatter of club-themed
+       doodles fills the background. Desktop: serpentine in a fixed
+       900px space. Mobile (<960px): a simple stacked pipe.
+       ============================================================ */
+
+  .aascend-page {
+    position: relative;
+    overflow: hidden;
+  }
+  .aascend-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .aascend-sub {
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    max-width: 760px;
+    margin: 1.35rem auto 0;
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 1.45rem;
+    text-align: center;
+    padding: 0 1.25rem;
+  }
+  @media (max-width: 767px) {
+    .aascend-sub {
+      font-size: 1.2rem;
+    }
+  }
+  .aascend-hint {
+    display: block;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+    opacity: 0.7;
+  }
+
+  /* ---- The serpentine track ---- */
+  .aascend-track {
+    position: relative;
+    width: 900px;
+    max-width: 100%;
+    height: 1920px;
+    margin: 2.5rem auto 3.5rem;
+  }
+  .aascend-snake {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 900px;
+    height: 1920px;
+    z-index: 1;
+    pointer-events: none;
+    overflow: visible;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
+  }
+  .aascend-snake .pipe-body {
+    fill: none;
+    stroke: url(#aascend-grad);
+    stroke-width: 13;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .aascend-snake .pipe-flow {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 4 26;
+    animation: aascend-flow 1.4s linear infinite;
+  }
+  @keyframes aascend-flow {
+    to {
+      stroke-dashoffset: -30;
+    }
+  }
+
+  /* ---- Nodes (open, card-less) ---- */
+  .aascend-node {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  .aascend-node.left {
+    left: 5px;
+    flex-direction: row-reverse;
+  }
+  .aascend-node.right {
+    left: 546px;
+    flex-direction: row;
+  }
+
+  /* the bubble is a link → clicking it opens the club page */
+  .aascend-node .aascend-badge {
+    flex: 0 0 auto;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Playfair Display", serif;
+    font-weight: 900;
+    font-size: 3rem;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+    background: linear-gradient(145deg, var(--club-light), var(--club));
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+    position: relative;
+    animation: aascend-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition:
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.25s ease;
+  }
+  .aascend-badge::after {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition:
+      inset 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .aascend-badge::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--club);
+    opacity: 0;
+    transform: scale(0.85);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+  .aascend-node .aascend-badge:hover {
+    color: #fff;
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.26);
+  }
+  .aascend-badge:hover::after {
+    inset: 4px;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  .aascend-badge:hover::before {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  .aascend-info {
+    width: 215px;
+    display: flex;
+    flex-direction: column;
+    animation: aascend-fade 0.6s ease 0.08s both;
+  }
+  .aascend-node.left .aascend-info {
+    align-items: flex-end;
+    text-align: right;
+  }
+  .aascend-node.right .aascend-info {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .aascend-type {
+    font-family: "Inter", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  /* raise specificity so `.dark-mode a` can't repaint these links blue */
+  .aascend-info .aascend-name {
+    font-family: "Playfair Display", serif;
+    font-weight: 800;
+    font-size: 1.75rem;
+    line-height: 1.12;
+    color: var(--heading-color);
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0.55rem;
+  }
+  .aascend-info .aascend-name::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 44px;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--club-light), var(--club));
+    transition: width 0.25s ease;
+  }
+  .aascend-node.left .aascend-info .aascend-name::after {
+    left: auto;
+    right: 0;
+  }
+  .aascend-info .aascend-name:hover {
+    color: var(--heading-color);
+  }
+  .aascend-info .aascend-name:hover::after {
+    width: 100%;
+  }
+  .aascend-desc {
+    font-family: "Inter", sans-serif;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    line-height: 1.55;
+  }
+  .aascend-info .aascend-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .aascend-info .aascend-go i {
+    transition: transform 0.2s ease;
+  }
+  .aascend-info .aascend-go:hover i {
+    transform: translateX(4px);
+  }
+  .aascend-node.left .aascend-info .aascend-go {
+    flex-direction: row-reverse;
+  }
+  .aascend-node.left .aascend-info .aascend-go:hover i {
+    transform: translateX(-4px);
+  }
+
+  @keyframes aascend-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+  @keyframes aascend-fade {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* ---------- Mobile: stacked pipeline ---------- */
+  @media (max-width: 959px) {
+    .aascend-track {
+      width: 100%;
+      height: auto;
+      padding-left: 6px;
+    }
+    .aascend-snake {
+      display: none;
+    }
+    .aascend-track::before {
+      content: "";
+      position: absolute;
+      left: 50px;
+      top: 40px;
+      bottom: 40px;
+      width: 4px;
+      border-radius: 2px;
+      background: linear-gradient(
+        180deg,
+        #7c3aed,
+        #e07b39,
+        #f2b705,
+        #38bdf8,
+        #e63946,
+        #21a35a,
+        #4f46e5,
+        #06b6d4
+      );
+      z-index: 0;
+    }
+    .aascend-node {
+      position: static !important;
+      transform: none !important;
+      left: auto !important;
+      flex-direction: row !important;
+      width: 100%;
+      margin-bottom: 32px;
+      gap: 18px;
+      z-index: 2;
+    }
+    .aascend-node .aascend-badge {
+      width: 92px;
+      height: 92px;
+      font-size: 2.5rem;
+    }
+    .aascend-info {
+      width: auto;
+      flex: 1 1 auto;
+      align-items: flex-start !important;
+      text-align: left !important;
+    }
+    .aascend-node.left .aascend-info .aascend-name::after {
+      left: 0;
+      right: auto;
+    }
+    .aascend-node.left .aascend-info .aascend-go {
+      flex-direction: row;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aascend-badge,
+    .aascend-info {
+      animation: none !important;
+    }
+    .aascend-snake .pipe-flow {
+      animation: none !important;
+    }
+    .aascend-badge,
+    .aascend-info .aascend-name::after,
+    .aascend-info .aascend-go i {
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="aascend-page">
+  {% include aascend-doodles.html %}
+
+  <section class="recent-posts aascend-section">
+    <div class="section-title section-hero-header">
+      <h2><span>AASCEND</span></h2>
+    </div>
+
+    <p class="aascend-sub">
+      From stargazers to circuit-benders &mdash; a spectrum of undergraduate
+      clubs, each with its own colour and its own kind of curious.
+    </p>
+    <div class="aascend-hint">&darr; follow the flow</div>
+
+    <div class="aascend-track">
+      <!-- The snaking pipe (900 x 1920 coordinate space). The gradient is anchored
+                 in user space so the flow takes each club's colour where its node sits. -->
+      <svg
+        class="aascend-snake"
+        viewBox="0 0 900 1920"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient
+            id="aascend-grad"
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1920"
+          >
+            <stop offset="0" stop-color="#7c3aed" />
+            <stop offset="0.0625" stop-color="#7c3aed" />
+            <stop offset="0.1875" stop-color="#e07b39" />
+            <stop offset="0.3125" stop-color="#f2b705" />
+            <stop offset="0.4375" stop-color="#38bdf8" />
+            <stop offset="0.5625" stop-color="#e63946" />
+            <stop offset="0.6875" stop-color="#21a35a" />
+            <stop offset="0.8125" stop-color="#4f46e5" />
+            <stop offset="0.9375" stop-color="#06b6d4" />
+            <stop offset="1" stop-color="#06b6d4" />
+          </linearGradient>
+        </defs>
+        <path
+          class="pipe-body"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800"
+        />
+        <path
+          class="pipe-flow"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800"
+        />
+      </svg>
+
+      <!-- A → Astrae (Astronomy, purple) -->
+      <div
+        class="aascend-node left"
+        style="
+          top: 120px;
+          --club: #7c3aed;
+          --club-light: #a78bfa;
+          --ink: #7c3aed;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/astrae/">A</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Astronomy</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/astrae/"
+            >Astrae</a
+          >
+          <div class="aascend-desc">
+            The night sky and everything beyond it.
+          </div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/astrae/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- A → Amalgam (Materials Science, copper) -->
+      <div
+        class="aascend-node right"
+        style="
+          top: 360px;
+          --club: #e07b39;
+          --club-light: #f4a261;
+          --ink: #c15f22;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/amalgam/">A</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Materials Science</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/amalgam/"
+            >Amalgam</a
+          >
+          <div class="aascend-desc">
+            Where disciplines blend into something new.
+          </div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/amalgam/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- S → Samasya (Mathematics, yellow) -->
+      <div
+        class="aascend-node left"
+        style="
+          top: 600px;
+          --club: #f2b705;
+          --club-light: #ffd43b;
+          --ink: #a67c00;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/samasya/">S</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Mathematics</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/samasya/"
+            >Samasya</a
+          >
+          <div class="aascend-desc">
+            Puzzles, problems and the joy of proofs.
+          </div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/samasya/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- C → Catalyst (Chemistry, light blue) -->
+      <div
+        class="aascend-node right"
+        style="
+          top: 840px;
+          --club: #38bdf8;
+          --club-light: #7dd3fc;
+          --ink: #0c8fc7;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/catalyst/">C</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Chemistry</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/catalyst/"
+            >Catalyst</a
+          >
+          <div class="aascend-desc">Sparking new reactions.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/catalyst/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- E → Ensemble (Physics, red) -->
+      <div
+        class="aascend-node left"
+        style="
+          top: 1080px;
+          --club: #e63946;
+          --club-light: #ff6b6b;
+          --ink: #d62835;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/ensemble/">E</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Physics</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/ensemble/"
+            >Ensemble</a
+          >
+          <div class="aascend-desc">The physics collective.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/ensemble/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- N → Naturalists (Biology, green) -->
+      <div
+        class="aascend-node right"
+        style="
+          top: 1320px;
+          --club: #21a35a;
+          --club-light: #51cf66;
+          --ink: #1a8a4c;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/naturalists/"
+          >N</a
+        >
+        <div class="aascend-info">
+          <div class="aascend-type">Biology</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/naturalists/"
+            >Naturalists</a
+          >
+          <div class="aascend-desc">Into the wild, together.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/naturalists/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- D → Databased (Computer Science, indigo) -->
+      <div
+        class="aascend-node left"
+        style="
+          top: 1560px;
+          --club: #4f46e5;
+          --club-light: #818cf8;
+          --ink: #4f46e5;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/databased/"
+          >D</a
+        >
+        <div class="aascend-info">
+          <div class="aascend-type">Computer Science</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/databased/"
+            >Databased</a
+          >
+          <div class="aascend-desc">Stories told in data.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/databased/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- V → Vicharaka (Robotics, teal) -->
+      <div
+        class="aascend-node right"
+        style="
+          top: 1800px;
+          --club: #06b6d4;
+          --club-light: #22d3ee;
+          --ink: #0596b0;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/vicharaka/"
+          >V</a
+        >
+        <div class="aascend-info">
+          <div class="aascend-type">Robotics</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/vicharaka/"
+            >Vicharaka</a
+          >
+          <div class="aascend-desc">Thinkers, tinkerers and machines.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/vicharaka/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

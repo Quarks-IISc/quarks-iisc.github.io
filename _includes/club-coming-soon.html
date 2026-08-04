@@ -1,0 +1,42 @@
+<style>
+    .club-soon-block {
+        text-align: center;
+        max-width: 560px;
+        margin: 2.75rem auto 4.5rem;
+        padding: 0 1.25rem;
+    }
+    .club-soon-block .icon {
+        font-size: 2.6rem;
+        display: block;
+        margin-bottom: 1.1rem;
+    }
+    .club-soon-block h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        color: var(--heading-color);
+        margin: 0 0 0.65rem;
+        font-size: 1.7rem;
+    }
+    .club-soon-block p {
+        font-family: 'Inter', sans-serif;
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin: 0 auto;
+    }
+</style>
+
+<section class="recent-posts">
+    <div class="section-title section-hero-header">
+        <h2><span>{{ include.name }} Club</span></h2>
+    </div>
+
+    {% if include.dek %}{% include club-dek.html text=include.dek %}{% endif %}
+
+    {% if include.website %}{% assign lc = include.linkcolor | default: include.color %}{% include club-website.html website=include.website color=lc %}{% endif %}
+
+    <div class="club-soon-block">
+        <i class="icon fas fa-{{ include.icon | default: 'compass' }}" style="color: {{ include.color }};"></i>
+        <h3>Editions coming soon</h3>
+        <p>{{ include.name }}'s newsletters, editions and stories will find their home right here.{% if include.website %} Until then, explore their website above.{% endif %}</p>
+    </div>
+</section>
