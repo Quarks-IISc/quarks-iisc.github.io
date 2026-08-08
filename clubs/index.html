@@ -55,7 +55,7 @@ permalink: /clubs/
     position: relative;
     width: 900px;
     max-width: 100%;
-    height: 1920px;
+    height: 2160px;
     margin: 2.5rem auto 3.5rem;
   }
   .aascend-snake {
@@ -63,7 +63,7 @@ permalink: /clubs/
     top: 0;
     left: 0;
     width: 900px;
-    height: 1920px;
+    height: 2160px;
     z-index: 1;
     pointer-events: none;
     overflow: visible;
@@ -295,7 +295,8 @@ permalink: /clubs/
         #e63946,
         #21a35a,
         #4f46e5,
-        #06b6d4
+        #06b6d4,
+        #d6457d
       );
       z-index: 0;
     }
@@ -364,7 +365,7 @@ permalink: /clubs/
                  in user space so the flow takes each club's colour where its node sits. -->
       <svg
         class="aascend-snake"
-        viewBox="0 0 900 1920"
+        viewBox="0 0 900 2160"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
@@ -375,27 +376,28 @@ permalink: /clubs/
             x1="0"
             y1="0"
             x2="0"
-            y2="1920"
+            y2="2160"
           >
             <stop offset="0" stop-color="#7c3aed" />
-            <stop offset="0.0625" stop-color="#7c3aed" />
-            <stop offset="0.1875" stop-color="#e07b39" />
-            <stop offset="0.3125" stop-color="#f2b705" />
-            <stop offset="0.4375" stop-color="#38bdf8" />
-            <stop offset="0.5625" stop-color="#e63946" />
-            <stop offset="0.6875" stop-color="#21a35a" />
-            <stop offset="0.8125" stop-color="#4f46e5" />
-            <stop offset="0.9375" stop-color="#06b6d4" />
-            <stop offset="1" stop-color="#06b6d4" />
+            <stop offset="0.05556" stop-color="#7c3aed" />
+            <stop offset="0.16667" stop-color="#e07b39" />
+            <stop offset="0.27778" stop-color="#f2b705" />
+            <stop offset="0.38889" stop-color="#38bdf8" />
+            <stop offset="0.5" stop-color="#e63946" />
+            <stop offset="0.61111" stop-color="#21a35a" />
+            <stop offset="0.72222" stop-color="#4f46e5" />
+            <stop offset="0.83333" stop-color="#06b6d4" />
+            <stop offset="0.94444" stop-color="#d6457d" />
+            <stop offset="1" stop-color="#d6457d" />
           </linearGradient>
         </defs>
         <path
           class="pipe-body"
-          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040"
         />
         <path
           class="pipe-flow"
-          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040"
         />
       </svg>
 
@@ -590,6 +592,29 @@ permalink: /clubs/
           >
           <div class="aascend-desc">Thinkers, tinkerers and machines.</div>
           <a class="aascend-go" href="{{ site.baseurl }}/clubs/vicharaka/"
+            >Explore <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
+
+      <!-- B → Book Club (Literature, rose) -->
+      <div
+        class="aascend-node left"
+        style="
+          top: 2040px;
+          --club: #d6457d;
+          --club-light: #f06595;
+          --ink: #c43c72;
+        "
+      >
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/bookclub/">B</a>
+        <div class="aascend-info">
+          <div class="aascend-type">Literature</div>
+          <a class="aascend-name" href="{{ site.baseurl }}/clubs/bookclub/"
+            >Book Club</a
+          >
+          <div class="aascend-desc">Building a community through stories.</div>
+          <a class="aascend-go" href="{{ site.baseurl }}/clubs/bookclub/"
             >Explore <i class="fas fa-arrow-right"></i
           ></a>
         </div>

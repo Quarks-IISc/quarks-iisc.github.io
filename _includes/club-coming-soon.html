@@ -30,7 +30,11 @@
         <h2><span>{{ include.name }} Club</span></h2>
     </div>
 
+    {% if include.slug %}{% include club-logo.html slug=include.slug name=include.name %}{% endif %}
+
     {% if include.dek %}{% include club-dek.html text=include.dek %}{% endif %}
+
+    {% if include.writeup %}{% include {{ include.writeup }} %}{% endif %}
 
     {% if include.website %}{% assign lc = include.linkcolor | default: include.color %}{% include club-website.html website=include.website color=lc %}{% endif %}
 

@@ -271,14 +271,84 @@
     border-radius: 10px; box-shadow: var(--card-shadow); overflow: hidden;
 }
 .section-hero-header h2, .section-hero-header h1, .section-hero-header h2 span, .section-hero-header h1 span {
-    font-family: 'Playfair Display', serif; 
-    color: #ffffff !important; 
+    font-family: 'Playfair Display', serif;
+    color: #ffffff !important;
     font-size: 3.5rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); 
-    text-align: center; 
-    line-height: 1.2; 
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-align: center;
+    line-height: 1.2;
     margin: 0;
     border-bottom: none !important;
+}
+
+/* --- Club logo --- */
+.club-logo-wrap { text-align: center; margin: 0 auto 1.75rem; }
+.club-logo {
+    max-height: 150px;
+    max-width: 300px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.18));
+    transition: transform 0.3s ease;
+}
+.club-logo:hover { transform: scale(1.04); }
+.club-logo.is-circle {
+    max-height: 160px;
+    max-width: 160px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* --- Club write-up / about the club --- */
+.club-writeup {
+    max-width: 760px;
+    margin: 3.25rem auto 1rem;
+    padding: 0 1.5rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    line-height: 1.85;
+    font-size: 1.08rem;
+}
+.club-writeup .club-writeup-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    text-align: center;
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+    color: var(--heading-color);
+}
+.club-writeup .club-writeup-rule {
+    width: 60px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--club-accent, var(--link-color));
+    margin: 0 auto 2rem;
+    opacity: 0.85;
+}
+.club-writeup p { margin: 0 0 1.35rem; }
+.club-writeup p:first-of-type::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.4rem;
+    font-weight: 800;
+    float: left;
+    line-height: 0.75;
+    padding: 0.08em 0.12em 0 0;
+    color: var(--club-accent, var(--heading-color));
+}
+.club-writeup .club-signoff {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.5;
+    margin-top: 1.75rem;
+}
+@media (max-width: 767px) {
+    .club-writeup { font-size: 1rem; margin-top: 2.5rem; }
+    .club-writeup .club-writeup-heading { font-size: 1.6rem; }
+    .club-writeup p:first-of-type::first-letter { font-size: 2.9rem; }
 }
 
 
