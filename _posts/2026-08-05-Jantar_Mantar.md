@@ -10,7 +10,7 @@ all: true
 featured: true
 ---
 
-<div style="border:1px solid #d0d7de; border-left:4px solid #7a7a7a; padding:1rem 1.25rem; background:#f8f8f8; margin:1rem 0;">
+<div style="border:1px solid #d0d7de; border-left:4px solid #451515; padding:1rem 1.25rem; background:#f8f8f8; margin:1rem 0;">
 <strong>Disclaimer:</strong> Though sources have been cited for all statements, readers are advised that not all of these sources are fully trustworthy. Alas, in a time when journalists are persecuted and so little exists of independent media, media resources, and documentation, we have little choice. Please apply your own discretion in all matters. This applies to both statements about the nation and about the institute. The writers of this article have made sure, to the best of their capacities, that none of the information is false, but since no official documentation exists (something that the magazine hopes to build for the future and something that the institute must consider building, going forward), no guarantees can be claimed.
 </div>
 
@@ -40,7 +40,7 @@ The events of the past few weeks have raised fundamental questions about the nat
 
 After all, democracy starts at home.
 
-<div style="border:1px solid #d0d7de; border-left:4px solid #7a7a7a; padding:1rem 1.25rem; background:#f8f8f8; margin:1rem 0;">
+<div style="border:1px solid #d0d7de; border-left:4px solid #451515; padding:1rem 1.25rem; background:#f8f8f8; margin:1rem 0;">
 This article was written, compiled, and edited in July and was supposed to be published on August 1\. However, due to unforeseen and unavoidable delays, that did not happen. A lot has happened since then. A new arm/version of the protest has come up in Jharkhand against the JPSC (among others) paper leak. The Prime Minister has taken to posting reels regularly, and the state has refused to release protesters who had cases filed against them during the events of July. The IISc students’ council still does not have access to their email IDs. We have no answers as to how or when they will be back. Finally, very recently, shocking and depressing news has come out from campus. As such, the authors feel that, although these are all things deeply connected with this article, too much has happened, and we cannot possibly fit everything here. Please stay safe, stay connected, stay strong. These events will be covered in future reports. Thank you.
 </div>
 
