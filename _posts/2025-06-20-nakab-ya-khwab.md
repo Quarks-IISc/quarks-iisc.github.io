@@ -5,7 +5,6 @@ author: "Pratibha Mahale"
 categories: [poems]
 image: "/assets/images/Poems/nakaab_ya_khwab.jpg"
 excerpt: "A Hindi free verse exploring the many masks people wear and the dreams or compulsions hidden behind them."
-featured: true
 ---
 
 

@@ -8,6 +8,7 @@ categories: [poems]
 image: "/assets/images/Poems/thoda_sa_waqt.jpg"
 excerpt: "A gentle reminder that every unfamiliar place was once new to everyone who now calls it home. Through simple verses, this poem celebrates patience, new beginnings, and the quiet magic of giving life a little time."
 all: true
+featured: true
 ---
 
 नया-सा शहर,  <br>

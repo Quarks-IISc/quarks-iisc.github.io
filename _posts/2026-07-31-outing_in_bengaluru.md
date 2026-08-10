@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/outing_in_bengaluru.jpg"
 excerpt: "A city of rain, trees, conversations, and unexpected adventures. Sometimes the best way to experience Bengaluru is simply to follow your curiosity."
 all: true
+featured: true
 ---
 
 Bangalore is a city that slowly grows on you.

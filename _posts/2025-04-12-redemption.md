@@ -5,7 +5,6 @@ author: "Rohith R"
 categories: [poems]
 image: "/assets/images/Poems/Redemption.jpg"
 excerpt: "A reflection on battling an inner monster and finally finding freedom and love."
-featured: true
 ---
 
 

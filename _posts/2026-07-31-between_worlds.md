@@ -8,6 +8,7 @@ categories: [poems]
 image: "/assets/images/Poems/between_worlds.jpg"
 excerpt: "A poignant reflection on the spaces between who we were and who we are becoming. Through quiet, powerful verses, the poem explores identity, belonging, and the difficult grace of choosing growth over familiarity."
 all: true
+featured: true
 ---
 
 I stand at the edge  <br>
