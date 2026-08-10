@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Outing in Bengaluru
-author: Kalidas Verma
+author: Kalidas Viswam
 categories: [stories]
 image: "/assets/images/Stories/outing_in_bengaluru.jpg"
 excerpt: "A city of rain, trees, conversations, and unexpected adventures. Sometimes the best way to experience Bengaluru is simply to follow your curiosity."

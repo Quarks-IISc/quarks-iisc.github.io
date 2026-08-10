@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A never-ending affection
-author: Saint
+author: Jahin Sadat Mollah
 categories: [stories]
 image: "/assets/images/Stories/never_ending_affection.jpg"
 excerpt: "Some bonds never ask for words—they simply wait, quietly and faithfully, until the right moment brings them home. A gentle tale of autumn, kindness, and an affection that time could never erase."
