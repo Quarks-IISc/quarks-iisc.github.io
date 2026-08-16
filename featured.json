@@ -1,0 +1,19 @@
+---
+layout: null
+---
+
+[
+{% assign featured_posts = site.posts | where: "featured", true %}
+{% for post in featured_posts limit:8 %}
+{
+  "title": {{ post.title | markdownify | remove: '<p>' | remove: '</p>' | jsonify }},
+  "url": {{ post.url | relative_url | jsonify }},
+  "image": {{ post.image | default: "" | jsonify }},
+  "excerpt": {{ post.excerpt | strip_html | strip_newlines | default: "" | jsonify }},
+  "author": {{ post.author | default: "" | jsonify }},
+  "date": {{ post.date | date_to_string | jsonify }},
+  "is_picture": {% if post.categories contains "pictures" or post.categories contains "Pictures" %}true{% else %}false{% endif %}
+}
+{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]

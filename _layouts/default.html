@@ -438,24 +438,7 @@
     {% endif %}
 
     <!-- Scroll Fade Up Logic -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-              }
-            });
-          },
-          { threshold: 0.1 },
-        );
-
-        document.querySelectorAll(".fade-up-element").forEach((el) => {
-          observer.observe(el);
-        });
-      });
-    </script>
+    <script src="{{ site.baseurl }}/assets/js/fade-up-observer.js"></script>
     <!-- Handle Featured Image Fade -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
