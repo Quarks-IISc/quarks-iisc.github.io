@@ -41,12 +41,14 @@ title: Home
         overflow: hidden; clip: rect(0 0 0 0);
         white-space: nowrap; border: 0;
     }
-    /* Taller images in the Featured grid (2-column layout) */
+    /* Featured grid: 3-up on desktop, so the cards are ~2/3 the old width and
+       the image/card heights come down to match. */
     .featured-posts .maxthumb { aspect-ratio: 4 / 3; }
     /* Picture cards match the full post-card height (image + text box), not just the image.
        !important overrides the inline min-height:280px baked into picturebox.html */
-    .featured-posts .picture-card { min-height: 525px !important; }
+    .featured-posts .picture-card { min-height: 430px !important; }
     @media (max-width: 991px) {
+        /* back to 2-up here, so the taller card is right again */
         .featured-posts .picture-card { min-height: 470px !important; }
     }
     @media (max-width: 767px) {
@@ -95,19 +97,19 @@ title: Home
     </div>
     <div class="row listrecent fade-up-element">
         {% assign featured_posts = site.posts | where: "featured", true %}
-        {% for post in featured_posts limit:8 %}
-            <div class="col-lg-6 col-md-6 mb-30px">
+        {% for post in featured_posts limit:9 %}
+            <div class="col-lg-4 col-md-6 mb-30px">
                 {% assign is_picture = false %}
                 {% if post.categories contains "pictures" or post.categories contains "Pictures" %}
                     {% assign is_picture = true %}
                 {% endif %}
                 {% comment %}
-                    Only the first two cards are above the fold, so only those
-                    get fetchpriority; eager-loading all eight meant the browser
-                    pulled every featured image before first paint.
+                    Only the first row is above the fold, so only those get
+                    fetchpriority; eager-loading every featured image meant the
+                    browser pulled all of them before first paint.
                 {% endcomment %}
                 {% assign eager = false %}
-                {% if forloop.index <= 2 %}{% assign eager = true %}{% endif %}
+                {% if forloop.index <= 3 %}{% assign eager = true %}{% endif %}
                 {% if is_picture %}
                     {% include picturebox.html disable_lazy=eager %}
                 {% else %}
@@ -212,6 +214,17 @@ title: Home
                 behavior: "smooth",
             });
         };
+
+        // With three reels and three visible there's nothing to scroll to, so
+        // the arrows would be dead controls. Show them only when the rail
+        // actually overflows — i.e. once a fourth reel is added.
+        const arrows = document.querySelectorAll(".reels-rail-wrap .carousel-arrow");
+        const syncArrows = () => {
+            const overflows = rail.scrollWidth > rail.clientWidth + 1;
+            arrows.forEach((a) => (a.hidden = !overflows));
+        };
+        syncArrows();
+        window.addEventListener("resize", syncArrows);
 
         // Autoplay only survives if the browser considers the video muted AND
         // on-screen: Chrome/Safari refuse (or silently pause) autoplay for

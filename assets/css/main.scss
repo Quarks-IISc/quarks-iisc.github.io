@@ -1064,14 +1064,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .reels-rail::-webkit-scrollbar {
     display: none;
 }
-/* Exactly two cards per view — each fills half the rail (the rail being the
-   full viewport minus its side padding), so the third sits just off-screen
-   and only appears when you hit an arrow or swipe. `aspect-ratio` is landscape
-   here rather than portrait: at half-viewport width a 3/4 card would be taller
-   than the window. */
+/* Three cards per view, each a third of the rail (the rail being the full
+   viewport minus its side padding). `aspect-ratio` is landscape rather than
+   portrait so the cards don't tower over the section. */
 .reel-item {
     position: relative;
-    flex: 0 0 calc(50% - 10px); /* 10px = half the 20px gap */
+    /* 2 gaps of 20px shared across 3 cards = 13.33px off each */
+    flex: 0 0 calc(33.333% - 13.34px);
     margin: 0;
     scroll-snap-align: start;
     transition: transform 0.3s ease;
@@ -1156,7 +1155,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     .reels-rail-wrap {
         padding: 0 16px;
     }
-    /* Swipe instead of arrows on small screens */
+    /* Swipe instead of arrows on small screens (see also the tablet rule below) */
     .reels-rail-wrap .carousel-arrow {
         display: none;
     }
@@ -1166,6 +1165,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     }
     .reel-title { font-size: 1.25rem; }
     .reel-dek { font-size: 0.95rem; }
+}
+/* Tablets: three across is too cramped, so drop to two and let the third
+   scroll — same as the featured grid's md breakpoint. */
+@media (min-width: 577px) and (max-width: 991px) {
+    .reel-item {
+        flex-basis: calc(50% - 10px);
+    }
 }
 
 /* --- Reels section heading: a rule, not a hero-header banner --- */
