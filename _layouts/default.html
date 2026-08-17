@@ -179,7 +179,7 @@
               <a class="nav-link" href="{{ site.baseurl }}/news/">News</a>
             </li>
 
-            <li class="nav-item dropdown {% if page.url contains 'aboutus' or page.url contains 'previous-editions' %}active{% endif %}">
+            <li class="nav-item dropdown {% if page.url contains 'aboutus' or page.url contains 'previous-editions' or page.url contains 'course-review' %}active{% endif %}">
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
@@ -200,6 +200,12 @@
                   class="dropdown-item"
                   href="{{ site.baseurl }}/previous-editions"
                   >Previous Editions <br>& Newsletters</a
+                >
+                <div class="dropdown-divider"></div>
+                <a
+                  class="dropdown-item"
+                  href="{{ site.baseurl }}/course-review/"
+                  >Course Reviews</a
                 >
                 <div class="dropdown-divider"></div>
                 <div class="dropdown-submenu">
