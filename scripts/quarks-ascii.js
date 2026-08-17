@@ -86,7 +86,7 @@
   var BG_RAMP = [' ', '·', ':', '~', '*', '+'];
   // clean block-shade ramp for phones: solid, anti-aliased letterforms
   var MOBILE_RAMP = ' ░▒▓█'.split('');
-  var FX_DEFAULTS = { ripple: true, livingText: true, tilt: true, burst: true, reveal: true };
+  var FX_DEFAULTS = { ripple: false, livingText: true, tilt: true, burst: true, reveal: true };
   var FX_ITEMS = [
     { key: 'ripple', label: 'Ripple' },
     { key: 'livingText', label: 'Living text' },

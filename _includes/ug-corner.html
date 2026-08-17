@@ -1,0 +1,186 @@
+<!-- UG Corner: the numbered index on the homepage, paired with
+     crossword-teaser.html in the same row. Self-contained — its styles live
+     here rather than in main.scss since nothing else on the site uses them. -->
+<style>
+  /* UG Corner — a magazine contents page: numbered rules, oversized display
+   type, and a fill that sweeps in from the left on hover. */
+  .ug-corner {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 4px;
+  }
+  .ug-corner-intro {
+    margin: 0 0 1.6rem;
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .ug-corner-intro strong {
+    font-style: normal;
+    color: var(--heading-color);
+  }
+  .ug-index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border-color);
+  }
+  .ug-index li {
+    border-bottom: 1px solid var(--border-color);
+  }
+  .ug-index a,
+  .ug-index-soon {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 16px 14px;
+    color: var(--heading-color);
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      color 0.3s ease,
+      padding-left 0.3s ease;
+  }
+  /* The sweep sits behind the text and is revealed by scaling from the left
+   edge, so the row itself never repaints. */
+  .ug-index a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--heading-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+    z-index: 0;
+  }
+  .ug-index a:hover::before {
+    transform: scaleX(1);
+  }
+  .ug-index a:hover {
+    color: var(--bg-color);
+    padding-left: 24px;
+    text-decoration: none;
+  }
+  .ug-index span {
+    position: relative;
+    z-index: 1;
+  }
+  .ug-num {
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0.55;
+  }
+  .ug-label {
+    flex: 1 1 auto;
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+  .ug-meta {
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    white-space: nowrap;
+  }
+  /* Unbuilt row: greyed out and inert — no sweep, no pointer, nothing that
+     suggests it can be clicked. Its "coming soon" tag is a dashed chip rather
+     than the plain uppercase gloss the live rows use, so the row reads as
+     pending at a glance instead of just looking faded. */
+  .ug-index-soon {
+    cursor: default;
+    color: var(--text-muted);
+  }
+  .ug-index-soon .ug-label {
+    font-weight: 400;
+    font-style: italic;
+    opacity: 0.75;
+  }
+  .ug-index-soon .ug-meta {
+    align-self: center;
+    padding: 4px 12px;
+    border: 1px dashed var(--border-color);
+    border-radius: 40px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    opacity: 1;
+    animation: ug-pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes ug-pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+  @media (max-width: 767px) {
+    .ug-corner {
+      min-height: 0;
+    }
+    .ug-label {
+      font-size: 1.4rem;
+    }
+    .ug-meta {
+      display: none;
+    }
+  }
+</style>
+
+<div class="section-title section-hero-header">
+  <h2 style="font-size: 2.5rem">UG CORNER</h2>
+</div>
+<div class="mt-4 ug-corner fade-up-element">
+  <p class="ug-corner-intro">
+    Undergrad-Life-at-IISc can't miss out on the UG clubs, events, who-we-are,
+    our newsletters and MORE!
+  </p>
+  <ol class="ug-index">
+    <li>
+      <a href="{{ site.baseurl }}/aboutus">
+        <span class="ug-num">01</span>
+        <span class="ug-label">About Quarks</span>
+        <span class="ug-meta">who we are</span>
+      </a>
+    </li>
+    <li>
+      <a href="{{ site.baseurl }}/clubs/">
+        <span class="ug-num">02</span>
+        <span class="ug-label">AASCEND</span>
+        <span class="ug-meta">the clubs</span>
+      </a>
+    </li>
+    <li>
+      <a href="{{ site.baseurl }}/course-review/">
+        <span class="ug-num">03</span>
+        <span class="ug-label">Course Reviews</span>
+        <span class="ug-meta">student verdicts</span>
+      </a>
+    </li>
+    <li>
+      <a href="{{ site.baseurl }}/previous-editions">
+        <span class="ug-num">04</span>
+        <span class="ug-label">Newsletters</span>
+        <span class="ug-meta">past editions</span>
+      </a>
+    </li>
+    <li>
+      <div class="ug-index-soon">
+        <span class="ug-num">05</span>
+        <span class="ug-label">Calendar</span>
+        <span class="ug-meta">coming soon</span>
+      </div>
+    </li>
+  </ol>
+</div>

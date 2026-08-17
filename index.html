@@ -53,6 +53,7 @@ title: Home
         .featured-posts .maxthumb { aspect-ratio: 16 / 9; }
         .featured-posts .picture-card { min-height: 420px !important; }
     }
+
 </style>
 <div class="hero-header">
     <div class="quarks-ascii-wrap hero-ascii"
@@ -109,6 +110,167 @@ title: Home
         {% endfor %}
     </div>
 </section>
+
+<!-- Reels Section -->
+<section class="reels-section mt-5" id="reels-section">
+    <div class="reels-heading-row fade-up-element">
+        <span class="reels-heading-rule"></span>
+        <h3 class="reels-heading-title">Watch Quarks in Action</h3>
+        <span class="reels-heading-rule"></span>
+        <a class="reels-heading-insta" href="https://www.instagram.com/quarks_ug_iisc/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i> Instagram
+        </a>
+    </div>
+    <!-- NOTE: deliberately NOT .fade-up-element. That class animates via
+         `transform`, which overrode this element's own breakout transform and
+         shoved the whole rail off to the right; its opacity:0 start also made
+         Chrome refuse to autoplay the (invisible) videos. -->
+    <div class="reels-rail-wrap">
+        <!-- Left Arrow (hidden on mobile, swipe instead) -->
+        <button class="carousel-arrow left" onclick="window.scroll_reels_carousel('left')" aria-label="Scroll Left">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="reels-rail" id="reels-carousel">
+            <figure class="reel-item">
+                <video
+                    poster="{{ site.baseurl }}/assets/reels/campus-aura-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="IISc Campus Aura reel">
+                    <source src="{{ site.baseurl }}/assets/reels/campus-aura.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/reel/Db40gRzRsxM/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">IISc Campus Aura</h4>
+                    <p class="reel-dek">Exploring cool locations on campus</p>
+                </figcaption>
+            </figure>
+            <figure class="reel-item">
+                <video
+                    poster="{{ site.baseurl }}/assets/reels/sugarcane-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="Quarks reel">
+                    <source src="{{ site.baseurl }}/assets/reels/sugarcane.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/quarks_ug_iisc/reel/DbbPZm8tHqM/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">Meet the Juniors</h4>
+                    <p class="reel-dek">The wait is over &mdash; the joos are here</p>
+                </figcaption>
+            </figure>
+            <figure class="reel-item">
+                <video
+                    poster="{{ site.baseurl }}/assets/reels/day-in-life-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="A Day in the Life of a UG Student reel">
+                    <source src="{{ site.baseurl }}/assets/reels/day-in-life.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/reel/DcAoNAdRBZO/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">A Day in the Life</h4>
+                    <p class="reel-dek">Following a UG student around campus</p>
+                </figcaption>
+            </figure>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="carousel-arrow right" onclick="window.scroll_reels_carousel('right')" aria-label="Scroll Right">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rail = document.getElementById("reels-carousel");
+
+        // Plain scroll-by-arrow. Deliberately not initCarousel(): that
+        // helper duplicates the track's content for seamless auto-scroll
+        // looping, which doubled these reels for no benefit since this
+        // rail doesn't autoscroll — it's a manual/swipe rail.
+        window.scroll_reels_carousel = function (direction) {
+            const card = rail.querySelector(".reel-item");
+            const amount = card ? card.getBoundingClientRect().width + 20 : 340;
+            rail.scrollBy({
+                left: direction === "left" ? -amount : amount,
+                behavior: "smooth",
+            });
+        };
+
+        // Autoplay only survives if the browser considers the video muted AND
+        // on-screen: Chrome/Safari refuse (or silently pause) autoplay for
+        // videos scrolled out of view. So drive play/pause off visibility
+        // rather than trusting the `autoplay` attribute alone. Setting .muted
+        // in JS too — the attribute alone isn't always honoured for a
+        // script-initiated play().
+        const videos = Array.from(rail.querySelectorAll("video"));
+        videos.forEach((v) => {
+            v.muted = true;
+            v.defaultMuted = true;
+        });
+
+        const onScreen = new Set();
+        const nudge = (video) => {
+            video.muted = true; // re-assert: a rejected play() can clear this
+            // Markup ships preload="none", so landing on the homepage costs
+            // zero video bytes; a clip only starts fetching as it's approached.
+            if (video.preload !== "auto") {
+                video.preload = "auto";
+                video.load();
+            }
+            const attempt = video.play();
+            if (attempt) attempt.catch(() => {});
+        };
+        const nudgeVisible = () => onScreen.forEach(nudge);
+
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        onScreen.add(entry.target);
+                        nudge(entry.target);
+                    } else {
+                        onScreen.delete(entry.target);
+                        entry.target.pause();
+                    }
+                });
+            },
+            // rootMargin gives each clip a head start on buffering just before
+            // it scrolls into view, vertically or along the rail.
+            { threshold: 0.15, rootMargin: "300px" }
+        );
+
+        videos.forEach((video) => {
+            io.observe(video);
+            // A video with only metadata buffered can reject play(); retry once
+            // there are real frames to show.
+            video.addEventListener("loadeddata", () => nudge(video), { once: true });
+            video.addEventListener("canplay", () => nudge(video), { once: true });
+        });
+
+        // Last-resort unlock: a few environments refuse even muted autoplay
+        // outright (iOS Low Power Mode, Safari's per-site Auto-Play setting,
+        // some privacy modes) and leave a native play button on the poster.
+        // Any user gesture anywhere on the page lifts that restriction, so
+        // retry on the first one rather than making people press play.
+        ["pointerdown", "touchstart", "keydown", "scroll"].forEach((evt) =>
+            window.addEventListener(evt, nudgeVisible, { once: true, passive: true })
+        );
+        // Some browsers stop playback when the tab goes to the background.
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) nudgeVisible();
+        });
+    });
+</script>
 
 <!-- SECTION 2: NEWS & ANNOUNCEMENTS -->
 <section class="news-announcements mt-5" id="news-announcements-section">
@@ -193,15 +355,9 @@ title: Home
 <!-- SECTION 4: Crosswords -->
 <section class="crosswords mt-5 mb-5" id="crosswords-section">
     <div class="row">
-        <!-- Left Side: Placeholder -->
+        <!-- Left Side: UG Corner -->
         <div class="col-md-6 mb-4">
-            <div class="section-title section-hero-header">
-                <h2 style="font-size: 2.5rem;">WHAT'S HERE?</h2>
-            </div>
-            <div class="mt-4 text-center d-flex flex-column align-items-center justify-content-center fade-up-element" style="min-height: 400px; background: linear-gradient(rgba(128,128,128,0.05), rgba(128,128,128,0.05)), var(--bg-color); border-radius: 15px; padding: 30px;">
-                <h3 class="font-weight-bold" style="font-family: 'Playfair Display', serif; opacity: 0.3; letter-spacing: 2px;">COMING SOON...</h3>
-                <p class="text-muted mt-3">We are working on something exciting for this section!</p>
-            </div>
+            {% include ug-corner.html %}
         </div>
 
         <!-- Right Side: Crossword -->

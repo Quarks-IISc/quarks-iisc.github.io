@@ -1031,3 +1031,198 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
         font-size: 0.9rem;
     }
 }
+
+/* --- Reels: full-bleed autoplaying rail linking out to Instagram ---
+   Breaks out of .container to span the viewport edge-to-edge (same trick
+   as .hero-header), with scroll-snap so it swipes cleanly on mobile. Every
+   card is forced to the same aspect-ratio + object-fit:cover regardless
+   of the source clip's own aspect (our 3 reels are a mix of landscape and
+   portrait) — without this, mismatched natural video heights left uneven
+   gaps under the shorter clips. */
+/* Breakout via margins, NOT `left + translateX(-50%)`: a transform here is
+   fragile (anything else that touches transform on this element — a fade-up
+   animation, a hover — silently cancels the centering and throws the whole
+   rail off to one side). Negative margins can't be clobbered that way. */
+.reels-rail-wrap {
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding: 0 60px;
+    box-sizing: border-box;
+}
+.reels-rail {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 10px 4px 30px;
+}
+.reels-rail::-webkit-scrollbar {
+    display: none;
+}
+/* Exactly two cards per view — each fills half the rail (the rail being the
+   full viewport minus its side padding), so the third sits just off-screen
+   and only appears when you hit an arrow or swipe. `aspect-ratio` is landscape
+   here rather than portrait: at half-viewport width a 3/4 card would be taller
+   than the window. */
+.reel-item {
+    position: relative;
+    flex: 0 0 calc(50% - 10px); /* 10px = half the 20px gap */
+    margin: 0;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease;
+}
+.reel-item:hover {
+    transform: translateY(-6px);
+}
+/* The aspect box lives on the video, not the figure — the caption sits below
+   the frame rather than inside it. */
+.reel-item video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 18px;
+    background: #000;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s ease;
+}
+.reel-item:hover video {
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* --- Caption: editorial/fashion-plate treatment --- */
+.reel-caption {
+    padding: 18px 4px 0;
+}
+.reel-title {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--heading-color);
+}
+.reel-dek {
+    margin: 6px 0 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+}
+.reel-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+    /* The badge is the ONLY thing that links out to Instagram — clicking the
+       video itself deliberately does nothing. */
+    text-decoration: none;
+    z-index: 2;
+}
+.reel-badge:hover,
+.reel-badge:focus {
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    transform: scale(1.12);
+    text-decoration: none;
+}
+.reels-rail-wrap .carousel-arrow {
+    position: absolute;
+    /* Centred on the video frame, not the figure — the caption below it would
+       otherwise drag the arrows visibly low. */
+    top: 38%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+.reels-rail-wrap .carousel-arrow.left { left: 15px; }
+.reels-rail-wrap .carousel-arrow.right { right: 15px; }
+@media (max-width: 576px) {
+    .reels-rail-wrap {
+        padding: 0 16px;
+    }
+    /* Swipe instead of arrows on small screens */
+    .reels-rail-wrap .carousel-arrow {
+        display: none;
+    }
+    /* One at a time on phones — half a phone screen is too small to see. */
+    .reel-item {
+        flex-basis: 82%;
+    }
+    .reel-title { font-size: 1.25rem; }
+    .reel-dek { font-size: 0.95rem; }
+}
+
+/* --- Reels section heading: a rule, not a hero-header banner --- */
+.reels-heading-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto 2rem;
+    padding: 0 24px;
+}
+.reels-heading-rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--border-color);
+}
+.dark-mode .reels-heading-rule {
+    background: rgba(255, 255, 255, 0.55);
+}
+.reels-heading-title {
+    flex: 0 0 auto;
+    margin: 0;
+    /* Anton — the closest free match to the Marvel logotype's Benton Sans
+       Extra Compressed Black. Wants uppercase and tight tracking to read the
+       way that logo does. */
+    font-family: 'Anton', 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 2.3rem;
+    line-height: 1;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--heading-color);
+    white-space: nowrap;
+}
+.reels-heading-insta {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.reels-heading-insta:hover {
+    color: var(--link-color);
+    text-decoration: none;
+}
+@media (max-width: 576px) {
+    .reels-heading-row {
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: 10px;
+    }
+    .reels-heading-rule { display: none; }
+    .reels-heading-insta { flex-basis: 100%; justify-content: center; }
+}
