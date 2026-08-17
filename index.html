@@ -101,10 +101,17 @@ title: Home
                 {% if post.categories contains "pictures" or post.categories contains "Pictures" %}
                     {% assign is_picture = true %}
                 {% endif %}
+                {% comment %}
+                    Only the first two cards are above the fold, so only those
+                    get fetchpriority; eager-loading all eight meant the browser
+                    pulled every featured image before first paint.
+                {% endcomment %}
+                {% assign eager = false %}
+                {% if forloop.index <= 2 %}{% assign eager = true %}{% endif %}
                 {% if is_picture %}
-                    {% include picturebox.html disable_lazy=true %}
+                    {% include picturebox.html disable_lazy=eager %}
                 {% else %}
-                    {% include postbox.html disable_lazy=true %}
+                    {% include postbox.html disable_lazy=eager %}
                 {% endif %}
             </div>
         {% endfor %}
@@ -335,10 +342,14 @@ title: Home
                             {% assign is_picture = true %}
                         {% endif %}
                         
+                        {% comment %}
+                            15 cards in a horizontal carousel, all off-screen at
+                            load and most never scrolled to — lazy throughout.
+                        {% endcomment %}
                         {% if is_picture %}
-                            {% include picturebox.html disable_lazy=true %}
+                            {% include picturebox.html %}
                         {% else %}
-                            {% include postbox.html disable_lazy=true %}
+                            {% include postbox.html %}
                         {% endif %}
                     </div>
                 {% endfor %}

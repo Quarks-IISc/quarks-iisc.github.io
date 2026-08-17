@@ -16,6 +16,7 @@
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com" crossorigin />
 
     <link
       rel="stylesheet"
@@ -23,25 +24,16 @@
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
       crossorigin="anonymous"
     />
+    <!-- One combined request instead of four separate ones: each extra
+         stylesheet is another render-blocking round trip to the same host. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Anton stands in for the Marvel logotype's Benton Sans Extra Compressed
-         Black, which is a licensed Font Bureau face with no free webfont. -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600&family=Anton&display=swap"
       rel="stylesheet"
     />
 
     <link href="{{ site.baseurl }}/assets/css/screen.css" rel="stylesheet" />
 
     <link href="{{ site.baseurl }}/assets/css/main.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <!-- Instant Dark Mode Check (Prevents Flash of White) -->
     <script>
       (function () {
@@ -57,14 +49,20 @@
       })();
     </script>
 
-    <script src="{{ site.baseurl }}/assets/js/jquery.min.js"></script>
-    <script src="{{ site.baseurl }}/assets/js/darkmode.js"></script>
+    <!-- defer: neither is needed before first paint, and both blocked it.
+         Deferred scripts still run in order, and before DOMContentLoaded. -->
+    <script defer src="{{ site.baseurl }}/assets/js/jquery.min.js"></script>
+    <script defer src="{{ site.baseurl }}/assets/js/darkmode.js"></script>
 
+    <!-- MathJax is a ~1MB download; only article pages can contain math, so
+         don't make every other page compete for bandwidth with it. -->
+    {% if page.layout == 'post' %}
     <script
       type="text/javascript"
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
+    {% endif %}
     <script type="text/javascript">
       MathJax = {
         tex: {
@@ -434,7 +432,9 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="{{ site.baseurl }}/assets/js/mediumish.js"></script>
+    <!-- defer, not plain: jquery.min.js above is deferred, so anything that
+         calls $ at top level must be too or it runs first and throws. -->
+    <script defer src="{{ site.baseurl }}/assets/js/mediumish.js"></script>
 
     {% if site.lazyimages == "enabled" %}
     <script src="{{ site.baseurl }}/assets/js/lazyload.js"></script>
