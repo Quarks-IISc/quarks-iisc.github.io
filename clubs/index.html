@@ -15,7 +15,9 @@ permalink: /clubs/
 
   .aascend-page {
     position: relative;
-    overflow: hidden;
+    /* clip, NOT hidden: `hidden` makes this a scroll container, which would
+       stop .aascend-track's position:sticky from ever engaging. */
+    overflow-x: clip;
   }
   .aascend-section {
     position: relative;
@@ -50,44 +52,163 @@ permalink: /clubs/
     opacity: 0.7;
   }
 
+  /* ---- The pinned finish ----
+     .aascend-runway is empty scroll distance that the track sticks through: it
+     scrolls past while the view holds still, which is the window the skater
+     uses to cross into OPB. Then the track un-sticks and the page carries on.
+
+     It must be a real child, NOT padding on the stage — a sticky box is
+     constrained to its containing block's *content* box, so padding gives it
+     nowhere to travel and the pin silently never engages. */
+  .aascend-runway {
+    height: 560px;
+  }
+  @media (max-width: 959px) {
+    /* no road to ride down here, so no pin either */
+    .aascend-runway {
+      display: none;
+    }
+    .aascend-track {
+      position: static !important;
+    }
+  }
+
   /* ---- The serpentine track ---- */
   .aascend-track {
-    position: relative;
+    position: sticky;
+    /* Bottom of the track parks 60px above the viewport bottom. Pinning higher
+       (e.g. at the skater's eye-line) leaves the entire lower half of the
+       screen empty for the whole pin, and drops the footer in a long way
+       below the road. */
+    top: calc(100vh - 2360px);
     width: 900px;
     max-width: 100%;
-    height: 2160px;
-    margin: 2.5rem auto 3.5rem;
+    height: 2300px;
+    margin: 2.5rem auto 0;
   }
   .aascend-snake {
     position: absolute;
     top: 0;
     left: 0;
     width: 900px;
-    height: 2160px;
+    height: 2300px;
     z-index: 1;
     pointer-events: none;
     overflow: visible;
     filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
   }
+  /* The road: monochrome and stationary. Uses --heading-color so it inverts
+     with the theme (black tarmac on light, white on dark). */
   .aascend-snake .pipe-body {
     fill: none;
-    stroke: url(#aascend-grad);
-    stroke-width: 13;
+    stroke: var(--heading-color);
+    stroke-width: 26;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.9;
+  }
+  /* Lane markings down the middle — dashed, but NOT animated. */
+  .aascend-snake .pipe-flow {
+    fill: none;
+    stroke: var(--bg-color);
+    stroke-width: 3;
+    stroke-linecap: butt;
+    stroke-dasharray: 16 20;
+  }
+
+  /* ---- The skater ----
+     He straddles two backgrounds: his board sits on the black road while his
+     body sticks up over the page. A single colour would vanish against one or
+     the other, so he's drawn twice — a fat halo in the page colour underneath,
+     the real linework on top. */
+  .aascend-skater {
+    fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .aascend-snake .pipe-flow {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.55);
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 4 26;
-    animation: aascend-flow 1.4s linear infinite;
+  .aascend-skater .skater-halo {
+    stroke: var(--bg-color);
+    color: var(--bg-color); /* drives fill="currentColor" on the eye */
+    stroke-width: 7;
   }
-  @keyframes aascend-flow {
-    to {
-      stroke-dashoffset: -30;
-    }
+  .aascend-skater .skater-ink {
+    stroke: var(--heading-color);
+    color: var(--heading-color);
+    stroke-width: 2.8;
+  }
+  /* NB: per-part weights (scarf fold, smile, speed lines) are presentation
+     attributes on the art itself, not classes — CSS selectors can't reach
+     inside a <use>'s cloned content, only inherited properties can. */
+
+  /* ---- OPB, drawn from sticks ---- */
+  .aascend-opb {
+    fill: none;
+    stroke: var(--heading-color);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* Secondary lines — eave, mullions, door jamb — sit back from the structure */
+  .aascend-opb .opb-hair {
+    stroke-width: 1.6;
+    opacity: 0.5;
+  }
+  .aascend-opb .opb-column path {
+    stroke-width: 3;
+  }
+  .aascend-opb-label {
+    fill: var(--heading-color);
+    stroke: none;
+    font-family: "Playfair Display", serif;
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: 4px;
+  }
+
+  /* ---- Bheemshankar ----
+     Same two-tone build as the source artwork: a dark outline shape with the
+     coat painted on top of it. Fixed colours, not theme variables — the road
+     under him flips from black to white between themes, so a dog keyed to the
+     ink colour would disappear on one of them. */
+  .aascend-dog .dog-outline {
+    fill: #1a1a1a;
+  }
+  .aascend-dog .dog-coat {
+    fill: #ffffff;
+  }
+  .aascend-dog .dog-smile {
+    fill: none;
+    stroke: #1a1a1a;
+    stroke-width: 14; /* in the artwork's own 1024 units */
+    stroke-linecap: round;
+  }
+  .aascend-bubble path,
+  .aascend-bubble circle {
+    fill: var(--bg-color);
+    stroke: var(--heading-color);
+    stroke-width: 2.4;
+  }
+  .aascend-bubble-text {
+    fill: var(--heading-color);
+    stroke: none;
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: 27px;
+  }
+  .aascend-tag .tag-arrow {
+    fill: none;
+    stroke: var(--heading-color);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+  .aascend-tag-label {
+    fill: var(--heading-color);
+    stroke: none;
+    /* Caveat is loaded with the other fonts in _layouts/default.html */
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: 40px;
   }
 
   /* ---- Nodes (open, card-less) ---- */
@@ -120,51 +241,40 @@ permalink: /clubs/
     font-family: "Playfair Display", serif;
     font-weight: 900;
     font-size: 3rem;
+    /* Club colour fills the centre; the heavy ink ring around it is what ties
+       these to the road, the skater and OPB. */
     color: #fff;
     text-decoration: none;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
-    background: linear-gradient(145deg, var(--club-light), var(--club));
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    background: var(--club);
+    border: 3px solid var(--heading-color);
+    box-shadow: none;
     position: relative;
     animation: aascend-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     transition:
       transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-      box-shadow 0.25s ease;
+      background 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease;
   }
+  /* hand-drawn double-line, like the doodles */
   .aascend-badge::after {
     content: "";
     position: absolute;
-    inset: 7px;
+    inset: 6px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     transition:
       inset 0.25s ease,
       border-color 0.25s ease;
   }
-  .aascend-badge::before {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    border: 2px solid var(--club);
-    opacity: 0;
-    transform: scale(0.85);
-    transition:
-      opacity 0.25s ease,
-      transform 0.25s ease;
-  }
   .aascend-node .aascend-badge:hover {
     color: #fff;
     transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.26);
   }
   .aascend-badge:hover::after {
     inset: 4px;
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-  .aascend-badge:hover::before {
-    opacity: 0.55;
-    transform: scale(1);
+    border-color: rgba(255, 255, 255, 0.75);
   }
 
   .aascend-info {
@@ -335,8 +445,8 @@ permalink: /clubs/
     .aascend-info {
       animation: none !important;
     }
-    .aascend-snake .pipe-flow {
-      animation: none !important;
+    .aascend-skater {
+      display: none !important;
     }
     .aascend-badge,
     .aascend-info .aascend-name::after,
@@ -358,47 +468,182 @@ permalink: /clubs/
       From stargazers to circuit-benders &mdash; a spectrum of undergraduate
       clubs, each with its own colour and its own kind of curious.
     </p>
-    <div class="aascend-hint">&darr; follow the flow</div>
+    <div class="aascend-hint">&darr; scroll to ride</div>
 
-    <div class="aascend-track">
+    <div class="aascend-stage">
+      <div class="aascend-track">
       <!-- The snaking pipe (900 x 1920 coordinate space). The gradient is anchored
                  in user space so the flow takes each club's colour where its node sits. -->
       <svg
         class="aascend-snake"
-        viewBox="0 0 900 2160"
+        viewBox="0 0 900 2300"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
-        <defs>
-          <linearGradient
-            id="aascend-grad"
-            gradientUnits="userSpaceOnUse"
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="2160"
-          >
-            <stop offset="0" stop-color="#7c3aed" />
-            <stop offset="0.05556" stop-color="#7c3aed" />
-            <stop offset="0.16667" stop-color="#e07b39" />
-            <stop offset="0.27778" stop-color="#f2b705" />
-            <stop offset="0.38889" stop-color="#38bdf8" />
-            <stop offset="0.5" stop-color="#e63946" />
-            <stop offset="0.61111" stop-color="#21a35a" />
-            <stop offset="0.72222" stop-color="#4f46e5" />
-            <stop offset="0.83333" stop-color="#06b6d4" />
-            <stop offset="0.94444" stop-color="#d6457d" />
-            <stop offset="1" stop-color="#d6457d" />
-          </linearGradient>
-        </defs>
         <path
           class="pipe-body"
-          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040 C300 2130 340 2190 430 2190 L860 2190"
         />
         <path
           class="pipe-flow"
-          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040"
+          d="M300 120 C300 240 600 240 600 360 C600 480 300 480 300 600 C300 720 600 720 600 840 C600 960 300 960 300 1080 C300 1200 600 1200 600 1320 C600 1440 300 1440 300 1560 C300 1680 600 1680 600 1800 C600 1920 300 1920 300 2040 C300 2130 340 2190 430 2190 L860 2190"
         />
+
+        <!-- OPB: the Old Physics Building, drawn in the same stick style as the
+             skater. Sits on the road's flat run-out, which doubles as its floor;
+             the skater's path ends between the columns. -->
+        <g class="aascend-opb" aria-hidden="true">
+          <!-- roof: cornice over a pediment, with a raking eave line inside -->
+          <path d="M598 2022 L902 2022" />
+          <path d="M606 2016 L750 1940 L894 2016 Z" />
+          <path d="M630 2010 L750 1948 L870 2010" class="opb-hair" />
+          <!-- entablature: architrave over frieze -->
+          <path d="M614 2022 L886 2022" />
+          <path d="M614 2038 L886 2038" />
+          <!-- the back wall the colonnade stands in front of -->
+          <path d="M636 2038 L636 2186" />
+          <path d="M864 2038 L864 2186" />
+          <!-- arched doorway on the centre line, where the road leads -->
+          <path d="M732 2186 L732 2120 Q750 2100 768 2120 L768 2186" />
+          <path d="M750 2110 L750 2186" class="opb-hair" />
+          <!-- flanking windows -->
+          <path d="M668 2172 L668 2126 Q681 2112 694 2126 L694 2172 Z" />
+          <path d="M806 2172 L806 2126 Q819 2112 832 2126 L832 2172 Z" />
+          <path d="M681 2119 L681 2172" class="opb-hair" />
+          <path d="M819 2119 L819 2172" class="opb-hair" />
+          <!-- four columns, each with a capital and a base -->
+          <g class="opb-column">
+            <path d="M652 2046 L652 2178" />
+            <path d="M643 2046 L661 2046" />
+            <path d="M643 2178 L661 2178" />
+          </g>
+          <g class="opb-column">
+            <path d="M708 2046 L708 2178" />
+            <path d="M699 2046 L717 2046" />
+            <path d="M699 2178 L717 2178" />
+          </g>
+          <g class="opb-column">
+            <path d="M792 2046 L792 2178" />
+            <path d="M783 2046 L801 2046" />
+            <path d="M783 2178 L801 2178" />
+          </g>
+          <g class="opb-column">
+            <path d="M848 2046 L848 2178" />
+            <path d="M839 2046 L857 2046" />
+            <path d="M839 2178 L857 2178" />
+          </g>
+          <!-- stylobate: the step the whole thing stands on, meeting the road -->
+          <path d="M624 2178 L876 2178" />
+          <path d="M616 2186 L884 2186" />
+          <text class="aascend-opb-label" x="750" y="1998" text-anchor="middle">
+            OPB
+          </text>
+        </g>
+        <!-- Bheemshankar, sitting beside the steps. Haloed like the skater so
+             he stays readable where he overlaps the black road. -->
+        <!-- Doodle skater. Drawn facing +x with the board sitting on y=0, so
+             JS can drop him straight onto a point of the road. Stroke-only so
+             both <use> copies below can recolour him by inheritance. -->
+        <defs>
+
+          <g id="aascend-skater-art">
+            <!-- speed lines trailing behind him -->
+            <path d="M-26 -4 L-38 -4" stroke-width="2" opacity="0.5" />
+            <path d="M-24 -13 L-33 -13" stroke-width="2" opacity="0.5" />
+            <path d="M-27 -21 L-35 -21" stroke-width="2" opacity="0.5" />
+            <!-- deck, with kicked nose and tail -->
+            <path d="M-19 -3 Q-17 1 -12 1 L12 1 Q17 1 19 -3" />
+            <!-- trucks + wheels -->
+            <path d="M-9 1 L-9 3" />
+            <path d="M9 1 L9 3" />
+            <circle cx="-9" cy="5" r="2.6" />
+            <circle cx="9" cy="5" r="2.6" />
+            <!-- legs, bent at the knee in a low stance -->
+            <path d="M-8 1 L-7 -8 L-1 -14" />
+            <path d="M9 1 L5 -8 L1 -14" />
+            <!-- torso, leaning into the ride -->
+            <path d="M-1 -14 L1 -20 L3 -25" />
+            <!-- jacket hem -->
+            <path d="M-3 -16 L4 -18" stroke-width="1.8" />
+            <!-- back arm swung out, front arm reaching forward -->
+            <path d="M2 -24 L-7 -24 L-12 -28" />
+            <path d="M3 -24 L11 -21 L15 -25" />
+            <!-- head -->
+            <circle cx="5" cy="-31" r="5.4" />
+            <!-- Cap: an arc struck OUTSIDE the head radius so it rides on top,
+                 closed by its own band line, with the brim pointing the way
+                 he's going. Anything drawn between the band and the chin lands
+                 across his face instead of on his head. -->
+            <path
+              d="M-1 -32.2 A6.1 6.1 0 0 1 11 -32.2 Z"
+              fill="currentColor"
+            />
+            <path d="M11 -32.2 L17.6 -33.6" />
+            <!-- face, kept to the leading side -->
+            <circle cx="7.6" cy="-30.4" r="0.9" fill="currentColor" stroke="none" />
+            <path d="M6.6 -27.6 Q8.1 -26.8 9.4 -27.9" stroke-width="1.6" />
+          </g>
+        </defs>
+        <!-- The <g> gets its transform set on scroll. -->
+        <g class="aascend-skater" id="aascend-skater">
+          <use class="skater-halo" href="#aascend-skater-art" />
+          <use class="skater-ink" href="#aascend-skater-art" />
+        </g>
+
+        <!-- Bheemshankar. Artwork from SVG Repo (assets/images/doodles/
+             dog-svgrepo-com.svg), inlined so it can be recoloured with the
+             page instead of shipped as a flat brown image. He faces back down
+             the road, watching the skater come. -->
+        <g class="aascend-dog" aria-hidden="true"
+           transform="translate(513.7 2129.4) scale(0.085)">
+            <path class="dog-outline" d="M959.5 860.4h0.2c0 31-25.2 56.2-56.2 56.2h-38.3c-14.3 0-27.8-6.2-37.1-17.1-0.7-0.8-1.3-1.6-2-2.5H799c-14.3 0-27.8-6.2-37.1-17.1-9.3-10.9-13.3-25.3-11-39.5 3.4-21.6 21.8-38.3 43.7-40.6l-0.1-38.2L690.3 631l-201 26.3c0 47.8-0.1 147.5-0.1 147.5v36c0 31-25.2 56.2-56.2 56.2h-13.3c-10.3 11.9-25.5 19.5-42.5 19.5H339c-14.3 0-27.8-6.3-37.1-17.1-9.3-10.9-13.3-25.3-11-39.5 3.4-21.6 21.8-38.3 43.7-40.6v-166c-42.6-19.1-75.4-55.3-90.9-101.1-0.1-0.4-59.3-189.8-59.3-189.8-67-5.7-119.7-62-119.7-130.4 0-10 8.1-18.1 18.1-18.1h85l55.9-45.3c0.7-7 2.6-14 5.9-20.9 10.4-22.2 32.1-37.1 56.5-38.7 5.6-0.4 11 2.2 14.3 6.8 1.9 2.6 3.6 5.4 5.1 8.3 8.4-3.6 17.5-5.6 26.8-5.6 6.3 0 12.1 3.1 15.4 8.4 13.4 21.2 14.3 48.1 2.2 70.2-1 1.8-2 3.5-3.1 5.2L450.7 332s392.2 63 393.3 63.2c7.4 1.3 14.6-1.8 18.2-7.8 37.1-61.7 46.6-121.3 46.4-144.1-0.1-9.7 7.5-17.7 17.2-18.3 9.6-0.5 18.1 6.7 19 16.3 0.5 5.2 12.2 127.3-15.6 198.7-5.5 14.1-7.8 28.3-6.9 42.4 0.1 2 0.2 168.3 0.2 168.3l35.8 84.9c0.9 2.2 1.4 4.6 1.4 7 0.1 0 0 116.9-0.2 117.8z" />
+            <path class="dog-coat" d="M923.7 860.4h-0.2c0 11-9 20-20 20h-38.3c-3.7 0-7.1-1.6-9.5-4.4-1.4-1.7-3.6-5.2-2.8-10.3 0.9-5.9 6.6-10.4 13.2-10.4l13.1-0.2c9.9-0.2 17.8-8.2 17.8-18.1v-71.4-0.3c-0.1-3.7-1.3-7.5-3.7-10.7l-98-128.1c0-0.1-0.1-0.1-0.1-0.2-20-25.5-52.5-38.7-84.6-34.5l-297.5 39c-9.1 1.2-15.8 9-15.8 18 0 32.4-0.1 173.5-0.1 175.6v36c0 11-9 20-20 20H339c-3.7 0-7.2-1.6-9.5-4.4-1.4-1.7-3.6-5.2-2.8-10.3 0.9-5.9 6.6-10.4 13.2-10.4l13.1-0.2c9.9-0.2 17.8-8.2 17.8-18.1V641c0-7.9-5-14.6-12-17.1-38.2-13.6-67.7-44.3-81-84.2-0.1-0.2-0.1-0.4-0.2-0.5l-62.4-199.9c-2.4-7.6-9.4-12.7-17.3-12.7h-2.4c-45.9 0-84.3-32.9-92.7-76.4h71.6c4.2 0 8.2-1.4 11.4-4l62.1-50.3h21.8c14.6 0.8 28.3-8 33.6-21.8 0.5-1.3 0.8-1.9 0.8-1.9 3.9-7.2 10.2-12.5 17.6-15.3 1.7 7.7 0.6 15.9-3.2 23-0.8 1.4-1.6 2.6-2.4 3.8-8.6 11.7-8.2 27.7 0.9 39.1l110.1 137.5c2.8 3.5 6.8 5.9 11.3 6.6 0 0 399.1 64.1 399.8 64.2 22.2 3.8 44-6 55.4-24.9 4.9-8.1 9.3-16 13.3-23.8-2.4 16.2-6 31.5-11.1 44.6-7.4 19-10.5 38.4-9.3 57.7 0.1 1.2 0.1 169.7 0.1 169.7 0 2.4 0.5 4.8 1.4 7l35.8 84.9c-0.3 0-0.2 113.2-0.1 114.1z" />
+            <path class="dog-coat" d="M860.8 771.7v47.6c-22 2.4-40.3 19-43.7 40.6 0 0.3-0.1 0.5-0.1 0.8h-17.9c-3.7 0-7.1-1.6-9.5-4.4-1.4-1.7-3.6-5.2-2.8-10.3 0.9-5.9 6.6-10.4 13.2-10.4l13.1-0.2c9.9-0.2 17.8-8.2 17.8-18.1l-0.1-62.1c0-4.1-1.4-8-3.9-11.2l-92-115.3c12.3 2.8 23.6 9.7 31.7 19.9l94.2 123.1zM433.5 664.6l19.6-2.6c0 49.6-0.1 142.8-0.1 142.8v36c0 10.9-8.7 19.7-19.6 19.9v-36.4-61.6c0.1-33.8 0.1-73.7 0.1-98.1z" />
+            <path class="dog-outline" d="M387.1 544.6c9.4 3.4 14.3 13.7 11 23.2-2.6 7.4-9.6 12-17.1 12-2 0-4.1-0.3-6.1-1.1-24.3-8.7-43.1-28.4-51.7-54.2l-0.1-0.2c0-0.1-0.1-0.2-0.1-0.3l-16.6-53.2c-3-9.6 2.3-19.7 11.9-22.7 9.6-3 19.7 2.3 22.7 11.9l16.6 53.1c5.1 15.2 15.8 26.7 29.5 31.5z" />
+            <path class="dog-coat" d="M278.5 143.8l0.3 0.9c-2.5 3.2-4.8 6.6-6.8 10.2-0.8 1.4-1.5 3-2.2 4.7h-9.6c4.1-7.4 10.6-13 18.3-15.8z" />
+            <path class="dog-outline" d="M219.8 238.1c9.9 0 17.9 8 17.9 17.9 0 9.9-8 17.9-17.9 17.9-9.9 0-17.9-8-17.9-17.9 0-9.9 8-17.9 17.9-17.9z" />
+          <!-- smile, added along the jaw -->
+          <path class="dog-smile" d="M92 266 Q126 292 164 270" />
+        </g>
+
+        <!-- What Bheemshankar is thinking. Sits left of him: right would run
+             into OPB's wall, above would cross the road. -->
+        <g class="aascend-bubble" aria-hidden="true">
+          <!-- cloud: overlapping lobes merged into one outline -->
+          <path
+            class="bubble-cloud"
+            d="M372 2086
+               a30 30 0 0 1 12 -44
+               a32 32 0 0 1 46 -20
+               a30 30 0 0 1 52 6
+               a28 28 0 0 1 26 34
+               a26 26 0 0 1 -16 36
+               a30 30 0 0 1 -44 14
+               a32 32 0 0 1 -52 -6
+               a28 28 0 0 1 -24 -20 Z"
+          />
+          <circle cx="507" cy="2124" r="6.5" />
+          <circle cx="518" cy="2132" r="3.6" />
+          <text class="aascend-bubble-text" x="445" y="2048" text-anchor="middle">
+            Late for
+          </text>
+          <text class="aascend-bubble-text" x="445" y="2078" text-anchor="middle">
+            attendance
+          </text>
+          <text class="aascend-bubble-text" x="445" y="2108" text-anchor="middle">
+            again?
+          </text>
+        </g>
+
+        <!-- ...and the tag pointing him out -->
+        <g class="aascend-tag" aria-hidden="true">
+          <path class="tag-arrow" d="M478 2258 C505 2264 530 2252 540 2216" />
+          <path class="tag-arrow" d="M540 2216 L534.2 2222.8" />
+          <path class="tag-arrow" d="M540 2216 L541.5 2224.9" />
+          <text class="aascend-tag-label" x="470" y="2264" text-anchor="end">
+            bheemshankar
+          </text>
+        </g>
       </svg>
 
       <!-- A → Astrae (Astronomy, purple) -->
@@ -618,7 +863,124 @@ permalink: /clubs/
             >Explore <i class="fas fa-arrow-right"></i
           ></a>
         </div>
+        </div>
       </div>
+      <div class="aascend-runway" aria-hidden="true"></div>
     </div>
   </section>
 </div>
+
+<script>
+  // Rides the skater along the exact same path the road is drawn from, driven
+  // by scroll position rather than a timer — so he moves only when you do.
+  (function () {
+    const stage = document.querySelector(".aascend-stage");
+    const runwayEl = document.querySelector(".aascend-runway");
+    const track = document.querySelector(".aascend-track");
+    const road = document.querySelector(".aascend-snake .pipe-body");
+    const skater = document.getElementById("aascend-skater");
+    if (!stage || !runwayEl || !track || !road || !skater) return;
+
+    // Below 960px the snake is swapped for a plain stacked pipe, so there's no
+    // path to ride. Same for anyone who asked for reduced motion.
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const small = window.matchMedia("(max-width: 959px)");
+
+    const VIEW_H = 2300; // must match the SVG viewBox height
+    // Where on screen he rides — 0.5 would be dead centre.
+    const EYE = 0.55;
+
+    const length = road.getTotalLength();
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    let shown = -1; // distance along the road currently rendered
+
+    // The descending part of the road has a monotonic y, so a binary search can
+    // find the distance sitting at a given height.
+    function distanceAtY(y) {
+      let lo = 0;
+      let hi = length;
+      for (let i = 0; i < 18; i++) {
+        const mid = (lo + hi) / 2;
+        if (road.getPointAtLength(mid).y < y) lo = mid;
+        else hi = mid;
+      }
+      return (lo + hi) / 2;
+    }
+
+    // ...but the final run-out into OPB is flat, so every point on it shares one
+    // y and the search above would snap straight to the end of the path the
+    // moment the eye-line crossed it. That stretch is driven by the pin instead.
+    const yFloor = road.getPointAtLength(length).y;
+    const yRamp = yFloor - 0.5;
+    const flatAt = distanceAtY(yRamp);
+
+    function draw() {
+      if (small.matches || reduced.matches) {
+        skater.style.display = "none";
+        return;
+      }
+      skater.style.display = "";
+
+      const box = track.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // Anchor him to the scroll position rather than to overall progress: find
+      // the point of road level with EYE down the viewport. He then tracks the
+      // page live in both directions instead of running the road once and
+      // parking at the bottom.
+      const scale = box.height / VIEW_H;
+      const y = (vh * EYE - box.top) / scale;
+
+      // While the track is stuck, its own rect stops moving — so the run-out is
+      // measured off the stage instead. The gap between the two bottoms is the
+      // stage's padding until the pin engages, then shrinks to zero as the
+      // runway is consumed. That ratio IS the ride into OPB.
+      const stageBottom = stage.getBoundingClientRect().bottom;
+      const runway = runwayEl.getBoundingClientRect().height;
+      const along = runway
+        ? clamp((runway - (stageBottom - box.bottom)) / runway, 0, 1)
+        : 0;
+
+      // Where the eye-line alone would put him. Once the track pins, its rect
+      // stops moving, so this freezes at exactly the point he'd reached.
+      const free = distanceAtY(y);
+      // The pin then carries him the rest of the way from *that* point — not
+      // from a fixed mark. Starting the pinned stretch at a hardcoded distance
+      // is what made him jump: wherever he actually was when the pin engaged
+      // rarely matched it.
+      const at = clamp(free + along * (length - free), 0, length);
+
+      if (Math.abs(at - shown) < 0.05) return; // nothing moved; skip the work
+      shown = at;
+
+      const point = road.getPointAtLength(at);
+      // A second sample just ahead gives the direction of travel.
+      const ahead = road.getPointAtLength(Math.min(at + 2, length));
+      const dx = ahead.x - point.x;
+      const dy = ahead.y - point.y;
+
+      // Keep him upright and merely leaning into the bends: a full tangent
+      // rotation would lay him flat on the near-vertical stretches.
+      const heading = (Math.atan2(dy, dx) * 180) / Math.PI;
+      const lean = clamp((heading - 90) * 0.6, -32, 32);
+      // Face the way he's travelling.
+      const facing = dx < 0 ? -1 : 1;
+
+      // Scaled up: at the 900-unit viewBox width he'd otherwise be ~35px tall.
+      skater.setAttribute(
+        "transform",
+        `translate(${point.x} ${point.y}) rotate(${lean}) scale(${facing * 1.5} 1.5)`
+      );
+    }
+
+    // A rAF loop rather than a scroll listener: it re-reads position every
+    // frame, so it can't miss updates if the page turns out to be scrolled by
+    // something other than the window (a wrapper element, a smooth-scroll
+    // library). draw() early-returns when nothing moved, so idle cost is one
+    // getBoundingClientRect per frame.
+    (function loop() {
+      draw();
+      requestAnimationFrame(loop);
+    })();
+  })();
+</script>
