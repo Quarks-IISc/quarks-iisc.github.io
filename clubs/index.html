@@ -241,13 +241,13 @@ permalink: /clubs/
     font-family: "Playfair Display", serif;
     font-weight: 900;
     font-size: 3rem;
-    /* Club colour fills the centre; the heavy ink ring around it is what ties
-       these to the road, the skater and OPB. */
+    /* One border only: the club colour ring, with the logo (or the letter for
+       clubs that have none) sitting directly inside it. */
     color: #fff;
     text-decoration: none;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     background: var(--club);
-    border: 3px solid var(--heading-color);
+    border: 4px solid var(--club);
     box-shadow: none;
     position: relative;
     animation: aascend-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
@@ -257,24 +257,26 @@ permalink: /clubs/
       border-color 0.25s ease,
       color 0.25s ease;
   }
-  /* hand-drawn double-line, like the doodles */
-  .aascend-badge::after {
-    content: "";
-    position: absolute;
-    inset: 6px;
+  /* Club logo, sat inside the inner ring. The logos have wildly different
+     backgrounds (dark squares, white squares, transparent), so each gets a
+     white circular plate to sit on and is contained rather than cropped —
+     several are wordmarks that `cover` would slice through. */
+  .aascend-badge-logo {
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    transition:
-      inset 0.25s ease,
-      border-color 0.25s ease;
+    background: #fff;
+    object-fit: contain;
+    /* Thin white rim between the logo art and the club-colour ring — enough to
+       separate them, not enough to read as a second border. */
+    padding: 2px;
+    box-sizing: border-box;
+    display: block;
   }
+
   .aascend-node .aascend-badge:hover {
     color: #fff;
     transform: scale(1.1) translateY(-2px);
-  }
-  .aascend-badge:hover::after {
-    inset: 4px;
-    border-color: rgba(255, 255, 255, 0.75);
   }
 
   .aascend-info {
@@ -312,6 +314,10 @@ permalink: /clubs/
     display: inline-block;
     position: relative;
     padding-bottom: 0.55rem;
+  }
+  /* First letter picks up the club's colour, tying the name to its badge. */
+  .aascend-info .aascend-name::first-letter {
+    color: var(--club);
   }
   .aascend-info .aascend-name::after {
     content: "";
@@ -424,6 +430,10 @@ permalink: /clubs/
       width: 92px;
       height: 92px;
       font-size: 2.5rem;
+    }
+    .aascend-badge-logo {
+      width: 74px;
+      height: 74px;
     }
     .aascend-info {
       width: auto;
@@ -656,7 +666,7 @@ permalink: /clubs/
           --ink: #7c3aed;
         "
       >
-        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/astrae/">A</a>
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/astrae/"><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/astrae/logo.webp" alt="Astrae logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Astronomy</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/astrae/"
@@ -681,7 +691,7 @@ permalink: /clubs/
           --ink: #c15f22;
         "
       >
-        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/amalgam/">A</a>
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/amalgam/"><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/amalgam/logo.webp" alt="Amalgam logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Materials Science</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/amalgam/"
@@ -706,7 +716,7 @@ permalink: /clubs/
           --ink: #a67c00;
         "
       >
-        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/samasya/">S</a>
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/samasya/"><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/samasya/logo.webp" alt="Samasya logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Mathematics</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/samasya/"
@@ -731,7 +741,7 @@ permalink: /clubs/
           --ink: #0c8fc7;
         "
       >
-        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/catalysts/">C</a>
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/catalysts/"><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/catalysts/logo.webp" alt="Catalysts logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Chemistry</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/catalysts/"
@@ -754,7 +764,7 @@ permalink: /clubs/
           --ink: #d62835;
         "
       >
-        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/ensemble/">E</a>
+        <a class="aascend-badge" href="{{ site.baseurl }}/clubs/ensemble/"><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/ensemble/logo.webp" alt="Ensemble logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Physics</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/ensemble/"
@@ -778,8 +788,7 @@ permalink: /clubs/
         "
       >
         <a class="aascend-badge" href="{{ site.baseurl }}/clubs/naturalists/"
-          >N</a
-        >
+          ><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/Naturalists/logo.webp" alt="Naturalists logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Biology</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/naturalists/"
@@ -803,8 +812,7 @@ permalink: /clubs/
         "
       >
         <a class="aascend-badge" href="{{ site.baseurl }}/clubs/databased/"
-          >D</a
-        >
+          ><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/databased/logo.webp" alt="Databased logo" loading="lazy" decoding="async"></a>
         <div class="aascend-info">
           <div class="aascend-type">Computer Science</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/databased/"
@@ -828,8 +836,9 @@ permalink: /clubs/
         "
       >
         <a class="aascend-badge" href="{{ site.baseurl }}/clubs/vicharaka/"
-          >V</a
-        >
+          ><img class="aascend-badge-logo" src="{{ site.baseurl }}/assets/clubs/vicharaka/logo.webp"
+            alt="Vicharaka logo" loading="lazy" decoding="async"
+        /></a>
         <div class="aascend-info">
           <div class="aascend-type">Robotics</div>
           <a class="aascend-name" href="{{ site.baseurl }}/clubs/vicharaka/"
