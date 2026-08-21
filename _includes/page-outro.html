@@ -1,0 +1,314 @@
+{% comment %}
+  Closing note for the section index pages (crosswords, gallery, poems,
+  stories). One visual system, different copy per page.
+
+  Params:
+    kicker        small uppercase label above the headline
+    title         the handwritten headline
+    text          the body line
+    cta           the words that sit before the arrow
+    subject       mailto subject line for this page
+    video         optional Google Drive file id, embedded above the note
+    video_caption optional caption under the video
+{% endcomment %}
+
+<style>
+  .page-outro--ruled {
+    border-top: 1px solid var(--border-color);
+    padding-top: 3.5rem;
+  }
+  .page-outro {
+    margin: 3.5rem 0 3rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  /* Video and its note sit side by side: clip on the left, who-made-it on the
+     right. Stacks below 992px. */
+  .outro-video {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto 2.4rem;
+    text-align: left;
+  }
+  .outro-video-frame {
+    position: relative;
+    flex: 1 1 58%;
+    min-width: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: rgba(128, 128, 128, 0.06);
+  }
+  .outro-video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .outro-video-side {
+    flex: 1 1 42%;
+    min-width: 0;
+  }
+  .outro-video-caption {
+    margin: 0;
+    font-family: "Caveat", cursive;
+    font-size: 1.6rem;
+    line-height: 1.35;
+    color: var(--heading-color);
+  }
+  .outro-video-caption strong {
+    font-weight: 600;
+  }
+
+  /* A long arc running from the video's edge across to the photo, with the
+     label riding above it. Kept horizontal and a touch heavier than the arrow
+     that points at the email further down, so the two read as different marks. */
+  .outro-whodat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .whodat-lead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+  .whodat-words {
+    font-family: "Caveat", cursive;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .whodat-arrow {
+    width: 96px;
+    height: 34px;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+  .whodat-photo {
+    width: 132px;
+    height: 132px;
+    flex: 0 0 auto;
+    object-fit: cover;
+    border: 6px solid #fff;
+    border-bottom-width: 18px;
+    border-radius: 3px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+    transform: rotate(-5deg);
+    transition: transform 0.3s ease;
+  }
+  .whodat-photo:hover {
+    transform: rotate(0deg) scale(1.04);
+  }
+
+  @media (max-width: 991px) {
+    .outro-video {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+    .outro-video-frame {
+      flex: 0 0 auto;
+      width: 100%;
+    }
+    .outro-whodat {
+      justify-content: center;
+    }
+  }
+
+  .outro-kicker {
+    margin: 0 0 0.6rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .outro-title {
+    margin: 0 0 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .outro-text {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  /* An optional scatter of the things we'd take, set slightly askew so it reads
+     as scribbled in a margin rather than as a tidy tag list. */
+  .outro-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 20px;
+    max-width: 660px;
+    margin: 1.3rem auto 0;
+  }
+  .outro-item {
+    font-family: "Caveat", cursive;
+    font-size: 1.45rem;
+    line-height: 1.1;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+  }
+  .outro-item:nth-child(odd) {
+    transform: rotate(-2deg);
+  }
+  .outro-item:nth-child(even) {
+    transform: rotate(1.5deg);
+  }
+  .outro-item:hover {
+    transform: rotate(0) scale(1.06);
+  }
+
+  /* The arrow is a doodle in the same hand as the type: it curves out of the
+     sentence and lands on the address. */
+  .outro-cta {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 0.5rem;
+  }
+  .outro-cta-words {
+    font-family: "Caveat", cursive;
+    font-size: 1.6rem;
+    line-height: 1;
+    padding-bottom: 6px;
+    white-space: nowrap;
+  }
+  /* The row aligns on its bottom edge, but the address is set larger than the
+     words before it, so its glyphs actually start HIGHER — an arrow that simply
+     slopes down from one to the other points the wrong way. This one hops over
+     the gap and comes down onto the top of the address; the offset below puts
+     its tip there rather than at the baseline. */
+  .outro-arrow {
+    width: 72px;
+    height: 41px;
+    flex: 0 0 auto;
+    margin-bottom: 23px;
+    color: var(--text-muted);
+    opacity: 0.75;
+  }
+  .outro-mail {
+    font-family: "Caveat", cursive;
+    font-size: 2.1rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--heading-color);
+    text-decoration: none;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 2px;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .outro-mail:hover,
+  .outro-mail:focus {
+    color: #e8705f;
+    border-bottom-color: #e8705f;
+    text-decoration: none;
+  }
+
+  @media (max-width: 767px) {
+    .page-outro {
+      margin: 3.5rem 0 2rem;
+    }
+    .outro-title {
+      font-size: 2.2rem;
+    }
+    .outro-cta {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .outro-arrow {
+      width: 60px;
+      height: 34px;
+      margin-bottom: 0;
+    }
+    .outro-cta-words {
+      padding-bottom: 0;
+    }
+  }
+</style>
+
+<section class="page-outro fade-up-element{% if include.divider %} page-outro--ruled{% endif %}">
+  {% if include.video %}
+  <div class="outro-video">
+    <div class="outro-video-frame">
+      <iframe
+        src="https://drive.google.com/file/d/{{ include.video }}/preview"
+        title="{{ include.video_caption | strip_html | escape }}"
+        loading="lazy"
+        allow="autoplay"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <div class="outro-video-side">
+      {% if include.video_caption %}
+      <p class="outro-video-caption">{{ include.video_caption }}</p>
+      {% endif %}
+      {% if include.person_image %}
+      <div class="outro-whodat">
+        <div class="whodat-lead">
+          <span class="whodat-words">{{ include.person_note | default: "this guy" }}</span>
+          <svg class="whodat-arrow" viewBox="0 0 96 34" fill="none" aria-hidden="true"
+               stroke="currentColor" stroke-width="2.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 26 C 16 4, 60 2, 84 20" />
+            <path d="M86 21 L 75 20" />
+            <path d="M86 21 L 82 11" />
+          </svg>
+        </div>
+        <img
+          class="whodat-photo"
+          src="{{ site.baseurl }}{{ include.person_image }}"
+          alt="{{ include.person_alt | default: 'Photo' }}"
+          loading="lazy"
+        />
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <p class="outro-kicker">{{ include.kicker }}</p>
+  <h3 class="outro-title">{{ include.title }}</h3>
+  <p class="outro-text">{{ include.text }}</p>
+
+  {% if include.items %}
+  <div class="outro-items">
+    {% assign outro_items = include.items | split: "," %}
+    {% for outro_item in outro_items %}
+    <span class="outro-item">{{ outro_item | strip }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="outro-cta">
+    <span class="outro-cta-words">{{ include.cta }}</span>
+    <svg class="outro-arrow" viewBox="0 0 70 40" fill="none" aria-hidden="true"
+         stroke="currentColor" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 34 C 14 6, 48 4, 61 32" />
+      <path d="M61 33 L 52 27" />
+      <path d="M61 33 L 62 22" />
+    </svg>
+    <a class="outro-mail"
+       href="mailto:quarks.ug@iisc.ac.in?subject={{ include.subject | uri_escape }}"
+       >quarks.ug@iisc.ac.in</a>
+  </div>
+</section>
