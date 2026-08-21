@@ -1,0 +1,388 @@
+<!-- Wellness banner: the closing note on the homepage. Self-contained (styles
+     and doodle live here) the same way ug-corner.html and crossword-teaser.html
+     are, since nothing else on the site reuses them. -->
+<style>
+  .wellness-band {
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 34px 34px 30px;
+    background:
+      linear-gradient(rgba(128, 128, 128, 0.04), rgba(128, 128, 128, 0.04)),
+      var(--bg-color);
+  }
+  .wellness-inner {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+  }
+  .wellness-art {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
+  .wellness-art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Strokes and the ground line follow the theme; the fills stay light in
+       both themes so the dark outline always reads. */
+    color: var(--heading-color);
+  }
+  .wellness-copy {
+    flex: 1 1 auto;
+  }
+  .wellness-kicker {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .wellness-title {
+    margin: 0 0 14px;
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 2.6rem;
+    line-height: 1.12;
+    color: var(--heading-color);
+  }
+  .wellness-text {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+  .wellness-text strong {
+    color: var(--heading-color);
+    font-weight: 600;
+  }
+
+  /* Two half-width call buttons sitting on one row across the band, so the
+     thing to do here is unmissable and both numbers are one tap away. */
+  .wellness-calls {
+    display: flex;
+    gap: 14px;
+    width: 100%;
+    margin-top: 30px;
+  }
+  .wellness-call {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: #e8705f;
+    color: #fff !important;
+    font-family: "Inter", sans-serif;
+    text-decoration: none;
+    text-align: left;
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .wellness-call:hover,
+  .wellness-call:focus {
+    background: #d65a49;
+    color: #fff !important;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(232, 112, 95, 0.35);
+  }
+  .wellness-call i,
+  .wellness-call span,
+  .wellness-call .wellness-call-label,
+  .wellness-call .wellness-call-num {
+    color: #fff !important;
+  }
+  .wellness-call i {
+    font-size: 1.3rem;
+    flex: 0 0 auto;
+  }
+  .wellness-call-label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .wellness-call-num {
+    display: block;
+    font-size: 1.32rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .wellness-hesitate {
+    margin: 18px 0 0;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--heading-color);
+  }
+
+  .wellness-foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin: 8px 0 0;
+    font-family: "Inter", sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .wellness-foot a {
+    color: var(--heading-color);
+    border-bottom: 1px solid var(--border-color);
+    text-decoration: none;
+  }
+  .wellness-foot a:hover {
+    text-decoration: none;
+    border-bottom-color: #e8705f;
+  }
+
+  @media (max-width: 767px) {
+    .wellness-band {
+      padding: 26px 20px 24px;
+    }
+    .wellness-inner {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+    .wellness-art {
+      flex-basis: auto;
+      max-width: 240px;
+    }
+    .wellness-title {
+      font-size: 1.9rem;
+    }
+    .wellness-text {
+      font-size: 1rem;
+    }
+    .wellness-calls {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wellness-call {
+      padding: 16px;
+    }
+    .wellness-call-num {
+      font-size: 1.2rem;
+    }
+    .wellness-hesitate {
+      font-size: 1.15rem;
+    }
+  }
+</style>
+
+<div class="wellness-band fade-up-element">
+  <div class="wellness-inner">
+    <div class="wellness-art" aria-hidden="true">
+      <!-- Two figures, one with an arm around the other. Fills are fixed light
+           tones with a dark outline so the doodle survives both themes; only
+           the ground line and sparkles use currentColor. -->
+      <svg
+        viewBox="0 0 420 330"
+        role="img"
+        fill="none"
+        stroke="#1a1a1a"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <!-- ground + a pot plant to anchor the scene -->
+        <path
+          d="M62 300 H366"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-dasharray="2 14"
+          opacity="0.35"
+        />
+        <path d="M350 276 Q328 268 324 244 Q346 250 350 276 Z" fill="#7fb083" />
+        <path d="M350 276 Q370 264 374 240 Q352 248 350 276 Z" fill="#9bc79e" />
+        <path d="M350 278 V252" stroke-width="3.5" />
+        <path d="M330 300 L334 276 H368 L364 300 Z" fill="#d9a07a" />
+
+        <!-- taller figure -->
+        <!-- legs first so they tuck behind the shirt -->
+        <path d="M147 250 V292" stroke-width="15" />
+        <path d="M147 250 V292" stroke="#7ea3d0" stroke-width="9" />
+        <path d="M183 250 V292" stroke-width="15" />
+        <path d="M183 250 V292" stroke="#7ea3d0" stroke-width="9" />
+        <rect x="133" y="290" width="29" height="13" rx="6.5" fill="#e6e1da" />
+        <rect x="169" y="290" width="29" height="13" rx="6.5" fill="#e6e1da" />
+        <path
+          d="M133 264 L136 178 Q140 150 165 150 Q190 150 194 178 L197 264 Z"
+          fill="#e8a35c"
+        />
+        <path d="M152 152 Q165 165 178 152" stroke-width="3.5" />
+        <circle cx="132" cy="103" r="7.5" fill="#f2c9a0" />
+        <circle cx="198" cy="103" r="7.5" fill="#f2c9a0" />
+        <circle cx="165" cy="100" r="34" fill="#f2c9a0" />
+        <path
+          d="M132 94 A34 34 0 0 1 198 94 Q180 76 165 78 Q146 80 132 94 Z"
+          fill="#4a3524"
+          stroke-width="3.5"
+        />
+        <path d="M149 89 Q155 84 161 88" stroke-width="3.5" />
+        <path d="M169 88 Q175 84 181 89" stroke-width="3.5" />
+        <path d="M155 101 h0.5 M177 101 h0.5" stroke-width="7.5" />
+        <ellipse
+          cx="145"
+          cy="114"
+          rx="6"
+          ry="4"
+          fill="#e0907c"
+          stroke="none"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="187"
+          cy="114"
+          rx="6"
+          ry="4"
+          fill="#e0907c"
+          stroke="none"
+          opacity="0.55"
+        />
+        <path d="M154 114 Q166 128 178 113" stroke-width="4" />
+
+        <!-- shorter figure -->
+        <path d="M264 256 V292" stroke-width="14" />
+        <path d="M264 256 V292" stroke="#7ea3d0" stroke-width="8" />
+        <path d="M292 256 V292" stroke-width="14" />
+        <path d="M292 256 V292" stroke="#7ea3d0" stroke-width="8" />
+        <rect x="251" y="290" width="27" height="13" rx="6.5" fill="#e6e1da" />
+        <rect x="279" y="290" width="27" height="13" rx="6.5" fill="#e6e1da" />
+        <path
+          d="M252 268 L254 200 Q256 174 278 174 Q300 174 302 200 L304 268 Z"
+          fill="#8fc0c2"
+        />
+        <path d="M268 176 Q278 187 288 176" stroke-width="3.5" />
+        <circle cx="300" cy="107" r="12" fill="#2f2a2a" />
+        <circle cx="250" cy="135" r="6.5" fill="#f2c9a0" />
+        <circle cx="306" cy="135" r="6.5" fill="#f2c9a0" />
+        <circle cx="278" cy="132" r="29" fill="#f2c9a0" />
+        <path
+          d="M251 127 A29 29 0 0 1 305 127 Q292 112 278 114 Q262 116 251 127 Z"
+          fill="#2f2a2a"
+          stroke-width="3.5"
+        />
+        <path d="M264 123 Q269 119 274 122" stroke-width="3.2" />
+        <path d="M283 122 Q288 119 292 123" stroke-width="3.2" />
+        <path d="M269 133 h0.5 M288 133 h0.5" stroke-width="6.5" />
+        <ellipse
+          cx="261"
+          cy="144"
+          rx="5"
+          ry="3.5"
+          fill="#e0907c"
+          stroke="none"
+          opacity="0.55"
+        />
+        <ellipse
+          cx="296"
+          cy="144"
+          rx="5"
+          ry="3.5"
+          fill="#e0907c"
+          stroke="none"
+          opacity="0.55"
+        />
+        <path d="M268 145 Q278 157 289 144" stroke-width="3.8" />
+
+        <!-- arms last: the free arm, then the one around the shoulder -->
+        <path d="M134 186 Q111 218 118 248" stroke-width="13" />
+        <path d="M134 186 Q111 218 118 248" stroke="#f2c9a0" stroke-width="7" />
+        <circle cx="118" cy="252" r="10" fill="#f2c9a0" />
+        <path d="M253 206 Q236 238 245 262" stroke-width="12" />
+        <path d="M253 206 Q236 238 245 262" stroke="#f2c9a0" stroke-width="6" />
+        <circle cx="246" cy="266" r="9" fill="#f2c9a0" />
+        <path d="M196 178 Q246 158 292 198" stroke-width="13" />
+        <path d="M196 178 Q246 158 292 198" stroke="#f2c9a0" stroke-width="7" />
+        <circle cx="296" cy="200" r="9.5" fill="#f2c9a0" />
+
+        <!-- hearts + sparkles -->
+        <path
+          d="M336 78 c-9-15-30-9-30 8 0 14 18 24 30 34 12-10 30-20 30-34
+                 0-17-21-23-30-8 Z"
+          fill="#e8705f"
+          stroke-width="4"
+        />
+        <g transform="translate(374 116) scale(0.42) translate(-336 -78)">
+          <path
+            d="M336 78 c-9-15-30-9-30 8 0 14 18 24 30 34 12-10 30-20 30-34
+                   0-17-21-23-30-8 Z"
+            fill="#e8705f"
+            stroke-width="9"
+          />
+        </g>
+        <path
+          d="M92 132 v-16 M84 124 h16"
+          stroke="currentColor"
+          stroke-width="4"
+          opacity="0.45"
+        />
+        <path
+          d="M104 68 v-11 M98.5 62.5 h11"
+          stroke="currentColor"
+          stroke-width="4"
+          opacity="0.45"
+        />
+      </svg>
+    </div>
+
+    <div class="wellness-copy">
+      <span class="wellness-kicker">Student Wellness</span>
+      <h2 class="wellness-title">We are there for each other.</h2>
+      <p class="wellness-text">
+        A student community isn't sparked by creativity, sport and late-night
+        problem sets alone &mdash; it is held together by the quieter things
+        too. By checking in. By noticing when someone has gone missing from the
+        mess hall. By asking twice. Mental and physical wellness are not a
+        detour from campus life; they <em>are</em> campus life. And on the days
+        it gets heavy,
+        <strong>you do not have to carry it by yourself.</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="wellness-calls">
+    <a class="wellness-call" href="tel:+917022163232">
+      <i class="fas fa-phone-alt" aria-hidden="true"></i>
+      <span>
+        <span class="wellness-call-label">Emergency hotline</span>
+        <span class="wellness-call-num">70221 63232</span>
+      </span>
+    </a>
+    <a class="wellness-call" href="tel:+918047113444">
+      <i class="fas fa-phone-alt" aria-hidden="true"></i>
+      <span>
+        <span class="wellness-call-label">From in-campus line</span>
+        <span class="wellness-call-num">080 4711 3444</span>
+      </span>
+    </a>
+  </div>
+
+  <p class="wellness-hesitate">Don't hesitate.</p>
+
+  <p class="wellness-foot">
+    <span>Available round the clock</span>
+    <span
+      ><a href="https://wellness.iisc.ac.in/" target="_blank" rel="noopener"
+        >IISc Wellness Centre &xrarr;</a
+      ></span
+    >
+  </p>
+</div>
