@@ -1,20 +1,19 @@
 (function() {
   /**
    * NEWS ARTICLE LOADER
-   * Fetches a single news record from Airtable and renders it.
+   * Renders one story from the News sheet, picked by the ?id= slug that
+   * news-loader.js and news-page-loader.js link to.
    */
 
-  // --- CONFIGURATION ---
-  const AIRTABLE_BASE_ID = 'appZL8Aqpgy1IsIUY'; 
-  const AIRTABLE_TABLE_NAME = 'tblf9YPTj8BSx7fV2'; 
-  const OBFUSCATED_TOKEN = 'cGF0STN2Q21QTXlleFJBbEUuNTFlNTc4ZjJlNzg0MjEwM2QzNTMwYzNkY2YxMmE0OWQxYTM1NzliNjdmODExYzkzYjcxMDFkMmFlYTVlNzE4YQ=='; 
-  // ---------------------
+  function description(row) {
+    return row['Description'] || row['Decription'] || '';
+  }
 
   async function loadArticle() {
     const params = new URLSearchParams(window.location.search);
-    const recordId = params.get('id');
+    const articleId = params.get('id');
 
-    if (!recordId) {
+    if (!articleId) {
       window.location.href = '/news/';
       return;
     }
@@ -23,28 +22,22 @@
     const displayEl = document.getElementById('news-article-display');
 
     try {
-      const token = atob(OBFUSCATED_TOKEN);
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${recordId}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rows = await QuarksSheets.load('news');
+      const row = rows.find(r => QuarksSheets.slugify(r['Title']) === articleId);
 
-      if (!response.ok) {
-        throw new Error(`Airtable error: ${response.status}`);
+      if (!row) {
+        // Covers old Airtable record-id links as well as a story whose title
+        // was edited in the sheet after someone copied the URL.
+        loadingEl.innerHTML = '<div class="text-muted py-5">That story has moved or been renamed. <a href="/news/">Browse all news</a></div>';
+        return;
       }
-      
-      const data = await response.json();
-      const f = data.fields;
 
-      const title = f['Title'] || f['title'] || 'Untitled News';
-      const description = f['Description'] || f['description'] || '';
-      const publishedDate = f['Published Date'] || '';
+      const title = row['Title'] || 'Untitled News';
+      const body = description(row);
+      const publishedDate = row['Published Date'] || '';
       const publishedDateText = typeof formatHumanDate === 'function' ? formatHumanDate(publishedDate) : publishedDate;
-      const link = f['Link'] || f['link'] || '';
-      const linkText = f['Link Text'] || f['link text'] || 'Read More';
+      const link = row['Link'] || '';
+      const linkText = row['Link Text'] || 'Read More';
 
       // Update Page Title
       document.title = `${title} | Quarks News`;
@@ -52,13 +45,13 @@
       // Inject Content
       document.getElementById('article-title').textContent = title;
       document.getElementById('article-date').textContent = publishedDateText;
-      
-      const wordCount = description.split(/\s+/).length;
+
+      const wordCount = body.split(/\s+/).length;
       const readTime = Math.max(1, Math.round(wordCount / 180));
       document.getElementById('article-read-time').textContent = `${readTime} min read`;
 
       const bodyEl = document.getElementById('article-body');
-      bodyEl.innerHTML = description.replace(/\n/g, '<br>');
+      bodyEl.innerHTML = body.replace(/\n/g, '<br>');
 
       // Handle External Link
       if (link) {

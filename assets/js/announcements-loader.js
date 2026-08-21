@@ -1,134 +1,91 @@
 (function() {
   /**
-   * ANNOUNCEMENTS LOADER (Airtable Version)
+   * ANNOUNCEMENTS LOADER (homepage column)
+   * Reads the Announcements sheet via sheets-data.js.
    */
 
-  // --- CONFIGURATION ---
-  const AIRTABLE_BASE_ID = 'appZL8Aqpgy1IsIUY'; 
-  const AIRTABLE_TABLE_NAME = 'tblgSwoYBQLlufAND'; 
-  const OBFUSCATED_TOKEN = 'cGF0STN2Q21QTXlleFJBbEUuNTFlNTc4ZjJlNzg0MjEwM2QzNTMwYzNkY2YxMmE0OWQxYTM1NzliNjdmODExYzkzYjcxMDFkMmFlYTVlNzE4YQ=='; 
-  // ---------------------
+  function toItem(row) {
+    const deadline = row['Deadline'] || '';
+    return {
+      id: row['Content ID'] || QuarksSheets.slugify(row['Title']),
+      title: row['Title'] || '',
+      description: row['Description'] || '',
+      link: row['Link'] || '#',
+      link_text: row['Link Text'] || 'Apply Here',
+      image: row['Image'] || '',
+      deadline: deadline,
+      deadline_text: typeof formatHumanDate === 'function' ? formatHumanDate(deadline) : deadline
+    };
+  }
+
+  function card(a, type, sizes) {
+    const itemData = JSON.stringify({
+      title: a.title,
+      description: a.description,
+      link: a.link,
+      linkText: a.link_text,
+      image: a.image,
+      dateText: a.deadline_text || a.deadline,
+      type: type
+    }).replace(/"/g, '&quot;');
+
+    return `
+      <li class="mb-${sizes.mb} pb-${sizes.pb} border-bottom">
+        <div class="news-item-content">
+          <div class="font-weight-bold" style="font-size: 1.15rem; line-height: 1.4;">
+            ${a.title}
+          </div>
+          <div class="news-desc-preview text-muted" style="font-weight: 400; font-size: 0.95rem;">
+            ${a.description}
+          </div>
+        </div>
+        <div class="mt-${sizes.mt} ${a.deadline ? 'd-flex align-items-center justify-content-between flex-wrap' : ''}" style="gap: 10px;">
+          <a href="javascript:void(0)" onclick="showNewsDetails(${itemData})" class="magazine-link" style="font-size: ${sizes.link}; padding-bottom: 2px;">Read More <span class="arrow" style="font-size: ${sizes.arrow}; margin-left: ${sizes.gap};">&xrarr;</span></a>
+          ${a.deadline ? `<span class="deadline-badge"><i class="far fa-calendar-alt mr-1"></i> Deadline: ${a.deadline_text || a.deadline}</span>` : ''}
+        </div>
+      </li>
+    `;
+  }
 
   async function loadAnnouncements() {
     const listEl = document.getElementById('announcements-list');
     if (!listEl) return;
 
     try {
-      const token = atob(OBFUSCATED_TOKEN);
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rows = await QuarksSheets.load('announcements');
+      const announcements = rows
+        .map(toItem)
+        .filter(a => a.title.trim() || a.description.trim());
 
-      if (!response.ok) {
-        throw new Error(`Airtable error: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      const announcements = data.records.map(record => {
-        const f = record.fields;
-        return {
-          id: record.id,
-          title: f['Title'] || f['title'] || '',
-          description: f['Description'] || f['description'] || '',
-          link: f['Link'] || f['link'] || '#',
-          link_text: f['Link Text'] || f['link text'] || 'Apply Here',
-          image: f['Image'] && f['Image'][0] ? f['Image'][0].url : (f['image'] && f['image'][0] ? f['image'][0].url : ''),
-          deadline: f['Deadline'] || f['deadline'] || '',
-          deadline_text: (typeof formatHumanDate === 'function' ? formatHumanDate(f['Deadline'] || f['deadline']) : (f['Deadline'] || f['deadline'] || ''))
-        };
-      });
+      const todayNum = QuarksSheets.todayKey();
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const todayNum = parseInt(today.toISOString().slice(0, 10).replace(/-/g, ''));
-      
-      const active = announcements.filter(a => {
-        if (!a.deadline) return true;
-        const deadlineNum = parseInt(a.deadline.replace(/-/g, ''));
-        return deadlineNum >= todayNum;
-      }).sort((a, b) => {
-        const aDate = a.deadline ? parseInt(a.deadline.replace(/-/g, '')) : 99999999;
-        const bDate = b.deadline ? parseInt(b.deadline.replace(/-/g, '')) : 99999999;
-        return aDate - bDate;
-      });
-      
-      const past = announcements.filter(a => {
-        if (!a.deadline) return false;
-        const deadlineNum = parseInt(a.deadline.replace(/-/g, ''));
-        return deadlineNum < todayNum;
-      }).sort((a, b) => {
-        const aDate = parseInt(a.deadline.replace(/-/g, ''));
-        const bDate = parseInt(b.deadline.replace(/-/g, ''));
-        return bDate - aDate;
-      });
-      
-      const html = active.map(a => {
-        const itemData = JSON.stringify({
-          title: a.title,
-          description: a.description,
-          link: a.link,
-          linkText: a.link_text,
-          image: a.image,
-          dateText: a.deadline_text || a.deadline,
-          type: 'Announcements'
-        }).replace(/"/g, '&quot;');
+      // No deadline means an open-ended notice: always active, listed last.
+      const active = announcements
+        .filter(a => !a.deadline || QuarksSheets.dateKey(a.deadline) >= todayNum)
+        .sort((a, b) => {
+          const aDate = a.deadline ? QuarksSheets.dateKey(a.deadline) : 99999999;
+          const bDate = b.deadline ? QuarksSheets.dateKey(b.deadline) : 99999999;
+          return aDate - bDate;
+        });
 
-        return `
-        <li class="mb-4 pb-3 border-bottom">
-          <div class="news-item-content">
-            <div class="font-weight-bold" style="font-size: 1.15rem; line-height: 1.4;">
-              ${a.title}
-            </div>
-            <div class="news-desc-preview text-muted" style="font-weight: 400; font-size: 0.95rem;">
-              ${a.description}
-            </div>
-          </div>
-          <div class="mt-3 ${a.deadline ? 'd-flex align-items-center justify-content-between flex-wrap' : ''}" style="gap: 10px;">
-            <a href="javascript:void(0)" onclick="showNewsDetails(${itemData})" class="magazine-link" style="font-size: 0.95rem; padding-bottom: 2px;">Read More <span class="arrow" style="font-size: 1.2rem; margin-left: 8px;">&xrarr;</span></a>
-            ${a.deadline ? `<span class="deadline-badge"><i class="far fa-calendar-alt mr-1"></i> Deadline: ${a.deadline_text || a.deadline}</span>` : ''}
-          </div>
-        </li>
-      `;}).join('');
-      
+      const past = announcements
+        .filter(a => a.deadline && QuarksSheets.dateKey(a.deadline) < todayNum)
+        .sort((a, b) => QuarksSheets.dateKey(b.deadline) - QuarksSheets.dateKey(a.deadline));
+
+      const activeSizes = { mb: 4, pb: 3, mt: 3, link: '0.95rem', arrow: '1.2rem', gap: '8px' };
+      const pastSizes = { mb: 3, pb: 2, mt: 2, link: '0.85rem', arrow: '1rem', gap: '5px' };
+
+      const html = active.map(a => card(a, 'Announcements', activeSizes)).join('');
+
       const pastHtml = past.length > 0 ? `
         <div class="mt-5 mb-3">
           <h5 class="text-muted text-uppercase" style="letter-spacing: 2px; font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid rgba(128,128,128,0.2); padding-bottom: 10px;">Past Announcements</h5>
         </div>
-        ${past.map(a => {
-          const itemData = JSON.stringify({
-            title: a.title,
-            description: a.description,
-            link: a.link,
-            linkText: a.link_text,
-            image: a.image,
-            dateText: a.deadline_text || a.deadline,
-            type: 'Past Announcements'
-          }).replace(/"/g, '&quot;');
-          
-          return `
-          <li class="mb-3 pb-2 border-bottom">
-            <div class="news-item-content">
-              <div class="font-weight-bold" style="font-size: 1.15rem; line-height: 1.4;">
-                ${a.title}
-              </div>
-              <div class="news-desc-preview text-muted" style="font-weight: 400; font-size: 0.95rem;">
-                ${a.description}
-              </div>
-            </div>
-            <div class="mt-2 d-flex align-items-center justify-content-between flex-wrap" style="gap: 10px;">
-              <a href="javascript:void(0)" onclick="showNewsDetails(${itemData})" class="magazine-link" style="font-size: 0.85rem; padding-bottom: 2px;">Read More <span class="arrow" style="font-size: 1rem; margin-left: 5px;">&xrarr;</span></a>
-              <span class="deadline-badge"><i class="far fa-calendar-alt mr-1"></i> Deadline: ${a.deadline_text || a.deadline}</span>
-            </div>
-          </li>
-        `;}).join('')}
+        ${past.map(a => card(a, 'Past Announcements', pastSizes)).join('')}
       ` : '';
-      
+
       listEl.innerHTML = html + pastHtml || '<li class="text-muted text-center py-3">No announcements</li>';
-      
+
     } catch (e) {
       console.error('Failed to load announcements:', e);
       listEl.innerHTML = '<li class="text-muted text-center py-3">Unable to load announcements</li>';
