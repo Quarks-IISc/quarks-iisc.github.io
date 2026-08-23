@@ -391,14 +391,24 @@ title: Home
     </div>
 </section>
 
+{% include page-outro.html
+    divider=true
+    kicker="The open door"
+    title="Quarks becomes better with what you create."
+    text="Nearly everything on this site began as somebody's half-thought on the walk back from the mess. There is no pitch to write, no bar to clear and no committee to get past &mdash; if you made it, saw it, wrote it or cannot stop thinking about it, that is already enough."
+    items="something you wrote at 2 a.m., a photo nobody else got, a clue for the mini, a tip-off, a doodle from the back bench, an idea you cannot shake"
+    cta="send it our way"
+    subject="I have something for Quarks" %}
+
 <!-- SECTION 5: Student wellness -->
-<section class="wellness mt-5 mb-5" id="wellness-section">
+<section class="wellness mt-5 mb-5" id="student-wellness" style="scroll-margin-top: 90px">
     {% include wellness-banner.html %}
 </section>
 
 {% endif %}
 
 <script src="{{ site.baseurl }}/assets/js/date-utils.js"></script>
+<script src="{{ site.baseurl }}/assets/js/sheets-data.js"></script>
 <script src="{{ site.baseurl }}/assets/js/carousel-logic.js"></script>
 <script src="{{ site.baseurl }}/assets/js/announcements-loader.js"></script>
 <script src="{{ site.baseurl }}/assets/js/news-loader.js"></script>

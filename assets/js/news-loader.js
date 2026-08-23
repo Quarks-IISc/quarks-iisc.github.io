@@ -1,50 +1,43 @@
 (function() {
   /**
-   * NEWS LOADER (Airtable Version)
+   * NEWS LOADER (homepage column)
+   * Reads the News sheet via sheets-data.js.
    */
 
-  // --- CONFIGURATION ---
-  const AIRTABLE_BASE_ID = 'appZL8Aqpgy1IsIUY'; 
-  const AIRTABLE_TABLE_NAME = 'tblf9YPTj8BSx7fV2'; 
-  const OBFUSCATED_TOKEN = 'cGF0STN2Q21QTXlleFJBbEUuNTFlNTc4ZjJlNzg0MjEwM2QzNTMwYzNkY2YxMmE0OWQxYTM1NzliNjdmODExYzkzYjcxMDFkMmFlYTVlNzE4YQ=='; 
-  // ---------------------
+  // The sheet spells it "Decription"; accept either so fixing the header in the
+  // sheet doesn't blank the column on the site.
+  function description(row) {
+    return row['Description'] || row['Decription'] || '';
+  }
+
+  function toItem(row) {
+    const publishedDate = row['Published Date'] || '';
+    return {
+      id: QuarksSheets.slugify(row['Title']),
+      title: row['Title'] || '',
+      description: description(row),
+      link: row['Link'] || '#',
+      link_text: row['Link Text'] || 'Read More',
+      image: row['Image'] || '',
+      published_date: publishedDate,
+      published_date_text: typeof formatHumanDate === 'function' ? formatHumanDate(publishedDate) : publishedDate
+    };
+  }
 
   async function loadNews() {
     const listEl = document.getElementById('news-list');
     if (!listEl) return;
 
     try {
-      const token = atob(OBFUSCATED_TOKEN);
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rows = await QuarksSheets.load('news');
 
-      if (!response.ok) {
-        throw new Error(`Airtable error: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      const newsItems = data.records.map(record => {
-        const f = record.fields;
-        return {
-          id: record.id,
-          title: f['Title'] || f['title'] || '',
-          description: f['Description'] || f['description'] || '',
-          link: f['Link'] || f['link'] || '#',
-          link_text: f['Link Text'] || f['link text'] || 'Read More',
-          image: f['Image'] && f['Image'][0] ? f['Image'][0].url : (f['image'] && f['image'][0] ? f['image'][0].url : ''),
-          published_date: f['Published Date'] || '',
-          published_date_text: typeof formatHumanDate === 'function' ? formatHumanDate(f['Published Date']) : (f['Published Date'] || '')
-        };
-      }).sort((a, b) => {
-        // Sort by date descending (newest first)
-        return new Date(b.published_date) - new Date(a.published_date);
-      });
+      const newsItems = rows
+        .map(toItem)
+        .filter(item => item.title.trim() || item.description.trim())
+        .sort((a, b) => {
+          // Newest first; rows with no date sort to the bottom.
+          return QuarksSheets.dateKey(b.published_date) - QuarksSheets.dateKey(a.published_date);
+        });
 
       const html = newsItems.length > 0 ? newsItems.map(item => {
         const words = item.description.split(/\s+/);
@@ -67,9 +60,9 @@
           </div>
         </li>
       `;}).join('') : '<li class="text-muted text-center py-3">No updates yet</li>';
-      
+
       listEl.innerHTML = html;
-      
+
     } catch (e) {
       console.error('Failed to load news:', e);
       listEl.innerHTML = '<li class="text-muted text-center py-3">Unable to load news updates</li>';

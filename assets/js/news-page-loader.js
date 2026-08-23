@@ -1,50 +1,39 @@
 (function() {
   /**
    * NEWS PAGE LOADER (Professional Magazine Version)
+   * Reads the News sheet via sheets-data.js.
    */
 
-  // --- CONFIGURATION (Synced with news-loader.js) ---
-  const AIRTABLE_BASE_ID = 'appZL8Aqpgy1IsIUY'; 
-  const AIRTABLE_TABLE_NAME = 'tblf9YPTj8BSx7fV2'; 
-  const OBFUSCATED_TOKEN = 'cGF0STN2Q21QTXlleFJBbEUuNTFlNTc4ZjJlNzg0MjEwM2QzNTMwYzNkY2YxMmE0OWQxYTM1NzliNjdmODExYzkzYjcxMDFkMmFlYTVlNzE4YQ=='; 
-  // ---------------------
+  // The sheet spells it "Decription"; accept either so fixing the header in the
+  // sheet doesn't blank the column on the site.
+  function description(row) {
+    return row['Description'] || row['Decription'] || '';
+  }
 
   async function loadNewsPage() {
     const listEl = document.getElementById('news-page-list');
     if (!listEl) return;
 
     try {
-      const token = atob(OBFUSCATED_TOKEN);
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rows = await QuarksSheets.load('news');
 
-      if (!response.ok) {
-        throw new Error(`Airtable error: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      const newsItems = data.records.map(record => {
-        const f = record.fields;
+      const newsItems = rows.map(row => {
+        const publishedDate = row['Published Date'] || '';
         return {
-          id: record.id,
-          title: f['Title'] || f['title'] || '',
-          description: f['Description'] || f['description'] || '',
-          link: f['Link'] || f['link'] || '',
-          link_text: f['Link Text'] || f['link text'] || 'Read More',
-          published_date: f['Published Date'] || '',
-          published_date_text: typeof formatHumanDate === 'function' ? formatHumanDate(f['Published Date']) : (f['Published Date'] || '')
+          id: QuarksSheets.slugify(row['Title']),
+          title: row['Title'] || '',
+          description: description(row),
+          link: row['Link'] || '',
+          link_text: row['Link Text'] || 'Read More',
+          published_date: publishedDate,
+          published_date_text: typeof formatHumanDate === 'function' ? formatHumanDate(publishedDate) : publishedDate
         };
       }).filter(item => {
-        // Drop blank Airtable records so they don't render as an empty/black box
+        // Drop blank rows so they don't render as an empty/black box
         return (item.title && item.title.trim()) || (item.description && item.description.trim());
       }).sort((a, b) => {
-        return new Date(b.published_date) - new Date(a.published_date);
+        // Newest first; rows with no date sort to the bottom.
+        return QuarksSheets.dateKey(b.published_date) - QuarksSheets.dateKey(a.published_date);
       });
 
       const styles = `
