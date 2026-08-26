@@ -7,7 +7,7 @@
     title         the handwritten headline
     text          the body line
     cta           the words that sit before the arrow
-    subject       mailto subject line for this page
+    subject       kept for callers; unused since the arrow points at the post office
     video         optional Google Drive file id, embedded above the note
     video_caption optional caption under the video
 {% endcomment %}
@@ -307,8 +307,6 @@
       <path d="M61 33 L 52 27" />
       <path d="M61 33 L 62 22" />
     </svg>
-    <a class="outro-mail"
-       href="mailto:quarks.ug@iisc.ac.in?subject={{ include.subject | uri_escape }}"
-       >quarks.ug@iisc.ac.in</a>
+    <a class="outro-mail" href="{{ site.baseurl }}/post-office/">the Quarks post office</a>
   </div>
 </section>

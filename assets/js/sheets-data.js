@@ -30,6 +30,14 @@ window.QuarksSheets = (function () {
     announcements: {
       id: '1O56l5QnyMzO8mPfpbcf9UFCMxPeoNkRNhYUaMNayKL0',
       tab: 'Sheet1'
+    },
+    // The UG@IISc calendar. Fill in the id of a link-viewable Google Sheet with
+    // the columns the calendar page expects: Title, Date, Start Time, End Time,
+    // End Date, Location, Category, Link, Description. Until then the calendar
+    // page renders empty with a "not connected" note rather than an error.
+    calendar: {
+      id: '',
+      tab: 'Sheet1'
     }
   };
 
@@ -60,16 +68,31 @@ window.QuarksSheets = (function () {
     return (n < 10 ? '0' : '') + n;
   }
 
-  // 'Date(2026,2,20)' -> '2026-03-20' (the format formatHumanDate expects).
+  // 'Date(2026,2,20)'          -> '2026-03-20'
+  // 'Date(2026,2,20,14,30,0)'   -> '2026-03-20T14:30'
   function toIsoDate(value) {
     if (typeof value !== 'string') return '';
-    var m = value.match(/^Date\((\d+),(\d+),(\d+)/);
+    var m = value.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+))?/);
     if (!m) return '';
-    return m[1] + '-' + pad(parseInt(m[2], 10) + 1) + '-' + pad(parseInt(m[3], 10));
+    var date = m[1] + '-' + pad(parseInt(m[2], 10) + 1) + '-' + pad(parseInt(m[3], 10));
+    if (m[4] === undefined) return date;
+    var h = parseInt(m[4], 10);
+    var min = parseInt(m[5], 10);
+    if (!h && !min) return date;
+    return date + 'T' + pad(h) + ':' + pad(min);
+  }
+
+  // A timeofday cell arrives as [hours, minutes, seconds, millis].
+  function toClockTime(value) {
+    if (!Array.isArray(value) || value.length < 2) return '';
+    return pad(value[0]) + ':' + pad(value[1]);
   }
 
   function cellText(cell, type) {
     if (!cell || cell.v === null || cell.v === undefined) return '';
+    if (type === 'timeofday') {
+      return toClockTime(cell.v) || cell.f || '';
+    }
     if (type === 'date' || type === 'datetime') {
       // Fall back to the sheet's own formatted string if the cell was typed as
       // a date but holds something we can't read.
@@ -108,6 +131,11 @@ window.QuarksSheets = (function () {
   function load(name) {
     var cfg = SHEETS[name];
     if (!cfg) return Promise.reject(new Error('Unknown sheet: ' + name));
+    if (!cfg.id) {
+      var missing = new Error('No sheet connected for: ' + name);
+      missing.notConnected = true;
+      return Promise.reject(missing);
+    }
 
     if (!pending[name]) {
       pending[name] = fetch(endpoint(cfg))
