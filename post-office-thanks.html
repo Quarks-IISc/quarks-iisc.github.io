@@ -5,6 +5,16 @@ permalink: /post-office/thanks/
 ---
 
 <style>
+  /* Matches the Post button: white type on the pale dark-mode --link-color
+     reads washed out at button size. */
+  .thanks-wrap {
+    --po-blue: #0b63ce;
+    --po-blue-hover: #084a9e;
+  }
+  .dark-mode .thanks-wrap {
+    --po-blue: #2f6fd8;
+    --po-blue-hover: #4a86e6;
+  }
   .thanks-wrap {
     max-width: 640px;
     margin: 0 auto;
@@ -58,12 +68,18 @@ permalink: /post-office/thanks/
   }
   .thanks-actions a:hover {
     transform: translateY(-2px);
-    border-color: var(--link-color);
+    border-color: var(--po-blue);
     text-decoration: none;
   }
   .thanks-actions a.is-primary {
-    background: var(--link-color);
-    border-color: var(--link-color);
+    background: var(--po-blue);
+    border-color: var(--po-blue);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(11, 99, 206, 0.28);
+  }
+  .thanks-actions a.is-primary:hover {
+    background: var(--po-blue-hover);
+    border-color: var(--po-blue-hover);
     color: #fff;
   }
   @media (max-width: 767px) {

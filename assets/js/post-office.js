@@ -45,6 +45,7 @@
   var dialog = document.getElementById('po-confirm');
   var recapTitle = document.getElementById('po-recap-title');
   var recapSender = document.getElementById('po-recap-sender');
+  var nudge = document.getElementById('po-nudge');
   var yesBtn = document.getElementById('po-yes');
   var noBtn = document.getElementById('po-no');
 
@@ -261,7 +262,9 @@
       recapSender.innerHTML =
         'Anonymously<span class="po-sub">No name, email or institute is ' +
         'attached &mdash; we will have no way to reach you.</span>';
+      nudge.classList.add('is-shown');
     } else {
+      nudge.classList.remove('is-shown');
       recapSender.innerHTML =
         escapeHtml(nameInput.value.trim()) +
         '<span class="po-sub">' + escapeHtml(emailInput.value.trim()) +

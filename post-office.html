@@ -586,6 +586,24 @@ permalink: /post-office/
     font-weight: 400;
     color: var(--text-muted);
   }
+  /* Shown only when the About block was left empty. Amber, like the caution
+     further up the page, because it is a nudge and not an objection. */
+  .po-nudge {
+    display: none;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: rgba(240, 180, 41, 0.12);
+    border: 1px solid rgba(240, 180, 41, 0.45);
+    border-radius: 11px;
+    padding: 0.8rem 0.95rem;
+    margin: -0.5rem 0 1.3rem;
+  }
+  .po-nudge.is-shown {
+    display: block;
+  }
+
   .po-confirm-actions {
     display: flex;
     gap: 10px;
@@ -868,6 +886,12 @@ permalink: /post-office/
               <span class="po-receipt-value" id="po-recap-sender"></span>
             </div>
           </div>
+          <p class="po-nudge" id="po-nudge">
+            Sure about staying anonymous? We would genuinely love to know who
+            made this. And if it is your <em>real</em> name you would rather not
+            give &mdash; a code name works just as well. Put one in the name
+            field and we will print that.
+          </p>
           <div class="po-confirm-actions">
             <button type="button" class="po-yes" id="po-yes">Yes, post it</button>
             <button type="button" class="po-no" id="po-no">Not yet</button>
