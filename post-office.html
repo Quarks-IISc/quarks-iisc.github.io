@@ -8,9 +8,10 @@ permalink: /post-office/
   QUARKS POST OFFICE — anonymous submissions
 
   The form posts straight to FormSubmit, which turns a submission into an email
-  to quarks.ug@iisc.ac.in. Nothing secret ships to the browser: the endpoint is
-  an address, not a credential. The worst anyone can do with it is send us mail,
-  which they could do from their own client anyway.
+  to the Quarks inbox. The hash in the action is FormSubmit's alias for that
+  address, so the mailbox itself never appears in the page source. It is not a
+  credential either: the worst anyone can do with it is send us mail, which they
+  could do from their own client anyway.
 
   Why a classic POST and not fetch(): attachments. FormSubmit's AJAX endpoint is
   documented for JSON only, so files go through the normal form submission and
@@ -25,6 +26,16 @@ permalink: /post-office/
     max-width: 860px;
     margin: 0 auto;
     padding: 0 1rem 1rem;
+
+    /* --link-color is a pale #90caf9 in dark mode — fine for a link in running
+       text, but white type on a whole button of it reads washed out. The Post
+       button gets its own blue, deep enough to carry white in both themes. */
+    --po-blue: #0b63ce;
+    --po-blue-hover: #084a9e;
+  }
+  .dark-mode .submit-page {
+    --po-blue: #2f6fd8;
+    --po-blue-hover: #4a86e6;
   }
 
   /* ---- Opening ---- */
@@ -475,17 +486,18 @@ permalink: /post-office/
     font-size: 1.02rem;
     font-weight: 700;
     color: #fff;
-    background: var(--link-color);
+    background: var(--po-blue);
     border: 0;
     border-radius: 40px;
     cursor: pointer;
+    box-shadow: 0 4px 14px rgba(11, 99, 206, 0.28);
     transition:
       transform 0.2s ease,
       box-shadow 0.2s ease,
       background 0.2s ease;
   }
   .submit-btn:hover {
-    background: var(--link-hover-color);
+    background: var(--po-blue-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
   }
@@ -595,11 +607,11 @@ permalink: /post-office/
   }
   .po-yes {
     color: #fff;
-    background: var(--link-color);
+    background: var(--po-blue);
     border: 0;
   }
   .po-yes:hover {
-    background: var(--link-hover-color);
+    background: var(--po-blue-hover);
   }
   .po-no {
     color: var(--heading-color);
@@ -702,14 +714,20 @@ permalink: /post-office/
     <form
       class="submit-form"
       id="quarks-submit-form"
-      action="https://formsubmit.co/quarks.ug@iisc.ac.in"
+      action="https://formsubmit.co/f007746c892f69b404980fcdbb3f6942"
       method="POST"
       enctype="multipart/form-data"
       novalidate
     >
       <input type="hidden" name="_subject" id="mail-subject" value="New Quarks submission" />
-      <input type="hidden" name="_cc" id="mail-cc" value="" />
-      <input type="hidden" name="_template" value="table" />
+      <!-- The institute inbox is always copied; the sender is added by JS when
+           they gave us an address. Seeded here rather than left blank so the CC
+           still happens if the script fails to load. -->
+      <input type="hidden" name="_cc" id="mail-cc" value="quarks.ug@iisc.ac.in" />
+      <!-- "box" lays each field out as a labelled block. "table" is the other
+           readable option, but it heads its columns "Name" and "Value", which
+           is not wording we can change. -->
+      <input type="hidden" name="_template" value="box" />
       <input type="hidden" name="_captcha" value="false" />
       <input type="hidden" name="_next" value="{{ site.url }}{{ site.baseurl }}/post-office/thanks/" />
       <div class="hp-field" aria-hidden="true">
@@ -739,7 +757,7 @@ permalink: /post-office/
 
         <div class="field">
           <label for="piece-kind">What kind of thing is it?</label>
-          <select id="piece-kind" name="Category">
+          <select id="piece-kind" name="What it is">
             <option value="Not sure / something else">Not sure &mdash; you decide</option>
             <option>Story</option>
             <option>Poem</option>

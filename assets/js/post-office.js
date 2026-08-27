@@ -293,9 +293,12 @@
     // Name the email after the piece so the inbox is readable.
     subjectInput.value = 'Quarks submission: ' + titleInput.value.trim().slice(0, 100);
 
-    // Copy the sender on their own submission, so they hold a record of exactly
-    // what reached us. Stays empty on the anonymous path.
-    ccInput.value = emailInput.value.trim();
+    // Always copy the institute inbox; add the sender so they hold a record of
+    // exactly what reached us. On the anonymous path only the first survives.
+    var cc = ['quarks.ug@iisc.ac.in'];
+    var senderEmail = emailInput.value.trim();
+    if (senderEmail) cc.push(senderEmail);
+    ccInput.value = cc.join(',');
 
     yesBtn.disabled = true;
     noBtn.disabled = true;
