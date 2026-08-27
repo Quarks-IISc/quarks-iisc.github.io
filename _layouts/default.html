@@ -429,13 +429,20 @@
 
     <!-- Scripts
 ================================================== -->
+    <!-- defer, and it is not optional: jquery.min.js in the head is deferred,
+         so a plain script here would execute BEFORE it and Bootstrap would
+         throw "Bootstrap's JavaScript requires jQuery" — taking the collapse
+         and dropdown plugins with it, which is what broke the mobile menu.
+         Deferred scripts run in document order, so jQuery lands first. -->
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
       integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
       crossorigin="anonymous"
     ></script>
 
     <script
+      defer
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
       integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
       crossorigin="anonymous"

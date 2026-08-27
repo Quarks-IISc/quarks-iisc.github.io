@@ -42,6 +42,12 @@
   var ccInput = document.getElementById('mail-cc');
   var button = document.getElementById('submit-btn');
 
+  var dialog = document.getElementById('po-confirm');
+  var recapTitle = document.getElementById('po-recap-title');
+  var recapSender = document.getElementById('po-recap-sender');
+  var yesBtn = document.getElementById('po-yes');
+  var noBtn = document.getElementById('po-no');
+
   var errTitle = document.getElementById('err-title');
   var errFile = document.getElementById('err-file');
   var errName = document.getElementById('err-name');
@@ -227,15 +233,79 @@
       return;
     }
 
+    // Everything checks out, but nothing is sent yet: show what is about to go,
+    // and let the dialog do the actual posting.
+    e.preventDefault();
+    openDialog();
+  });
+
+  // --- confirm before posting ---------------------------------------------
+
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function openDialog() {
+    var file = fileInput.files[0];
+
+    recapTitle.innerHTML =
+      escapeHtml(titleInput.value.trim()) +
+      '<span class="po-sub">' + escapeHtml(file.name) +
+      ' &middot; ' + humanSize(file.size) + '</span>';
+
+    // The one thing worth being sure about: whether a name is going with it.
+    if (aboutFilled().length === 0) {
+      recapSender.innerHTML =
+        'Anonymously<span class="po-sub">No name, email or institute is ' +
+        'attached &mdash; we will have no way to reach you.</span>';
+    } else {
+      recapSender.innerHTML =
+        escapeHtml(nameInput.value.trim()) +
+        '<span class="po-sub">' + escapeHtml(emailInput.value.trim()) +
+        ' &middot; ' + escapeHtml(placeInput.value.trim()) +
+        '<br />Your name will be published with the piece.</span>';
+    }
+
+    dialog.classList.add('is-open');
+    yesBtn.focus();
+  }
+
+  function closeDialog() {
+    dialog.classList.remove('is-open');
+    button.focus();
+  }
+
+  noBtn.addEventListener('click', closeDialog);
+
+  // Clicking the backdrop, but not the card, is a "not yet" too.
+  dialog.addEventListener('click', function (e) {
+    if (e.target === dialog) closeDialog();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && dialog.classList.contains('is-open')) closeDialog();
+  });
+
+  yesBtn.addEventListener('click', function () {
     // Name the email after the piece so the inbox is readable.
     subjectInput.value = 'Quarks submission: ' + titleInput.value.trim().slice(0, 100);
 
     // Copy the sender on their own submission, so they hold a record of exactly
     // what reached us. Stays empty on the anonymous path.
-    ccInput.value = email;
+    ccInput.value = emailInput.value.trim();
 
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+    yesBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Posting…';
     button.disabled = true;
     button.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending…';
+
+    // form.submit() bypasses the submit handler, which is what we want here —
+    // validation has already run and the hidden fields are set.
+    form.submit();
   });
 
   // Typing clears the complaint about the thing you're fixing.

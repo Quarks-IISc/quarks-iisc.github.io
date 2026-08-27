@@ -504,6 +504,108 @@ permalink: /post-office/
   .submit-fine a {
     color: var(--link-color);
   }
+
+  /* ---- Confirm dialog ---- */
+  .po-confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .po-confirm.is-open {
+    display: flex;
+  }
+  .po-confirm-card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.9rem 1.75rem 1.6rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    text-align: center;
+  }
+  .po-confirm-title {
+    margin: 0 0 1.2rem;
+    font-family: "Caveat", cursive;
+    font-size: 2.3rem;
+    line-height: 1.1;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  /* The receipt: what we are about to send, and nothing else. */
+  .po-receipt {
+    text-align: left;
+    background: rgba(128, 128, 128, 0.06);
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.4rem;
+  }
+  .po-receipt-row + .po-receipt-row {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+  }
+  .po-receipt-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+  .po-receipt-value {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--heading-color);
+    overflow-wrap: anywhere;
+  }
+  .po-receipt-value .po-sub {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .po-confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .po-confirm-actions button {
+    padding: 0.65rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 40px;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+  .po-confirm-actions button:hover {
+    transform: translateY(-2px);
+  }
+  .po-yes {
+    color: #fff;
+    background: var(--link-color);
+    border: 0;
+  }
+  .po-yes:hover {
+    background: var(--link-hover-color);
+  }
+  .po-no {
+    color: var(--heading-color);
+    background: transparent;
+    border: 1px solid var(--border-color);
+  }
   /* The plain-email route, set apart so it reads as a genuine alternative
      rather than a footnote to the button. */
   .submit-fine-alt {
@@ -731,6 +833,27 @@ permalink: /post-office/
         <div class="field">
           <label for="sender-remarks">Other remarks</label>
           <textarea id="sender-remarks" name="Remarks" maxlength="2000" placeholder="Credit preference, socials you'd like linked, content warnings, anything we should know before we read it."></textarea>
+        </div>
+      </div>
+
+      <div class="po-confirm" id="po-confirm" role="dialog" aria-modal="true"
+           aria-labelledby="po-confirm-title">
+        <div class="po-confirm-card">
+          <h3 class="po-confirm-title" id="po-confirm-title">Post this?</h3>
+          <div class="po-receipt">
+            <div class="po-receipt-row">
+              <span class="po-receipt-label">The piece</span>
+              <span class="po-receipt-value" id="po-recap-title"></span>
+            </div>
+            <div class="po-receipt-row">
+              <span class="po-receipt-label">Sent by</span>
+              <span class="po-receipt-value" id="po-recap-sender"></span>
+            </div>
+          </div>
+          <div class="po-confirm-actions">
+            <button type="button" class="po-yes" id="po-yes">Yes, post it</button>
+            <button type="button" class="po-no" id="po-no">Not yet</button>
+          </div>
         </div>
       </div>
 
