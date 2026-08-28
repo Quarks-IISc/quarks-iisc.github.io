@@ -158,6 +158,46 @@ title: About Quarks
     .about-chips span:nth-child(odd)  { transform: rotate(1.5deg); }
     .about-chips span:hover { transform: rotate(0) scale(1.06); }
 
+    .about-mail-alt {
+        text-align: center;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-muted);
+        margin-top: 0.4rem;
+    }
+    .about-mail-alt strong {
+        color: var(--heading-color);
+        font-weight: 700;
+    }
+    .about-po-btn {
+        /* same deeper blue as the Post button, for the same reason: white type
+           on the pale dark-mode --link-color reads washed out */
+        --po-blue: #0b63ce;
+        --po-blue-hover: #084a9e;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 1.1rem;
+        padding: 0.7rem 1.7rem;
+        border-radius: 40px;
+        background: var(--po-blue);
+        color: #fff;
+        font-size: 0.98rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .dark-mode .about-po-btn {
+        --po-blue: #2f6fd8;
+        --po-blue-hover: #4a86e6;
+    }
+    .about-po-btn:hover {
+        background: var(--po-blue-hover);
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    }
     .about-mail {
         margin-top: 2.75rem;
         font-size: 1.05rem;
@@ -253,7 +293,7 @@ title: About Quarks
 
         <div class="about-bubble left">
             <span class="bubble-label">Do we only publish magazines and newsletters?</span><br>
-            Not really! We offer the world a peek into the diverse facets of UG life at the institute. From the events we relish to the challenges we face, from the stories we write to the pictures we click, from the talks of brilliant minds to the light-hearted game nights, we aspire to capture what it feels like to be a UG at IISc.
+            Not really! We offer the world a peek into the diverse facets of UG life at the institute. From the events we relish to the challenges we face, from the stories we write to the pictures we click, from the talks of brilliant minds to the light-hearted game nights, we aspire to capture what it feels like to be a UG at IISc. Almost all of it arrives from people like you &mdash; a good deal of it through the <a href="{{ site.baseurl }}/post-office/">Quarks Post Office</a>, without a name attached.
         </div>
 
         <div class="about-callout">
@@ -274,6 +314,12 @@ title: About Quarks
             <p class="about-mail">
                 Send it all our way at <a href="mailto:quarks.ug@iisc.ac.in">quarks.ug@iisc.ac.in</a>
             </p>
+            <p class="about-mail-alt">
+                &mdash; or walk into the <strong>Quarks Post Office</strong>, where you can attach a file, pick what it is, and leave your name off it entirely.
+            </p>
+            <a class="about-po-btn" href="{{ site.baseurl }}/post-office/">
+                <i class="fas fa-paper-plane"></i> Visit the Quarks Post Office
+            </a>
         </div>
 
         <div class="about-signoff">

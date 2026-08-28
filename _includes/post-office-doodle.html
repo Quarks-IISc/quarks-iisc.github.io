@@ -1,0 +1,143 @@
+{% comment %}
+  The Post Office doodle: someone with the thing they made, a long twirl of an
+  arrow carrying it across the page, and a second figure posting the same way
+  with their face left blank. Both routes end at the Quarks box.
+
+  Drawn in the same hand as the wellness banner: flat fills with a dark outline,
+  and every stroke either sitting on a light fill or set in currentColor, so
+  nothing disappears against the dark theme.
+{% endcomment %}
+
+<style>
+  .po-doodle {
+    max-width: 720px;
+    margin: 0 auto 2.6rem;
+    color: var(--heading-color);
+  }
+  .po-doodle svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  @media (max-width: 600px) {
+    .po-doodle {
+      margin-bottom: 1.8rem;
+    }
+  }
+</style>
+
+<div class="po-doodle" aria-hidden="true">
+  <svg viewBox="0 0 840 372" fill="none" stroke="#1a1a1a" stroke-width="4"
+       stroke-linecap="round" stroke-linejoin="round"
+       xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ground -->
+    <path d="M40 332 H802" stroke="currentColor" stroke-width="3"
+          stroke-dasharray="2 14" opacity="0.35" />
+
+    <!-- ============ the artist, holding what they made ============ -->
+    <path d="M104 250 V308" stroke-width="15" />
+    <path d="M104 250 V308" stroke="#7ea3d0" stroke-width="9" />
+    <path d="M136 250 V308" stroke-width="15" />
+    <path d="M136 250 V308" stroke="#7ea3d0" stroke-width="9" />
+    <rect x="90" y="306" width="28" height="13" rx="6.5" fill="#e6e1da" />
+    <rect x="122" y="306" width="28" height="13" rx="6.5" fill="#e6e1da" />
+
+    <!-- near arm, tucked behind the shirt: it starts inside the body and only
+         appears past the silhouette, low enough to clear the crossing arm -->
+    <path d="M128 212 Q156 234 190 254" stroke-width="12" />
+    <path d="M128 212 Q156 234 190 254" stroke="#f2c9a0" stroke-width="7" />
+
+    <path d="M92 262 L95 186 Q99 160 120 160 Q141 160 145 186 L148 262 Z"
+          fill="#8fc0c2" />
+
+    <circle cx="93" cy="120" r="7" fill="#f2c9a0" />
+    <circle cx="147" cy="120" r="7" fill="#f2c9a0" />
+    <circle cx="120" cy="118" r="30" fill="#f2c9a0" />
+    <path d="M92 112 A30 30 0 0 1 148 112 Q132 96 120 98 Q104 100 92 112 Z"
+          fill="#4a3524" stroke-width="3.5" />
+    <path d="M107 110 Q112 106 117 109" stroke-width="3.2" />
+    <path d="M124 109 Q129 105 134 110" stroke-width="3.2" />
+    <path d="M112 130 Q120 137 128 130" stroke-width="3.2" />
+
+    <!-- far arm crosses the shirt to catch the near edge of the canvas. Drawn
+         after the torso, so it reads in front of the shirt. -->
+    <path d="M99 184 Q136 208 182 202" stroke-width="12" />
+    <path d="M99 184 Q136 208 182 202" stroke="#f2c9a0" stroke-width="7" />
+
+    <!-- the canvas -->
+    <rect x="186" y="192" width="104" height="86" rx="4" fill="#fdf6e8" />
+    <path d="M192 262 Q216 224 238 250 Q254 226 284 262 Z" fill="#7fb083"
+          stroke-width="3" />
+    <circle cx="258" cy="216" r="13" fill="#f2b544" stroke-width="3" />
+
+    <!-- hands, closed over the frame edge -->
+    <g stroke-width="3.4">
+      <circle cx="188" cy="203" r="12" fill="#f2c9a0" />
+      <path d="M177 199 Q182 191 190 192" fill="none" stroke-width="3" />
+      <circle cx="196" cy="256" r="12" fill="#f2c9a0" />
+      <path d="M186 250 Q192 243 199 246" fill="none" stroke-width="3" />
+    </g>
+
+    <!-- ============ the twirl, with the post riding it ============ -->
+    <g stroke="currentColor" stroke-width="4.5" opacity="0.85">
+      <path d="M300 200 C 328 142, 356 92, 400 84 C 436 78, 452 106, 430 122
+               C 410 136, 392 114, 412 98 C 444 72, 604 90, 690 174" />
+      <path d="M690 174 L 666 172" />
+      <path d="M690 174 L 677 153" />
+    </g>
+
+    <!-- an envelope tipped along the curve -->
+    <g transform="rotate(-14 560 118)">
+      <rect x="532" y="98" width="56" height="40" rx="4" fill="#fdf6e8" />
+      <path d="M532 102 L560 122 L588 102" stroke-width="3.4" />
+    </g>
+
+    <!-- ============ the one who leaves the name off ============ -->
+    <path d="M398 266 V310" stroke-width="13" />
+    <path d="M398 266 V310" stroke="#8d8880" stroke-width="7.5" />
+    <path d="M426 266 V310" stroke-width="13" />
+    <path d="M426 266 V310" stroke="#8d8880" stroke-width="7.5" />
+    <rect x="385" y="308" width="26" height="12" rx="6" fill="#e6e1da" />
+    <rect x="413" y="308" width="26" height="12" rx="6" fill="#e6e1da" />
+
+    <path d="M388 276 L391 222 Q395 202 412 202 Q429 202 433 222 L436 276 Z"
+          fill="#b9b3ac" />
+
+    <!-- face left blank on purpose -->
+    <circle cx="412" cy="178" r="26" fill="#dfd8cf" />
+    <path d="M404 170 A9 9 0 1 1 414 184 L414 189" stroke-width="3.6" />
+    <path d="M414 198 h0.5" stroke-width="6" />
+
+    <!-- their letter, held up toward the curve -->
+    <path d="M434 226 Q454 216 462 202" stroke-width="11" />
+    <path d="M434 226 Q454 216 462 202" stroke="#b9b3ac" stroke-width="6.5" />
+    <g transform="rotate(14 476 192)">
+      <rect x="456" y="178" width="40" height="28" rx="3" fill="#fdf6e8" />
+      <path d="M456 181 L476 195 L496 181" stroke-width="3" />
+    </g>
+    <g stroke-width="3.2">
+      <circle cx="459" cy="196" r="9.5" fill="#c9c3bb" />
+      <path d="M451 191 Q455 184 462 186" fill="none" stroke-width="2.8" />
+    </g>
+    <path d="M492 166 Q506 150 522 140" stroke="currentColor" stroke-width="2.6"
+          stroke-dasharray="3 8" opacity="0.5" />
+
+    <!-- ============ the Quarks box ============ -->
+    <!-- legs in a mid grey: a dark outline with no fill behind it would vanish
+         against the dark theme -->
+    <path d="M690 300 V326" stroke="#8d8880" stroke-width="8" />
+    <path d="M770 300 V326" stroke="#8d8880" stroke-width="8" />
+    <rect x="664 " y="192" width="132" height="112" rx="10" fill="#e8705f" />
+    <path d="M664 218 Q730 180 796 218" fill="#e8705f" />
+    <rect x="700" y="206" width="60" height="11" rx="5.5" fill="#3a2320"
+          stroke-width="3" />
+    <text x="730" y="272" text-anchor="middle" fill="#fdf6e8" stroke="none"
+          font-family="'Caveat', cursive" font-size="34" font-weight="600">Quarks</text>
+
+    <!-- one small spark, so the box reads as the happy ending -->
+    <g stroke="currentColor" opacity="0.45" stroke-width="2.6">
+      <path d="M812 186 v12 M806 192 h12 M808 188 l8 8 M816 188 l-8 8" />
+    </g>
+  </svg>
+</div>

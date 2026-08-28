@@ -1,0 +1,921 @@
+---
+layout: default
+title: Quarks Post Office
+permalink: /post-office/
+---
+
+{% comment %}
+  QUARKS POST OFFICE — anonymous submissions
+
+  The form posts straight to FormSubmit, which turns a submission into an email
+  to the Quarks inbox. The hash in the action is FormSubmit's alias for that
+  address, so the mailbox itself never appears in the page source. It is not a
+  credential either: the worst anyone can do with it is send us mail, which they
+  could do from their own client anyway.
+
+  Why a classic POST and not fetch(): attachments. FormSubmit's AJAX endpoint is
+  documented for JSON only, so files go through the normal form submission and
+  `_next` bounces the visitor to /post-office/thanks/.
+
+  To swap providers later, change `form action` and the four `_`-prefixed hidden
+  inputs. Everything else on the page is provider-agnostic.
+{% endcomment %}
+
+<style>
+  .submit-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1rem 1rem;
+
+    /* --link-color is a pale #90caf9 in dark mode — fine for a link in running
+       text, but white type on a whole button of it reads washed out. The Post
+       button gets its own blue, deep enough to carry white in both themes. */
+    --po-blue: #0b63ce;
+    --po-blue-hover: #084a9e;
+  }
+  .dark-mode .submit-page {
+    --po-blue: #2f6fd8;
+    --po-blue-hover: #4a86e6;
+  }
+
+  /* ---- Opening ---- */
+  /* The headline is set in the same hand as the closing notes elsewhere on the
+     site, so the page opens like something scribbled on the counter rather than
+     a form you have been sent to fill in. */
+  .submit-hand {
+    max-width: 720px;
+    margin: 0.5rem auto 0;
+    text-align: center;
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6.5vw, 3.9rem);
+    line-height: 1.05;
+    color: var(--heading-color);
+  }
+  /* A pen stroke under the headline, drawn slightly long and uneven the way an
+     underline actually comes out. */
+  .submit-rule {
+    display: block;
+    width: 190px;
+    height: 14px;
+    margin: 0.5rem auto 1.4rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+  .submit-lede {
+    max-width: 620px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+  .submit-lede strong {
+    color: var(--heading-color);
+    font-weight: 600;
+  }
+
+  /* ---- What you can send ---- */
+  .submit-kinds {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 0 0 1rem;
+  }
+  .kind-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .kind-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-hover);
+  }
+  .kind-card i {
+    font-size: 1.15rem;
+    color: var(--link-color);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .kind-card h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .kind-card p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .kinds-tail {
+    font-family: "Caveat", cursive;
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    margin: 1.2rem 0 3rem;
+  }
+
+  /* ---- The anonymity note ---- */
+  .anon-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--blockquote-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    margin: 0 0 2.5rem;
+  }
+  .anon-note i {
+    font-size: 1.3rem;
+    color: var(--link-color);
+    margin-top: 0.15rem;
+    flex: 0 0 auto;
+  }
+  .anon-note h4 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .anon-note p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  /* Amber rather than the page's red: a caution to read, not an error. The
+     tint and border are set in alpha so the one rule works on both themes. */
+  .warn-note {
+    /* Pulled up under the anonymity note it follows: the two are one thought,
+       so they sit as a pair rather than as two separate asides. */
+    margin: -1.4rem 0 2.5rem;
+    background: rgba(240, 180, 41, 0.12);
+    border-color: rgba(240, 180, 41, 0.45);
+  }
+  .warn-note i {
+    color: #c99114;
+  }
+  .dark-mode .warn-note i {
+    color: #e0a92e;
+  }
+
+  /* ---- Form shell ---- */
+  .submit-form {
+    margin-bottom: 1rem;
+  }
+  .form-block {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .form-block-head h3 {
+    margin: 0;
+    font-family: "Playfair Display", serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .block-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .block-tag.is-required {
+    color: #b8543f;
+    background: rgba(232, 112, 95, 0.13);
+  }
+  .block-tag.is-optional {
+    color: var(--text-muted);
+    background: rgba(128, 128, 128, 0.12);
+  }
+
+  /* A short rule for the whole block, sitting above its first field. */
+  .block-note {
+    margin: -0.5rem 0 1.4rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .field {
+    margin-bottom: 1.35rem;
+  }
+  .field:last-child {
+    margin-bottom: 0;
+  }
+  .field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .field label .req {
+    color: #e8705f;
+    margin-left: 2px;
+  }
+  /* Hover/focus note. Positioned on the label so the bubble clears the input. */
+  .info-tip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: rgba(128, 128, 128, 0.08);
+    color: var(--text-muted);
+    font-family: Georgia, serif;
+    font-size: 0.72rem;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    cursor: help;
+    vertical-align: middle;
+  }
+  .info-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 9px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    width: 250px;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    background: var(--heading-color);
+    color: var(--bg-color);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
+    z-index: 5;
+  }
+  .info-tip:hover::after,
+  .info-tip:focus::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  /* Near the left edge on narrow screens the bubble would run off; pin it. */
+  @media (max-width: 600px) {
+    .info-tip::after {
+      left: 0;
+      transform: translateY(4px);
+      width: min(250px, 68vw);
+    }
+    .info-tip:hover::after,
+    .info-tip:focus::after {
+      transform: translateY(0);
+    }
+  }
+  .field .hint {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text-color);
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 3px var(--highlight-color);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.35rem;
+  }
+  @media (max-width: 600px) {
+    .field-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .field-row .field {
+      margin-bottom: 1.35rem;
+    }
+  }
+
+  /* ---- Dropzone ---- */
+  .dropzone {
+    position: relative;
+    display: block;
+    border: 2px dashed var(--border-color);
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(128, 128, 128, 0.03);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+  .dropzone:hover,
+  .dropzone.is-hover {
+    border-color: var(--link-color);
+    background: var(--highlight-color);
+  }
+  .dropzone.has-error {
+    border-color: #e8705f;
+  }
+  .dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .dropzone-icon {
+    font-size: 1.9rem;
+    color: var(--link-color);
+    margin-bottom: 0.6rem;
+  }
+  .dropzone-main {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 0.3rem;
+  }
+  .dropzone-sub {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Shown once a file is chosen; replaces the prompt above. */
+  .file-chip {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0.9rem;
+    padding: 0.8rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    text-align: left;
+  }
+  .file-chip.is-shown {
+    display: flex;
+  }
+  .file-chip .fc-icon {
+    font-size: 1.3rem;
+    color: var(--link-color);
+    flex: 0 0 auto;
+  }
+  .file-chip .fc-body {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .file-chip .fc-name {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-chip .fc-size {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .file-chip .fc-clear {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .file-chip .fc-clear:hover {
+    color: #e8705f;
+    background: rgba(232, 112, 95, 0.1);
+  }
+
+  .field-error {
+    display: none;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e8705f;
+  }
+  .field-error.is-shown {
+    display: block;
+  }
+
+  /* The honeypot: a real input that no human ever sees or tabs into. */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* ---- Send ---- */
+  .submit-actions {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.85rem 2.4rem;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--po-blue);
+    border: 0;
+    border-radius: 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(11, 99, 206, 0.28);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
+  }
+  .submit-btn:hover {
+    background: var(--po-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  }
+  .submit-btn[disabled] {
+    opacity: 0.65;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+  .submit-fine {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .submit-fine a {
+    color: var(--link-color);
+  }
+
+  /* ---- Confirm dialog ---- */
+  .po-confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .po-confirm.is-open {
+    display: flex;
+  }
+  .po-confirm-card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.9rem 1.75rem 1.6rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    text-align: center;
+  }
+  .po-confirm-title {
+    margin: 0 0 1.2rem;
+    font-family: "Caveat", cursive;
+    font-size: 2.3rem;
+    line-height: 1.1;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  /* The receipt: what we are about to send, and nothing else. */
+  .po-receipt {
+    text-align: left;
+    background: rgba(128, 128, 128, 0.06);
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.4rem;
+  }
+  .po-receipt-row + .po-receipt-row {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+  }
+  .po-receipt-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+  .po-receipt-value {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--heading-color);
+    overflow-wrap: anywhere;
+  }
+  .po-receipt-value .po-sub {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  /* Shown only when the About block was left empty. Amber, like the caution
+     further up the page, because it is a nudge and not an objection. */
+  .po-nudge {
+    display: none;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: rgba(240, 180, 41, 0.12);
+    border: 1px solid rgba(240, 180, 41, 0.45);
+    border-radius: 11px;
+    padding: 0.8rem 0.95rem;
+    margin: -0.5rem 0 1.3rem;
+  }
+  .po-nudge.is-shown {
+    display: block;
+  }
+
+  .po-confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .po-confirm-actions button {
+    padding: 0.65rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 40px;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
+  }
+  .po-confirm-actions button:hover {
+    transform: translateY(-2px);
+  }
+  .po-yes {
+    color: #fff;
+    background: var(--po-blue);
+    border: 0;
+  }
+  .po-yes:hover {
+    background: var(--po-blue-hover);
+  }
+  .po-no {
+    color: var(--heading-color);
+    background: transparent;
+    border: 1px solid var(--border-color);
+  }
+  /* The plain-email route, set apart so it reads as a genuine alternative
+     rather than a footnote to the button. */
+  .submit-fine-alt {
+    max-width: 560px;
+    margin: 1.4rem auto 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border-color);
+  }
+</style>
+
+<section class="recent-posts">
+  <div class="section-title section-hero-header">
+    <h2><span>Quarks Post Office</span></h2>
+  </div>
+
+  <div class="submit-page">
+    <p class="submit-hand">Your quiet talent now has<br />a mailing address. Post it.</p>
+    <svg class="submit-rule" viewBox="0 0 190 14" fill="none" aria-hidden="true"
+         stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+      <path d="M4 9 C 46 3, 96 12, 186 5" />
+    </svg>
+    {% include post-office-doodle.html %}
+
+    <p class="submit-lede">
+      Need a place to send your story, the song you hummed in the shower, the doodle you made on the back of a notebook, or just something you want to get off your chest? Quarks is a place for it.
+        No pitch, no committee, only creativity is needed. Give the piece a title, attach the
+      file, and we will showcase it for you. <strong>You can be an anonymous sender.</strong>
+    </p>
+
+    <div class="submit-kinds">
+      <div class="kind-card">
+        <i class="fas fa-pen-nib"></i>
+        <h4>Story</h4>
+        <p>Anything told in prose &mdash; fiction, essays, opinion, rants, reviews, travelogues.</p>
+      </div>
+      <div class="kind-card">
+        <i class="fas fa-feather-alt"></i>
+        <h4>Poem</h4>
+        <p>Verse of any length, in any language.</p>
+      </div>
+      <div class="kind-card">
+        <i class="fas fa-camera-retro"></i>
+        <h4>Picture &amp; art</h4>
+        <p>Photos, doodles, illustration, design, comics.</p>
+      </div>
+      <div class="kind-card">
+        <i class="fas fa-th"></i>
+        <h4>Crossword &amp; puzzle</h4>
+        <p>A whole mini, a single stubborn clue, or anything that can stump the campus.</p>
+      </div>
+      <div class="kind-card">
+        <i class="fas fa-bullhorn"></i>
+        <h4>News &amp; tips</h4>
+        <p>Something that happened, or should have been announced and wasn't.</p>
+      </div>
+      <div class="kind-card">
+        <i class="fas fa-lightbulb"></i>
+        <h4>Idea &amp; suggestion</h4>
+        <p>A column we should run, a section we don't have, a thing you'd like to exist.</p>
+      </div>
+    </div>
+
+    <p class="kinds-tail">
+      and if it fits none of these, send it anyway &mdash; that is usually the good stuff
+    </p>
+
+    <div class="anon-note">
+      <i class="fas fa-user-secret"></i>
+      <div>
+        <h4>About staying anonymous</h4>
+        <p>
+          Only the name of the piece and the file itself are required. Leave the
+          rest blank and your submission reaches us with nothing attached to it
+          but the work. If you do give us a name, we will publish it alongside
+          your piece.
+        </p>
+      </div>
+    </div>
+
+    <div class="anon-note warn-note">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <h4>Notice!</h4>
+        <p>
+          If your piece contains inappropriate content which we can't publish or
+          we face other issues, we will write to you and ask. If you posted anonymously
+          or the contact details are wrong, then we may not publish the content.
+        </p>
+      </div>
+    </div>
+
+    <!-- FormSubmit turns this POST into an email. `_next` returns the visitor to
+         our own thank-you page instead of FormSubmit's. -->
+    <form
+      class="submit-form"
+      id="quarks-submit-form"
+      action="https://formsubmit.co/f007746c892f69b404980fcdbb3f6942"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <input type="hidden" name="_subject" id="mail-subject" value="New Quarks submission" />
+      <!-- The institute inbox is always copied; the sender is added by JS when
+           they gave us an address. Seeded here rather than left blank so the CC
+           still happens if the script fails to load. -->
+      <input type="hidden" name="_cc" id="mail-cc" value="quarks.ug@iisc.ac.in" />
+      <!-- "box" lays each field out as a labelled block. "table" is the other
+           readable option, but it heads its columns "Name" and "Value", which
+           is not wording we can change. -->
+      <input type="hidden" name="_template" value="box" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_next" value="{{ site.url }}{{ site.baseurl }}/post-office/thanks/" />
+      <div class="hp-field" aria-hidden="true">
+        <label for="hp-honey">Leave this field empty</label>
+        <input type="text" name="_honey" id="hp-honey" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-head">
+          <h3>The piece</h3>
+          <span class="block-tag is-required">Required</span>
+        </div>
+
+        <div class="field">
+          <label for="piece-title">Name of the piece <span class="req">*</span></label>
+          <input
+            type="text"
+            id="piece-title"
+            name="Name of the piece"
+            maxlength="140"
+            placeholder="What should we call it?"
+            required
+          />
+          <span class="hint">A working title is fine. So is &ldquo;untitled&rdquo;.</span>
+          <span class="field-error" id="err-title">Give the piece a name so we know what to call it.</span>
+        </div>
+
+        <div class="field">
+          <label for="piece-kind">What kind of thing is it?</label>
+          <select id="piece-kind" name="What it is">
+            <option value="Not sure / something else">Not sure &mdash; you decide</option>
+            <option>Story</option>
+            <option>Poem</option>
+            <option>Picture / art / doodle / illustration</option>
+            <option>Crossword / puzzle</option>
+            <option>News &amp; tip</option>
+            <option>Idea / suggestion</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="piece-file">
+            Your submission should be in a file &mdash; direct text is not supported
+            <span class="req">*</span>
+          </label>
+          <label class="dropzone" id="dropzone" for="piece-file">
+            <input
+              type="file"
+              id="piece-file"
+              name="attachment"
+              accept=".pdf,.jpg,.jpeg,.png,.webp,.gif,.md,.markdown,.txt,.rtf,.doc,.docx,.odt,application/pdf,image/jpeg,image/png,image/webp,image/gif,text/plain,text/markdown"
+              required
+            />
+            <div class="dropzone-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="dropzone-main">Drop your file here, or click to choose one</div>
+            <p class="dropzone-sub">
+              PDF, JPG, PNG, WEBP, GIF, Markdown, TXT, RTF, DOC, DOCX or ODT &middot; up to 5&nbsp;MB<br />
+              Writing something here and now? Paste it into a .txt or .md and attach that.
+            </p>
+          </label>
+          <div class="file-chip" id="file-chip">
+            <i class="fas fa-file-alt fc-icon" id="fc-icon"></i>
+            <span class="fc-body">
+              <span class="fc-name" id="fc-name"></span>
+              <span class="fc-size" id="fc-size"></span>
+            </span>
+            <button type="button" class="fc-clear" id="fc-clear" aria-label="Remove file">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <span class="field-error" id="err-file">Attach a file &mdash; that's the one thing we can't do without.</span>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-head">
+          <h3>About you</h3>
+          <span class="block-tag is-optional">Optional</span>
+        </div>
+
+        <p class="block-note">
+          Leave all three blank to stay anonymous. We will ask for all three details compulsarily in case you fill them.
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="sender-name">Your name</label>
+            <input type="text" id="sender-name" name="Sender name" maxlength="120" placeholder="As you'd like it printed" />
+            <span class="field-error" id="err-name">Add your name too, or clear this section to stay anonymous.</span>
+          </div>
+          <div class="field">
+            <label for="sender-email">
+              Email
+              <span class="info-tip" tabindex="0" role="note"
+                    aria-label="You are copied on the email your submission is sent in, so you have your own record of exactly what reached us and when."
+                    data-tip="You get a copy of the email your submission is sent in &mdash; your own receipt of exactly what reached us, and when.">i</span>
+            </label>
+            <input type="email" id="sender-email" name="Sender email" maxlength="160" placeholder="you@example.com" />
+            <span class="field-error" id="err-email">That email doesn't look right &mdash; fix it or clear this section.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sender-place">Institute / workplace</label>
+          <input type="text" id="sender-place" name="Institute or workplace" maxlength="160" placeholder="IISc, department, year &mdash; or wherever you're writing from" />
+          <span class="field-error" id="err-place">Add where you're writing from too, or clear this section to stay anonymous.</span>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-head">
+          <h3>Anything else</h3>
+          <span class="block-tag is-optional">Optional</span>
+        </div>
+
+        <div class="field">
+          <label for="sender-why">Why are you sending this?</label>
+          <textarea id="sender-why" name="Why they sent it" maxlength="2000" placeholder="What it's about, what made you write it, why now. A line is plenty."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="sender-remarks">Other remarks</label>
+          <textarea id="sender-remarks" name="Remarks" maxlength="2000" placeholder="Credit preference, socials you'd like linked, content warnings, anything we should know before we read it."></textarea>
+        </div>
+      </div>
+
+      <div class="po-confirm" id="po-confirm" role="dialog" aria-modal="true"
+           aria-labelledby="po-confirm-title">
+        <div class="po-confirm-card">
+          <h3 class="po-confirm-title" id="po-confirm-title">Post this?</h3>
+          <div class="po-receipt">
+            <div class="po-receipt-row">
+              <span class="po-receipt-label">The piece</span>
+              <span class="po-receipt-value" id="po-recap-title"></span>
+            </div>
+            <div class="po-receipt-row">
+              <span class="po-receipt-label">Sent by</span>
+              <span class="po-receipt-value" id="po-recap-sender"></span>
+            </div>
+          </div>
+          <p class="po-nudge" id="po-nudge">
+            Sure about staying anonymous? We would genuinely love to know who
+            made this. And if it is your <em>real</em> name you would rather not
+            give &mdash; a code name works just as well. Put one in the name
+            field and we will print that.
+          </p>
+          <div class="po-confirm-actions">
+            <button type="button" class="po-yes" id="po-yes">Yes, post it</button>
+            <button type="button" class="po-no" id="po-no">Not yet</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-actions">
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <i class="fas fa-paper-plane"></i> Post it to Quarks
+        </button>
+        <p class="submit-fine">
+          Goes straight to the Quarks inbox. Nothing is published automatically
+          &mdash; the Quarks team reads everything first.
+        </p>
+        <p class="submit-fine submit-fine-alt">
+          Rather not use a form? Write to
+          <a href="mailto:quarks.ug@iisc.ac.in">quarks.ug@iisc.ac.in</a> yourself,
+          any time, about anything &mdash; this page exists only to make 
+          your submissions anonymous.
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script src="{{ site.baseurl }}/assets/js/post-office.js"></script>

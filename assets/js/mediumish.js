@@ -60,6 +60,13 @@ jQuery(document).ready(function($){
 
     function hasScrolled() {
         var st = $(window).scrollTop();
+
+        // Don't slide the bar away while its own menu is open — on a phone that
+        // drags the menu you are reading off the top of the screen.
+        if ($('.navbar-collapse').hasClass('show')) {
+            lastScrollTop = st;
+            return;
+        }
         
         // Make sure they scroll more than delta
         if(Math.abs(lastScrollTop - st) <= delta)
@@ -82,7 +89,7 @@ jQuery(document).ready(function($){
         lastScrollTop = st;
     }
         
-    $('.site-content').css('margin-top', $('header').outerHeight() + 'px');  
+    // (there is no <header> element on this site; the offset lives in CSS)
     
     // spoilers
      $(document).on('click', '.spoiler', function() {

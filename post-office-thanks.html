@@ -1,0 +1,107 @@
+---
+layout: default
+title: Posted — we have it
+permalink: /post-office/thanks/
+---
+
+<style>
+  /* Matches the Post button: white type on the pale dark-mode --link-color
+     reads washed out at button size. */
+  .thanks-wrap {
+    --po-blue: #0b63ce;
+    --po-blue-hover: #084a9e;
+  }
+  .dark-mode .thanks-wrap {
+    --po-blue: #2f6fd8;
+    --po-blue-hover: #4a86e6;
+  }
+  .thanks-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4rem 1rem 3rem;
+    text-align: center;
+  }
+  .thanks-mark {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--highlight-color);
+    color: var(--link-color);
+    font-size: 2.2rem;
+  }
+  .thanks-title {
+    font-family: "Caveat", cursive;
+    font-size: 3.2rem;
+    line-height: 1.1;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin: 0 0 1rem;
+  }
+  .thanks-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    margin: 0 auto 2rem;
+    max-width: 520px;
+  }
+  .thanks-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .thanks-actions a {
+    padding: 0.7rem 1.6rem;
+    border-radius: 40px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    color: var(--heading-color);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .thanks-actions a:hover {
+    transform: translateY(-2px);
+    border-color: var(--po-blue);
+    text-decoration: none;
+  }
+  .thanks-actions a.is-primary {
+    background: var(--po-blue);
+    border-color: var(--po-blue);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(11, 99, 206, 0.28);
+  }
+  .thanks-actions a.is-primary:hover {
+    background: var(--po-blue-hover);
+    border-color: var(--po-blue-hover);
+    color: #fff;
+  }
+  @media (max-width: 767px) {
+    .thanks-title {
+      font-size: 2.4rem;
+    }
+  }
+</style>
+
+<div class="thanks-wrap">
+  <div class="thanks-mark"><i class="fas fa-paper-plane"></i></div>
+  <h1 class="thanks-title">Thank You!.</h1>
+  <p class="thanks-text">
+    Your submission has been sent. It has cleared the counter and landed in the
+    Quarks inbox, where our team will read it. In case of any issues, we will
+    reach out to you. If you left us an email we'll write back to you with a
+    response within few days.
+  </p>
+  <div class="thanks-actions">
+    <a class="is-primary" href="{{ site.baseurl }}/post-office/"
+      >Post another</a
+    >
+    <a href="{{ site.baseurl }}/">Back to Quarks</a>
+  </div>
+</div>

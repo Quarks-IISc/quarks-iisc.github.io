@@ -411,6 +411,48 @@
     pointer-events: auto;
 }
 
+/* ---- The menu on a touch screen ----
+   Everything above opens on :hover, which no phone has. Inside the collapsed
+   navbar the Clubs list would therefore be unreachable, and the flyout would be
+   positioned off the right edge anyway. Below lg it becomes a plain indented
+   list that is simply there once the UG@IISc menu is open. */
+@media (max-width: 991px) {
+    .dropdown-submenu > .dropdown-menu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+        float: none;
+        width: auto;
+        margin: 0.2rem 0 0.4rem 0.85rem !important;
+        padding: 0;
+        border-radius: 0;
+        border-left: 2px solid var(--border-color);
+        box-shadow: none;
+    }
+    /* the flyout caret means nothing once the list is inline */
+    .dropdown-item.dropdown-toggle-side::after {
+        content: none;
+    }
+    /* the whole panel can get tall with the clubs expanded */
+    .navbar-collapse {
+        max-height: calc(100vh - 76px);
+        overflow-y: auto;
+        padding: 0.5rem 1rem 1rem;
+    }
+    .navbar-toggler {
+        /* a thumb-sized target, not a 30px line */
+        min-width: 44px;
+        min-height: 44px;
+    }
+    /* screen.css assumes a 57px bar; a 44px tap target makes it taller than
+       that, and the first line of every page ends up under it. */
+    .site-content {
+        margin-top: 68px;
+    }
+}
+
 .dropdown-item.dropdown-toggle-side {
     display: flex;
     align-items: center;
