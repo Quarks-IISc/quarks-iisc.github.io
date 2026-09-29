@@ -7,7 +7,7 @@
  *
  * Both sheets are read through the Google Visualization endpoint:
  *
- *   https://docs.google.com/spreadsheets/d/<id>/gviz/tq?tqx=out:json&sheet=<tab>
+ *   https://docs.google.com/spreadsheets/d/<id>/gviz/tq?tqx=out:json&headers=1&sheet=<tab>
  *
  * That endpoint is public for any sheet shared as "anyone with the link can
  * view", needs no key, sends permissive CORS headers, and has no request quota.
@@ -63,10 +63,15 @@ window.QuarksSheets = (function () {
     return (
       'https://docs.google.com/spreadsheets/d/' +
       cfg.id +
-      '/gviz/tq?tqx=out:json&sheet=' +
+      '/gviz/tq?tqx=out:json&headers=1&sheet=' +
       encodeURIComponent(cfg.tab)
     );
   }
+  // headers=1 pins the first row as the header. Without it, gviz only detects a
+  // header when the columns below are typed differently from it (dates/numbers
+  // under text). An all-text sheet like Quacks leaves gviz unsure: it returns
+  // blank column labels and hands the header back as the first data row, so the
+  // labels toObjects() keys on come through empty and every field reads blank.
 
   // The body arrives wrapped in a JS callback:
   //   /*O_o*/ google.visualization.Query.setResponse({...});
