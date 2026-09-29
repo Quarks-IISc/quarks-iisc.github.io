@@ -90,11 +90,43 @@
         return String(value).trim();
       }
     }
+    // The sheet header may carry a leading space (e.g. " Poster image"), so
+    // try again with each candidate trimmed against every key in the row.
+    for (var j = 0; j < names.length; j++) {
+      var target = names[j].toLowerCase();
+      for (var key in row) {
+        if (key.trim().toLowerCase() === target) {
+          var v = row[key];
+          if (v !== undefined && String(v).trim() !== '') {
+            return String(v).trim();
+          }
+        }
+      }
+    }
     return '';
+  }
+
+  // Fallback poster: the Quarks Quacks main banner, used when an event has no
+  // poster of its own yet.
+  var FALLBACK_POSTER = '';
+  function fallbackPoster() {
+    if (!FALLBACK_POSTER) {
+      var base = window.QUACKS_BASEURL || '';
+      FALLBACK_POSTER = base + '/assets/images/quarks-quacks/main-poster.webp';
+    }
+    return FALLBACK_POSTER;
   }
 
   function toEvent(row) {
     var poster = field(row, ['Poster image', 'Poster', 'Poster Image', 'Image']);
+    // "Drive Link" is a separate column where editors paste the Google Drive
+    // sharing URL as plain text. It takes priority when present; "Poster image"
+    // is the fallback (it may hold an embedded cell image that the gviz API
+    // cannot read).
+    var driveLink = field(row, ['Drive Link', 'Drive link', 'Drive']);
+    if (driveLink) poster = driveLink;
+    var thumb = posterUrl(poster, THUMB_WIDTH);
+    var full = posterUrl(poster, FULL_WIDTH);
     return {
       name: field(row, ['Name of event', 'Event', 'Event name', 'Name', 'Title']),
       timing: field(row, ['Timing', 'Time', 'Timings']),
@@ -107,10 +139,23 @@
       lastDate: field(row, [
         'Last date for registration', 'Last date', 'Registration deadline', 'Deadline'
       ]),
-      thumb: posterUrl(poster, THUMB_WIDTH),
-      full: posterUrl(poster, FULL_WIDTH),
+      thumb: thumb || fallbackPoster(),
+      full: full || fallbackPoster(),
       isDemo: false
     };
+  }
+
+  var FALLBACK_REG = {
+    workshop:    'https://forms.gle/bH2CXSpw5BbpdkbAA',
+    competition: 'https://forms.gle/oU3tHMNAWEFCF4ma8'
+  };
+
+  function fillRegistration(event) {
+    if (event.register) return;
+    var theme = detectTheme(event);
+    if (FALLBACK_REG[theme]) {
+      event.register = FALLBACK_REG[theme];
+    }
   }
 
   // --- rendering -----------------------------------------------------------
@@ -179,65 +224,329 @@
       '</svg>';
   }
 
-  /**
-   * The running order. No posters here on purpose: they float in the pond, and
-   * showing every one again underneath made swimming pointless. A table rather
-   * than a card each, because twenty cards ran far too deep to take in at a
-   * glance — just with the rows given room to breathe.
-   */
-  function renderTable(events) {
-    var body = document.getElementById('quack-rows');
+  var TAPE_COLORS = ['c-sun', 'c-coral', 'c-leaf', 'c-drop'];
+  var TAPE_POS    = ['t-left', 't-center', 't-right'];
+  var STICKER_IDS = [
+    'qpx-frog', 'qpx-turtle', 'qpx-lily', 'qpx-fish', 'qpx-star',
+    'qpx-lotus', 'qpx-dragonfly', 'qpx-dice', 'qpx-camera', 'qpx-note',
+    'qpx-bubbles', 'qpx-cattail'
+  ];
+
+  function parseHour(timing) {
+    if (!timing) return -1;
+    var m = timing.match(/(\d{1,2})\s*[:.]\s*(\d{2})?\s*(AM|PM|am|pm)?/i);
+    if (!m) return -1;
+    var h = parseInt(m[1], 10);
+    var ampm = (m[3] || '').toUpperCase();
+    if (ampm === 'PM' && h < 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+    return h;
+  }
+
+  function parseMinute(timing) {
+    if (!timing) return 0;
+    var m = timing.match(/(\d{1,2})\s*[:.]\s*(\d{2})/);
+    return m ? parseInt(m[2], 10) : 0;
+  }
+
+  function timeSlot(hour) {
+    if (hour < 0) return 'all-day';
+    if (hour < 12) return 'morning';
+    if (hour < 17) return 'afternoon';
+    return 'evening';
+  }
+
+  // --- theme detection -------------------------------------------------------
+
+  var THEME_RULES = [
+    { tag: 'workshop',    icon: 'qpx-brush',  words: ['workshop', 'clinic', 'class', 'hands-on', 'tutorial', 'origami', 'doodle'] },
+    { tag: 'competition', icon: 'qpx-star',   words: ['competition', 'contest', 'compete', 'quiz', 'debate', 'mega quiz'] },
+    { tag: 'performance', icon: 'qpx-mic',    words: ['concert', 'open mic', 'karaoke', 'improv', 'jam session', 'stage play', 'play', 'performance', 'dance'] },
+    { tag: 'games',       icon: 'qpx-dice',   words: ['game', 'treasure hunt', 'board game', 'game room', 'gaming'] },
+    { tag: 'creative',    icon: 'qpx-camera',  words: ['photo', 'photobooth', 'film', 'frames', 'portrait', 'crossword', 'art'] },
+    { tag: 'talks',       icon: 'qpx-face',   words: ['talk', 'fireside', 'chat', 'lecture', 'panel', 'discussion', 'lightning'] },
+    { tag: 'social',      icon: 'qpx-lotus',  words: ['stall', 'food', 'ceremony', 'closing', 'opening', 'walk'] }
+  ];
+
+  function detectTheme(event) {
+    var haystack = (event.name + ' ' + (event.details || '')).toLowerCase();
+    for (var i = 0; i < THEME_RULES.length; i++) {
+      var rule = THEME_RULES[i];
+      for (var j = 0; j < rule.words.length; j++) {
+        if (haystack.indexOf(rule.words[j]) !== -1) return rule.tag;
+      }
+    }
+    return 'other';
+  }
+
+  var THEME_LABELS = {
+    'workshop': 'Workshops', 'competition': 'Competitions',
+    'performance': 'Performances', 'games': 'Games',
+    'creative': 'Creative', 'talks': 'Talks',
+    'social': 'Social', 'other': 'Other'
+  };
+
+  // --- filter bar ------------------------------------------------------------
+
+  function buildFilterBar(events) {
+    var bar = document.getElementById('zine-filters');
+    if (!bar) return;
+
+    var themes = {};
+    events.forEach(function (e) {
+      var theme = e._theme || detectTheme(e);
+      e._theme = theme;
+      themes[theme] = (themes[theme] || 0) + 1;
+    });
+
+    var themeOrder = THEME_RULES.map(function (r) { return r.tag; }).concat(['other']);
+    var themeIcons = {};
+    THEME_RULES.forEach(function (r) { themeIcons[r.tag] = r.icon; });
+    themeIcons['other'] = 'qpx-spark';
+
+    var html = '<div class="zf-group">' +
+      '<span class="zf-label">Vibe</span>' +
+      '<button class="zf-chip is-active" data-filter="theme" data-value="all">All' +
+      '<span class="zf-count">' + events.length + '</span></button>';
+    themeOrder.forEach(function (t) {
+      if (!themes[t]) return;
+      html += '<button class="zf-chip" data-filter="theme" data-value="' + t + '">' +
+        '<svg class="zf-svg"><use href="#' + themeIcons[t] + '" /></svg>' +
+        THEME_LABELS[t] +
+        '<span class="zf-count">' + themes[t] + '</span></button>';
+    });
+    html += '</div>';
+
+    bar.innerHTML = html;
+  }
+
+  function wireFilters(events) {
+    var bar = document.getElementById('zine-filters');
+    if (!bar) return;
+
+    bar.addEventListener('click', function (ev) {
+      var chip = ev.target.closest('.zf-chip');
+      if (!chip) return;
+
+      var value = chip.dataset.value;
+
+      bar.querySelectorAll('.zf-chip').forEach(function (c) { c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+
+      applyFilter(events, value);
+    });
+  }
+
+  function applyFilter(events, themeFilter) {
+    var wall = document.getElementById('zine-wall');
+    if (!wall) return;
+
+    var cards = wall.querySelectorAll('.zine-card');
+    var visibleCount = 0;
+
+    cards.forEach(function (card) {
+      var idx = Number(card.dataset.event);
+      var e = events[idx];
+      var theme = e._theme || detectTheme(e);
+      var show = (themeFilter === 'all' || theme === themeFilter);
+
+      card.style.display = show ? '' : 'none';
+      if (show) {
+        visibleCount++;
+        card.classList.add('is-visible');
+      }
+    });
+
+    var empty = wall.querySelector('.zine-empty');
+    if (visibleCount === 0) {
+      if (!empty) {
+        var p = document.createElement('p');
+        p.className = 'zine-empty';
+        p.textContent = 'No events match that vibe — try another!';
+        wall.appendChild(p);
+      }
+    } else if (empty) {
+      empty.remove();
+    }
+  }
+
+  // --- doodles ---------------------------------------------------------------
+
+  var DOODLE_SPRITES = [
+    'qpx-star', 'qpx-spark', 'qpx-spark2', 'qpx-dice', 'qpx-camera',
+    'qpx-note', 'qpx-brush', 'qpx-mic', 'qpx-lotus', 'qpx-dragonfly'
+  ];
+
+  function scatterDoodles() {
+    var wrap = document.querySelector('.zine-wall-wrap');
+    if (!wrap) return;
+    wrap.querySelectorAll('.zine-doodle').forEach(function (d) { d.remove(); });
+
+    var spots = [
+      { x: '-38px', y: '5%',  rot: -15, size: 32 },
+      { x: '-44px', y: '25%', rot: 22,  size: 28 },
+      { x: '-36px', y: '50%', rot: -8,  size: 36 },
+      { x: '-42px', y: '72%', rot: 30,  size: 26 },
+      { x: '-34px', y: '90%', rot: -20, size: 30 },
+      { right: '-38px', y: '8%',  rot: 12,  size: 30 },
+      { right: '-44px', y: '35%', rot: -25, size: 34 },
+      { right: '-36px', y: '58%', rot: 18,  size: 28 },
+      { right: '-40px', y: '80%', rot: -12, size: 32 },
+    ];
+
+    spots.forEach(function (spot, i) {
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'zine-doodle');
+      svg.setAttribute('viewBox', '0 0 16 16');
+      svg.setAttribute('width', spot.size);
+      svg.setAttribute('height', spot.size);
+      svg.setAttribute('aria-hidden', 'true');
+
+      var style = 'top:' + spot.y + ';transform:rotate(' + spot.rot + 'deg);';
+      if (spot.right) style += 'right:' + spot.right + ';';
+      else style += 'left:' + spot.x + ';';
+      svg.setAttribute('style', style);
+
+      var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      use.setAttributeNS('http://www.w3.org/1999/xlink', 'href',
+        '#' + DOODLE_SPRITES[i % DOODLE_SPRITES.length]);
+      svg.appendChild(use);
+      wrap.appendChild(svg);
+
+      setTimeout(function () { svg.classList.add('is-visible'); }, 400 + i * 120);
+    });
+  }
+
+  // --- render ----------------------------------------------------------------
+
+  function renderZineWall(events) {
+    var wall = document.getElementById('zine-wall');
     var status = document.getElementById('quack-status');
-    if (!body) return;
+    if (!wall) return;
 
     if (!events.length) {
       status.textContent = 'The schedule goes up here as soon as the clubs confirm it.';
       return;
     }
 
-    function cell(label, value, cls) {
-      return value
-        ? '<td class="' + cls + '" data-label="' + label + '">' +
-          escapeHtml(value) + '</td>'
-        : '<td class="docket-dim is-empty" data-label="' + label + '">&mdash;</td>';
-    }
-
-    var rows = '';
     events.forEach(function (e, i) {
-      var act = e.register
-        ? '<a class="quack-reg" href="' + escapeHtml(e.register) +
-          '" target="_blank" rel="noopener noreferrer">Register</a>' +
-          (e.lastDate
-            ? '<span class="docket-by">by ' + escapeHtml(e.lastDate) + '</span>'
-            : '')
-        : '<span class="docket-walkin">just turn up</span>';
-
-      rows += '' +
-        '<tr>' +
-        '  <td class="docket-time" data-label="When">' +
-             (e.timing ? escapeHtml(e.timing) : 'All day') + '</td>' +
-        '  <td class="docket-name" data-label="What">' + escapeHtml(e.name) +
-        (e.details ? '<small>' + escapeHtml(e.details) + '</small>' : '') +
-        '  </td>' +
-             cell('Where', e.venue, 'docket-where') +
-             cell('Guest / judge', e.speaker, 'docket-where') +
-        '  <td data-label="Sign up">' + act + '</td>' +
-        '  <td><button type="button" class="quack-more" data-event="' + i +
-             '">Poster</button></td>' +
-        '</tr>';
-
-      // a swirl every few rows, so a long list is not one unbroken run
-      if ((i + 1) % 5 === 0 && i < events.length - 1) {
-        rows += '<tr class="docket-swirl-row"><td colspan="6">' +
-          swirlHtml((i + 1) / 5) + '</td></tr>';
-      }
+      e._idx = i;
+      e._theme = detectTheme(e);
+      fillRegistration(e);
     });
 
-    body.innerHTML = rows;
+    var html = '';
+    var tilts = [-1.4, 0.8, -0.5, 1.6, -0.9, 1.1, -0.3, 1.3];
+
+    events.forEach(function (e, j) {
+      var tape = '<span class="zine-tape ' +
+        TAPE_POS[(e._idx * 7 + j) % TAPE_POS.length] + ' ' +
+        TAPE_COLORS[(e._idx * 3 + j) % TAPE_COLORS.length] +
+        '"></span>';
+
+      var desc = '';
+      if (e.details) {
+        var short = e.details.length > 80
+          ? e.details.slice(0, 80).replace(/\s+\S*$/, '') + '…'
+          : e.details;
+        desc = '<p class="zine-desc">' + escapeHtml(short);
+        if (e.details.length > 80) {
+          desc += ' <button type="button" class="quack-more" data-event="' +
+            e._idx + '">Read more</button>';
+        }
+        desc += '</p>';
+      }
+
+      var foot = '';
+      if (e.register) {
+        foot += '<a class="zine-reg" href="' + escapeHtml(e.register) +
+          '" target="_blank" rel="noopener noreferrer"' +
+          ' onclick="event.stopPropagation()">Register</a>';
+      } else {
+        foot += '<span class="zine-walkin">just turn up</span>';
+      }
+
+      var themeBadge = e._theme && e._theme !== 'other'
+        ? '<span class="zine-pill is-theme" data-theme="' + e._theme + '">' +
+          THEME_LABELS[e._theme] + '</span>'
+        : '';
+
+      var tilt = tilts[j % tilts.length];
+
+      html += '' +
+        '<article class="zine-card" data-event="' + e._idx + '" tabindex="0"' +
+        ' style="--tilt:' + tilt + 'deg">' +
+        tape +
+        '<div class="zine-poster">' +
+          '<img src="' + escapeHtml(e.thumb) + '" alt="' +
+          escapeHtml(e.name) + '" loading="lazy" decoding="async"' +
+          ' onerror="this.src=\'' + escapeHtml(fallbackPoster()) + '\'" />' +
+        '</div>' +
+        '<div class="zine-body">' +
+          '<h3 class="zine-name">' + escapeHtml(e.name) + '</h3>' +
+          '<div class="zine-meta">' +
+            (e.timing ? '<span class="zine-pill is-time">' + escapeHtml(e.timing) + '</span>' : '') +
+            (e.venue ? '<span class="zine-pill is-venue">' + escapeHtml(e.venue) + '</span>' : '') +
+            themeBadge +
+          '</div>' +
+          desc +
+          '<div class="zine-foot">' + foot + '</div>' +
+        '</div>' +
+        '</article>';
+    });
+
+    wall.innerHTML = html;
     status.style.display = 'none';
-    body.querySelectorAll('.quack-more').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+
+    // event count badge
+    var badge = document.getElementById('zine-count-badge');
+    if (badge) {
+      badge.textContent = events.length + ' events to explore';
+      setTimeout(function () { badge.classList.add('is-visible'); }, 200);
+    }
+
+    // scatter pixel doodles around the wall
+    scatterDoodles();
+
+    buildFilterBar(events);
+    wireFilters(events);
+
+    // scroll-reveal: stagger cards as they enter the viewport
+    if ('IntersectionObserver' in window) {
+      var delay = 0;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var card = entry.target;
+            var d = parseFloat(card.dataset.delay || 0);
+            setTimeout(function () { card.classList.add('is-visible'); }, d);
+            observer.unobserve(card);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      wall.querySelectorAll('.zine-card').forEach(function (card, i) {
+        card.dataset.delay = (i % 3) * 80;
+        observer.observe(card);
+      });
+    } else {
+      wall.querySelectorAll('.zine-card').forEach(function (card) {
+        card.classList.add('is-visible');
+      });
+    }
+
+    wall.querySelectorAll('.quack-more').forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
         openModal(events[Number(btn.dataset.event)]);
+      });
+    });
+
+    wall.querySelectorAll('.zine-card').forEach(function (card) {
+      function open() { openModal(events[Number(card.dataset.event)]); }
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); open(); }
       });
     });
   }
@@ -1102,7 +1411,7 @@
   }
 
   function start(events) {
-    renderTable(events);
+    renderZineWall(events);
     wirePond(events);
     wireModal();
   }

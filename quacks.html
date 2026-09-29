@@ -678,15 +678,11 @@ permalink: /quacks/
   .pond-pad-keys .k-right { grid-area: 2 / 3; }
   .pond-pad-keys .k-down  { grid-area: 3 / 2; }
 
-  /* ---- the docket, below ----
-     Deliberately not a table and deliberately not posters. Posters float in
-     the pond; showing them all again underneath made swimming pointless. And a
-     ruled grid is the least inviting way to read a day out, so this is laid
-     out like a running order pinned to a wall: time, what it is, where, and
-     how to get in. */
+  /* ---- the zine wall ---- */
   .quack-list-head {
     text-align: center;
     margin: 3.5rem 0 0.6rem;
+    position: relative;
   }
   .quack-list-head h2 {
     margin: 0 0 0.2rem;
@@ -701,89 +697,331 @@ permalink: /quacks/
     color: var(--text-muted);
   }
 
-  /* Back to a table: the card-per-event version ran twenty boxes deep and you
-     could not take the day in at a glance. Same compactness as a table, but
-     with the rows given room to breathe and no vertical rules. */
-  .docket-wrap { overflow-x: auto; }
-  table.docket {
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 0.93rem;
-  }
-  .docket th {
-    padding: 0.5rem 1rem 0.8rem;
-    text-align: left;
-    font-family: "Inter", sans-serif;
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border-bottom: 2px solid var(--border-color);
-    white-space: nowrap;
-  }
-  .docket td {
-    padding: 0.95rem 1rem;
-    vertical-align: middle;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-  }
-  .docket tbody tr { transition: background 0.18s ease; }
-  .docket tbody tr:hover { background: rgba(var(--line), 0.06); }
-
-  .docket-time {
-    font-family: "Caveat", cursive;
-    font-size: 1.45rem;
-    font-weight: 600;
-    line-height: 1.1;
-    color: var(--coral);
-    white-space: nowrap;
-  }
-  .docket-name {
-    font-weight: 700;
-    color: var(--heading-color);
-    min-width: 170px;
-  }
-  .docket-name small {
-    display: block;
-    margin-top: 2px;
-    font-size: 0.8rem;
-    font-weight: 400;
-    line-height: 1.45;
-    color: var(--text-muted);
-  }
-  .docket-where { color: var(--text-muted); }
-  .docket-dim { color: var(--text-muted); opacity: 0.55; }
-
-  .quack-reg {
+  /* event count badge */
+  .zine-count-badge {
     display: inline-block;
-    padding: 0.42rem 1rem;
-    font-size: 0.72rem;
+    margin-top: 0.5rem;
+    padding: 0.3rem 1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #fff;
-    background: var(--edge);
-    text-decoration: none;
+    color: var(--edge);
+    background: rgba(var(--line), 0.07);
+    clip-path: var(--pixel-corner);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease 0.3s, transform 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) 0.3s;
+  }
+  .zine-count-badge.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* hand-drawn connector arrow between heading and wall */
+  .zine-connector {
+    display: block;
+    width: 80px;
+    height: 40px;
+    margin: 0.6rem auto 0;
+    color: var(--text-muted);
+    opacity: 0.45;
+  }
+
+  /* scattered pixel doodles around the wall */
+  .zine-doodle {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    image-rendering: pixelated;
+    z-index: 0;
+  }
+  .zine-doodle.is-visible {
+    opacity: 0.18;
+  }
+  .dark-mode .zine-doodle.is-visible {
+    opacity: 0.12;
+  }
+  @media (max-width: 760px) {
+    .zine-doodle { display: none; }
+  }
+
+  /* wall wrapper for positioning doodles */
+  .zine-wall-wrap {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ---- filter bar ---- */
+  .zine-filter-bar {
+    max-width: 1020px;
+    margin: 0.8rem auto 0;
+    padding: 0.7rem 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+  }
+  .zf-group {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .zf-label {
+    font-family: "Inter", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 0.2rem;
+  }
+  .zf-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.28rem 0.65rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(var(--line), 0.06);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.18s ease;
     white-space: nowrap;
     clip-path: var(--pixel-corner);
   }
-  .quack-reg:hover { background: var(--coral); color: #fff; text-decoration: none; }
-  .docket-by {
-    display: block;
-    margin-top: 4px;
-    font-size: 0.7rem;
-    color: var(--text-muted);
+  .zf-chip:hover {
+    background: rgba(var(--line), 0.12);
+    color: var(--heading-color);
   }
-  .docket-walkin {
+  .zf-chip.is-active {
+    background: var(--edge);
+    color: #fff;
+    border-color: var(--edge);
+  }
+  .zf-icon {
+    font-size: 0.82rem;
+    line-height: 1;
+  }
+  .zf-svg {
+    width: 14px;
+    height: 14px;
+    image-rendering: pixelated;
+  }
+  .zf-chip.is-active .zf-svg {
+    filter: brightness(10);
+  }
+  .zf-count {
+    font-size: 0.6rem;
+    opacity: 0.6;
+  }
+
+  .zine-empty {
+    text-align: center;
+    padding: 3rem 1rem;
     font-family: "Caveat", cursive;
-    font-size: 1.15rem;
+    font-size: 1.4rem;
     color: var(--text-muted);
-    white-space: nowrap;
   }
+
+  /* theme badge on cards */
+  .zine-pill.is-theme {
+    font-size: 0.6rem;
+    color: var(--edge);
+    background: rgba(var(--line), 0.08);
+  }
+
+  @media (max-width: 760px) {
+    .zine-filter-bar {
+      gap: 0.4rem 1rem;
+      padding: 0.5rem 0.8rem;
+    }
+    .zf-chip { font-size: 0.65rem; padding: 0.22rem 0.5rem; }
+  }
+
+  /* the board itself — uses CSS grid instead of columns to avoid
+     the card-splitting glitch that CSS columns causes with transforms */
+  .zine-wall {
+    max-width: 1020px;
+    margin: 1.2rem auto 0;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.6rem;
+  }
+
+  /* each clipping — scroll-reveal + hover lift */
+  .zine-card {
+    position: relative;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transform: rotate(var(--tilt, 0deg)) translateY(24px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0.4, 1),
+                opacity 0.5s cubic-bezier(0.2, 0, 0.4, 1),
+                box-shadow 0.25s ease;
+  }
+  .zine-card.is-visible {
+    opacity: 1;
+    transform: rotate(var(--tilt, 0deg)) translateY(0);
+  }
+  .zine-card:hover {
+    box-shadow: 6px 10px 28px rgba(0,0,0,0.18);
+    z-index: 2;
+  }
+  .zine-card:hover .zine-poster img {
+    transform: scale(1.05);
+  }
+  .zine-card:hover .zine-tape {
+    opacity: 1;
+  }
+  .zine-card:hover .zine-name {
+    color: var(--coral);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zine-card {
+      opacity: 1;
+      transform: rotate(var(--tilt, 0deg));
+      transition: box-shadow 0.25s ease;
+    }
+  }
+
+  /* tape strip holding the card */
+  .zine-tape {
+    position: absolute;
+    top: -6px;
+    z-index: 3;
+    width: 52px;
+    height: 16px;
+    opacity: 0.85;
+    clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+  }
+  .zine-tape.t-left  { left: 18%; transform: rotate(-8deg); }
+  .zine-tape.t-center { left: 50%; transform: translateX(-50%) rotate(2deg); }
+  .zine-tape.t-right { right: 18%; transform: rotate(6deg); }
+  .zine-tape.c-sun   { background: var(--sun); }
+  .zine-tape.c-coral { background: var(--coral); }
+  .zine-tape.c-leaf  { background: var(--leaf); }
+  .zine-tape.c-drop  { background: var(--drop); }
+
+  .zine-poster {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: rgba(var(--line), 0.05);
+  }
+  .zine-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  .zine-body {
+    padding: 0.7rem 0.85rem 0.8rem;
+  }
+  .zine-name {
+    margin: 0 0 0.2rem;
+    font-family: "Playfair Display", serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--heading-color);
+    transition: color 0.25s ease;
+  }
+  .zine-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+  .zine-pill {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .zine-pill.is-time {
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--coral);
+    background: rgba(var(--line), 0.06);
+    clip-path: var(--pixel-corner);
+  }
+  .zine-pill.is-venue {
+    color: var(--ink-soft);
+    background: rgba(var(--line), 0.06);
+    clip-path: var(--pixel-corner);
+  }
+  .zine-desc {
+    margin: 0 0 0.45rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .zine-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .zine-reg {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    text-decoration: none;
+    white-space: nowrap;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .zine-reg:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+    color: #fff;
+    text-decoration: none;
+  }
+  .zine-reg:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .zine-walkin {
+    font-family: "Caveat", cursive;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+  .zine-poster-btn {
+    margin-left: auto;
+    padding: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--edge);
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .zine-poster-btn:hover { color: var(--coral); }
+
   .quack-more {
     padding: 0;
     font-size: 0.76rem;
@@ -796,38 +1034,22 @@ permalink: /quacks/
   }
   .quack-more:hover { color: var(--coral); }
 
-  /* a swirl every few rows, so the run of them is not unbroken */
-  .docket-swirl-row td { border: 0; padding: 0.5rem 1rem; }
-  .docket-swirl {
-    display: block;
-    width: 104px;
-    height: 32px;
-    color: var(--text-muted);
-    opacity: 0.5;
-  }
-  .docket-swirl.is-right { margin-left: auto; transform: scaleX(-1); }
-  .docket-swirl.is-mid { margin: 0 auto; }
-
   @media (max-width: 760px) {
-    .docket thead { display: none; }
-    .docket, .docket tbody, .docket tr, .docket td { display: block; width: 100%; }
-    .docket tbody tr {
-      padding: 0.9rem 0.2rem 1rem;
-      border-bottom: 2px solid var(--border-color);
+    .zine-wall {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 0.8rem;
     }
-    .docket td { border: 0; padding: 0.2rem; }
-    .docket td[data-label]::before {
-      content: attr(data-label);
-      display: block;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 2px;
+    .zine-name { font-size: 0.95rem; }
+    .zine-poster { aspect-ratio: 3 / 4; }
+  }
+  @media (max-width: 480px) {
+    .zine-wall {
+      grid-template-columns: 1fr;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .docket td.is-empty { display: none; }
-    .docket-swirl-row { display: none; }
   }
 
   /* ---- the sign-off ---- */
@@ -1096,27 +1318,25 @@ permalink: /quacks/
     </div>
   </div>
 
-  <!-- and the whole lot, plainly -->
+  <!-- the full line-up, pinned to the zine wall -->
   <div class="quack-list-head">
-    <h2>The Duck Docket</h2>
-    <p>The running order &mdash; every time, venue and sign-up link, no swimming required</p>
+    <h2>The Line-Up</h2>
+    <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
+    <span class="zine-count-badge" id="zine-count-badge"></span>
+    <svg class="zine-connector" viewBox="0 0 80 40" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <path d="M40 2 C 36 10, 44 14, 40 22 C 36 30, 40 34, 40 38" />
+      <path d="M40 38 L 35 30" />
+      <path d="M40 38 L 45 30" />
+    </svg>
   </div>
 
+  <div class="zine-filter-bar" id="zine-filters"></div>
+
   <p class="quack-status" id="quack-status">Loading the line-up&hellip;</p>
-  <div class="docket-wrap">
-    <table class="docket">
-      <thead>
-        <tr>
-          <th>When</th>
-          <th>What</th>
-          <th>Where</th>
-          <th>Guest / judge</th>
-          <th>Sign up</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="quack-rows"></tbody>
-    </table>
+  <div class="zine-wall-wrap">
+    <div class="zine-wall" id="zine-wall"></div>
   </div>
   <div class="quack-outro">
     <p class="quack-outro-kicker">See you by the water</p>
