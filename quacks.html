@@ -719,6 +719,105 @@ permalink: /quacks/
     transform: scale(1);
   }
 
+  /* whatsapp channel link */
+  .zine-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding: 0.4rem 1.1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    text-decoration: none;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .zine-whatsapp:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+    color: #fff;
+    text-decoration: none;
+  }
+  .zine-whatsapp:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .zine-whatsapp i {
+    font-size: 1rem;
+  }
+
+  /* horizontal ticker tape — sticky between filter bar and last card */
+  .zine-ticker {
+    max-width: 1020px;
+    margin: 0.8rem auto 0;
+    overflow: hidden;
+    position: sticky;
+    bottom: 1.5rem;
+    z-index: 50;
+    clip-path: var(--pixel-corner);
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  }
+  .zine-ticker::before,
+  .zine-ticker::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .zine-ticker::before {
+    left: 0;
+    background: linear-gradient(to right, var(--card-bg, #fff), transparent);
+  }
+  .zine-ticker::after {
+    right: 0;
+    background: linear-gradient(to left, var(--card-bg, #fff), transparent);
+  }
+  .zine-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 80s linear infinite;
+  }
+  .zine-ticker:hover .zine-ticker-track {
+    animation-play-state: paused;
+  }
+  .zine-ticker-item {
+    flex: 0 0 auto;
+    padding: 0.5rem 1.4rem;
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .zine-ticker-item:hover {
+    color: var(--coral);
+  }
+  .zine-ticker-dot {
+    flex: 0 0 auto;
+    padding: 0.5rem 0;
+    font-size: 0.6rem;
+    color: var(--coral);
+    line-height: 1.8;
+  }
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zine-ticker-track { animation: none; }
+  }
+
   /* hand-drawn connector arrow between heading and wall */
   .zine-connector {
     display: block;
@@ -858,7 +957,7 @@ permalink: /quacks/
     gap: 1.6rem;
   }
 
-  /* each clipping — scroll-reveal + hover lift */
+  /* each clipping — scroll-reveal + hover lift + 3D tilt */
   .zine-card {
     position: relative;
     background: var(--card-bg, #fff);
@@ -870,10 +969,13 @@ permalink: /quacks/
     transition: transform 0.5s cubic-bezier(0.2, 0, 0.4, 1),
                 opacity 0.5s cubic-bezier(0.2, 0, 0.4, 1),
                 box-shadow 0.25s ease;
+    transform-style: preserve-3d;
+    perspective: 600px;
   }
   .zine-card.is-visible {
     opacity: 1;
-    transform: rotate(var(--tilt, 0deg)) translateY(0);
+    transform: rotate(var(--tilt, 0deg)) translateY(0)
+               rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   }
   .zine-card:hover {
     box-shadow: 6px 10px 28px rgba(0,0,0,0.18);
@@ -1323,6 +1425,10 @@ permalink: /quacks/
     <h2>The Line-Up</h2>
     <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
     <span class="zine-count-badge" id="zine-count-badge"></span>
+    <a class="zine-whatsapp" href="https://whatsapp.com/channel/0029Vb8qihZ1HsppFp6b2m3b"
+       target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-whatsapp"></i> Follow on WhatsApp
+    </a>
     <svg class="zine-connector" viewBox="0 0 80 40" fill="none"
          stroke="currentColor" stroke-width="2" stroke-linecap="round"
          stroke-linejoin="round" aria-hidden="true">
@@ -1337,6 +1443,7 @@ permalink: /quacks/
   <p class="quack-status" id="quack-status">Loading the line-up&hellip;</p>
   <div class="zine-wall-wrap">
     <div class="zine-wall" id="zine-wall"></div>
+    <div class="zine-ticker" id="zine-ticker" style="display:none" aria-hidden="true"></div>
   </div>
   <div class="quack-outro">
     <p class="quack-outro-kicker">See you by the water</p>

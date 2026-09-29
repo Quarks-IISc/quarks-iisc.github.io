@@ -370,6 +370,65 @@
     }
   }
 
+  // --- ticker tape -----------------------------------------------------------
+
+  function buildTicker(events) {
+    var ticker = document.getElementById('zine-ticker');
+    if (!ticker || !events.length) return;
+
+    var items = events.map(function (e, i) {
+      return '<span class="zine-ticker-item" data-ticker="' + i + '">' +
+             escapeHtml(e.name) + '</span>' +
+             '<span class="zine-ticker-dot">♦</span>';
+    }).join('');
+
+    ticker.innerHTML = '<div class="zine-ticker-track">' + items + items + '</div>';
+    ticker.style.display = '';
+
+    ticker.addEventListener('click', function (ev) {
+      var item = ev.target.closest('.zine-ticker-item');
+      if (!item) return;
+      var idx = Number(item.dataset.ticker);
+      if (events[idx]) openModal(events[idx]);
+    });
+  }
+
+  // --- 3D card tilt ----------------------------------------------------------
+
+  function wire3DTilt() {
+    var wall = document.getElementById('zine-wall');
+    if (!wall) return;
+
+    wall.addEventListener('mousemove', function (ev) {
+      var card = ev.target.closest('.zine-card');
+      if (!card || !card.classList.contains('is-visible')) return;
+
+      var rect = card.getBoundingClientRect();
+      var x = (ev.clientX - rect.left) / rect.width;
+      var y = (ev.clientY - rect.top) / rect.height;
+      var ry = (x - 0.5) * 8;
+      var rx = (0.5 - y) * 6;
+      card.style.setProperty('--rx', rx.toFixed(1) + 'deg');
+      card.style.setProperty('--ry', ry.toFixed(1) + 'deg');
+    });
+
+    wall.addEventListener('mouseleave', function (ev) {
+      var card = ev.target.closest('.zine-card');
+      if (card) {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      }
+    }, true);
+
+    wall.addEventListener('mouseout', function (ev) {
+      var card = ev.target.closest('.zine-card');
+      if (card && !card.contains(ev.relatedTarget)) {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      }
+    });
+  }
+
   // --- doodles ---------------------------------------------------------------
 
   var DOODLE_SPRITES = [
@@ -507,6 +566,9 @@
 
     // scatter pixel doodles around the wall
     scatterDoodles();
+
+    buildTicker(events);
+    wire3DTilt();
 
     buildFilterBar(events);
     wireFilters(events);
