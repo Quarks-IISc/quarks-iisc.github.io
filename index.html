@@ -146,6 +146,54 @@ title: Home
         <div class="reels-rail" id="reels-carousel">
             <figure class="reel-item">
                 <video
+                    poster="{{ site.baseurl }}/assets/reels/friday-night-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="A random Friday karaoke night reel">
+                    <source src="{{ site.baseurl }}/assets/reels/friday-night.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/quarks_ug_iisc/reel/DdT73LVyN6V/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">A Random Friday Karaoke Night</h4>
+                    <p class="reel-dek">Just the craziness we needed before midsem week</p>
+                </figcaption>
+            </figure>
+            <figure class="reel-item">
+                <video
+                    poster="{{ site.baseurl }}/assets/reels/quacks-teaser-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="Quarks Quacks teaser reel">
+                    <source src="{{ site.baseurl }}/assets/reels/quacks-teaser.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/quarks_ug_iisc/reel/DdmYKCoyG3a/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">Quarks Quacks</h4>
+                    <p class="reel-dek">Save the date &mdash; 11th October</p>
+                </figcaption>
+            </figure>
+            <figure class="reel-item">
+                <video
+                    poster="{{ site.baseurl }}/assets/reels/sugarcane-poster.jpg"
+                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
+                    preload="none"
+                    aria-label="Meet the Juniors reel">
+                    <source src="{{ site.baseurl }}/assets/reels/sugarcane.webm" type="video/webm">
+                </video>
+                <a class="reel-badge" href="https://www.instagram.com/quarks_ug_iisc/reel/DbbPZm8tHqM/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <figcaption class="reel-caption">
+                    <h4 class="reel-title">Meet the Juniors</h4>
+                    <p class="reel-dek">The wait is over &mdash; the joos are here</p>
+                </figcaption>
+            </figure>
+            <figure class="reel-item">
+                <video
                     poster="{{ site.baseurl }}/assets/reels/campus-aura-poster.jpg"
                     autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
                     preload="none"
@@ -158,22 +206,6 @@ title: Home
                 <figcaption class="reel-caption">
                     <h4 class="reel-title">IISc Campus Aura</h4>
                     <p class="reel-dek">Exploring cool locations on campus</p>
-                </figcaption>
-            </figure>
-            <figure class="reel-item">
-                <video
-                    poster="{{ site.baseurl }}/assets/reels/sugarcane-poster.jpg"
-                    autoplay muted loop playsinline webkit-playsinline disablepictureinpicture
-                    preload="none"
-                    aria-label="Quarks reel">
-                    <source src="{{ site.baseurl }}/assets/reels/sugarcane.webm" type="video/webm">
-                </video>
-                <a class="reel-badge" href="https://www.instagram.com/quarks_ug_iisc/reel/DbbPZm8tHqM/" target="_blank" rel="noopener noreferrer" aria-label="Watch on Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <figcaption class="reel-caption">
-                    <h4 class="reel-title">Meet the Juniors</h4>
-                    <p class="reel-dek">The wait is over &mdash; the joos are here</p>
                 </figcaption>
             </figure>
             <figure class="reel-item">
@@ -394,6 +426,11 @@ title: Home
     </div>
 </section>
 
+<!-- SECTION 5: Student wellness -->
+<section class="wellness mt-5 mb-5" id="student-wellness" style="scroll-margin-top: 90px">
+    {% include wellness-banner.html %}
+</section>
+
 {% include page-outro.html
     divider=true
     kicker="The open door"
@@ -402,11 +439,6 @@ title: Home
     items="something you wrote at 2 a.m., a photo nobody else got, a clue for the mini, a tip-off, a doodle from the back bench, an idea you cannot shake"
     cta="send it our way"
     subject="I have something for Quarks" %}
-
-<!-- SECTION 5: Student wellness -->
-<section class="wellness mt-5 mb-5" id="student-wellness" style="scroll-margin-top: 90px">
-    {% include wellness-banner.html %}
-</section>
 
 {% endif %}
 
