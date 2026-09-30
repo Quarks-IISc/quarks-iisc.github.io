@@ -153,7 +153,12 @@
   function fillRegistration(event) {
     if (event.register) return;
     var theme = detectTheme(event);
-    if (FALLBACK_REG[theme]) {
+    if (theme === 'competition') {
+      var name = event.name.toLowerCase();
+      if (name.indexOf('treasure') !== -1) {
+        event.register = FALLBACK_REG.competition;
+      }
+    } else if (FALLBACK_REG[theme]) {
       event.register = FALLBACK_REG[theme];
     }
   }
@@ -1463,7 +1468,12 @@
 
     QuarksSheets.load('quacks')
       .then(function (rows) {
-        var events = rows.map(toEvent).filter(function (e) { return e.name; });
+        var events = rows.map(toEvent).filter(function (e) {
+          if (!e.name) return false;
+          var theme = detectTheme(e);
+          if (theme === 'competition') return false;
+          return true;
+        });
         start(events.length ? events : demoEvents(baseurl));
       })
       .catch(function (e) {
