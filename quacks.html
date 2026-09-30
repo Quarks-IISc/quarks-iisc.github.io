@@ -1539,6 +1539,121 @@ permalink: /quacks/
       padding: 1.5rem 1.3rem 1.8rem;
     }
   }
+
+  /* ---- TLDR popup ---- */
+  .tldr-btn {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    border: 0;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .tldr-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+  }
+  .tldr-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .tldr-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .tldr-overlay.is-open {
+    display: flex;
+  }
+  .tldr-card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--card-bg, #fff);
+    border: 3px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
+    padding: 1.8rem 1.5rem 1.4rem;
+  }
+  .tldr-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: #333;
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+  }
+  .tldr-close:hover {
+    background: var(--coral);
+  }
+  .tldr-heading {
+    margin: 0 0 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    text-align: center;
+  }
+  .tldr-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tldr-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed var(--border-color);
+    align-items: baseline;
+  }
+  .tldr-item:last-child {
+    border-bottom: none;
+  }
+  .tldr-name {
+    font-family: "Playfair Display", serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .tldr-time {
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--coral);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .tldr-venue {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  @media (max-width: 480px) {
+    .tldr-card { padding: 1.4rem 1rem 1rem; }
+    .tldr-name { font-size: 0.85rem; }
+  }
 </style>
 
 <script>
@@ -1667,7 +1782,10 @@ permalink: /quacks/
   <div class="quack-list-head">
     <h2>The Line-Up</h2>
     <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
-    <span class="zine-count-badge" id="zine-count-badge"></span>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem">
+      <span class="zine-count-badge" id="zine-count-badge"></span>
+      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<s>a</s>ick Schedule</button>
+    </div>
     <a class="zine-whatsapp" href="https://whatsapp.com/channel/0029Vb8qihZ1HsppFp6b2m3b"
        target="_blank" rel="noopener noreferrer">
       <i class="fab fa-whatsapp"></i> Follow on WhatsApp
@@ -1717,6 +1835,16 @@ permalink: /quacks/
       <i class="fas fa-times"></i>
     </button>
     <div id="quack-modal-body"></div>
+  </div>
+</div>
+
+<div class="tldr-overlay" id="tldr-overlay" role="dialog" aria-modal="true" aria-label="Quick schedule">
+  <div class="tldr-card">
+    <button type="button" class="tldr-close" id="tldr-close" aria-label="Close">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 class="tldr-heading">Qu<s>a</s>ick Schedule</h3>
+    <ul class="tldr-list" id="tldr-list"></ul>
   </div>
 </div>
 

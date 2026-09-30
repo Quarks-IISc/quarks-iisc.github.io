@@ -434,6 +434,43 @@
     });
   }
 
+  // --- TLDR popup ------------------------------------------------------------
+
+  function buildTLDR(events) {
+    var list = document.getElementById('tldr-list');
+    var overlay = document.getElementById('tldr-overlay');
+    var openBtn = document.getElementById('tldr-open');
+    var closeBtn = document.getElementById('tldr-close');
+    if (!list || !overlay || !openBtn) return;
+
+    var html = '';
+    events.forEach(function (e) {
+      html += '<li class="tldr-item">' +
+        '<span class="tldr-name">' + escapeHtml(e.name) + '</span>' +
+        '<span class="tldr-time">' + escapeHtml(e.timing || 'TBA') + '</span>' +
+        (e.venue ? '<span class="tldr-venue">' + escapeHtml(e.venue) + '</span>' : '') +
+        '</li>';
+    });
+    list.innerHTML = html;
+
+    function openTLDR() {
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeTLDR() {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    openBtn.addEventListener('click', openTLDR);
+    if (closeBtn) closeBtn.addEventListener('click', closeTLDR);
+    overlay.addEventListener('click', function (ev) {
+      if (ev.target === overlay) closeTLDR();
+    });
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && overlay.classList.contains('is-open')) closeTLDR();
+    });
+  }
+
   // --- doodles ---------------------------------------------------------------
 
   var DOODLE_SPRITES = [
@@ -574,6 +611,7 @@
 
     buildTicker(events);
     wire3DTilt();
+    buildTLDR(events);
 
     buildFilterBar(events);
     wireFilters(events);
