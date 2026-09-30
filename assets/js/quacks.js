@@ -265,7 +265,7 @@
 
   var THEME_RULES = [
     { tag: 'workshop',    icon: 'qpx-brush',  words: ['workshop', 'clinic', 'class', 'hands-on', 'tutorial', 'origami', 'doodle'] },
-    { tag: 'competition', icon: 'qpx-star',   words: ['competition', 'contest', 'compete', 'quiz', 'debate', 'mega quiz'] },
+    { tag: 'competition', icon: 'qpx-star',   words: ['competition', 'contest', 'compete', 'quiz', 'debate', 'mega quiz', 'treasure', 'loot'] },
     { tag: 'performance', icon: 'qpx-mic',    words: ['concert', 'open mic', 'karaoke', 'improv', 'jam session', 'stage play', 'play', 'performance', 'dance'] },
     { tag: 'games',       icon: 'qpx-dice',   words: ['game', 'treasure hunt', 'board game', 'game room', 'gaming'] },
     { tag: 'creative',    icon: 'qpx-camera',  words: ['photo', 'photobooth', 'film', 'frames', 'portrait', 'crossword', 'art'] },
@@ -1468,12 +1468,7 @@
 
     QuarksSheets.load('quacks')
       .then(function (rows) {
-        var events = rows.map(toEvent).filter(function (e) {
-          if (!e.name) return false;
-          var theme = detectTheme(e);
-          if (theme === 'competition' && !e.register) return false;
-          return true;
-        });
+        var events = rows.map(toEvent).filter(function (e) { return e.name; });
         start(events.length ? events : demoEvents(baseurl));
       })
       .catch(function (e) {
