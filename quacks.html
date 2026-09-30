@@ -20,6 +20,175 @@ permalink: /quacks/
 {% endcomment %}
 
 <style>
+  /* ---- splash intro ---- */
+  .qq-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    overflow: hidden;
+    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+  }
+  .qq-splash.is-gone {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* rotating sunburst rays */
+  .qq-rays {
+    position: absolute;
+    width: 200vmax;
+    height: 200vmax;
+    background: conic-gradient(
+      from 0deg,
+      #ffc93c 0deg, transparent 8deg,
+      transparent 30deg, #ffc93c 30deg, transparent 38deg,
+      transparent 60deg, #ffc93c 60deg, transparent 68deg,
+      transparent 90deg, #ffc93c 90deg, transparent 98deg,
+      transparent 120deg, #ffc93c 120deg, transparent 128deg,
+      transparent 150deg, #ffc93c 150deg, transparent 158deg,
+      transparent 180deg, #ffc93c 180deg, transparent 188deg,
+      transparent 210deg, #ffc93c 210deg, transparent 218deg,
+      transparent 240deg, #ffc93c 240deg, transparent 248deg,
+      transparent 270deg, #ffc93c 270deg, transparent 278deg,
+      transparent 300deg, #ffc93c 300deg, transparent 308deg,
+      transparent 330deg, #ffc93c 330deg, transparent 338deg
+    );
+    opacity: 0.35;
+    animation: rays-spin 30s linear infinite;
+  }
+  @keyframes rays-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* radial glow behind the poster */
+  .qq-glow {
+    position: absolute;
+    width: 80vmin;
+    height: 80vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,201,60,0.4) 0%, rgba(255,122,89,0.15) 50%, transparent 70%);
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow-pulse {
+    from { transform: scale(0.9); opacity: 0.7; }
+    to   { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* title slam */
+  .qq-splash-title {
+    position: relative;
+    z-index: 2;
+    font-family: "Caveat", cursive;
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    font-weight: 700;
+    color: #fff;
+    text-shadow:
+      3px 3px 0 #ffc93c,
+      6px 6px 0 rgba(0,0,0,0.4);
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    transform: scale(3);
+    animation: title-slam 0.6s cubic-bezier(0.2, 1.2, 0.3, 1) 0.3s forwards;
+  }
+  .qq-splash-title span {
+    color: #ffc93c;
+  }
+  @keyframes title-slam {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* "Presenting" kicker in splash */
+  .qq-splash-kicker {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 0.8rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 2px 12px rgba(255,201,60,0.4);
+    opacity: 0;
+    animation: kicker-fade 0.6s ease 0.1s forwards;
+  }
+  @keyframes kicker-fade {
+    from { opacity: 0; transform: translateY(14px) scale(0.9); letter-spacing: 0.5em; }
+    to   { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.2em; }
+  }
+
+  /* poster card flies up */
+  .qq-splash-poster {
+    position: relative;
+    z-index: 2;
+    max-width: min(560px, 80vw);
+    margin-top: 1.5rem;
+    border: 4px solid #ffc93c;
+    box-shadow: 0 0 40px rgba(255,201,60,0.5), 0 0 80px rgba(255,122,89,0.3);
+    opacity: 0;
+    transform: translateY(80px) scale(0.8);
+    animation: poster-rise 0.7s cubic-bezier(0.2, 1, 0.3, 1) 0.7s forwards;
+  }
+  .qq-splash-poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @keyframes poster-rise {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* date tag */
+  .qq-splash-date {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.2rem;
+    padding: 0.4rem 1.5rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: #ffc93c;
+    clip-path: var(--pixel-corner);
+    opacity: 0;
+    animation: date-pop 0.4s ease 1.2s forwards;
+  }
+  @keyframes date-pop {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* particles */
+  .qq-spark {
+    position: absolute;
+    z-index: 3;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffc93c;
+    opacity: 0;
+    animation: spark-fly 1.5s ease-out forwards;
+  }
+  @keyframes spark-fly {
+    0%  { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qq-splash { display: none; }
+  }
+
   /* ---- palette ----
      Water, foam, sun and one green for the lilies. Light is a bright
      afternoon, dark is the same water after dark. */
@@ -92,12 +261,14 @@ permalink: /quacks/
   }
   .quack-kicker {
     margin: 0 0 1rem;
-    font-family: "Inter", sans-serif;
-    font-size: 0.72rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
     font-weight: 700;
-    letter-spacing: 0.34em;
+    font-style: italic;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--heading-color);
+    opacity: 0.7;
   }
   .quack-banner {
     display: block;
@@ -754,9 +925,20 @@ permalink: /quacks/
   .zine-reg-links {
     display: flex;
     justify-content: center;
-    gap: 0.8rem;
-    margin-top: 0.7rem;
+    gap: 1.2rem;
+    margin-top: 1rem;
     flex-wrap: wrap;
+  }
+  .zine-reg-links .zine-reg {
+    padding: 0.7rem 2rem;
+    font-size: 1.35rem;
+    box-shadow: 4px 4px 0 #111;
+  }
+  .zine-reg-links .zine-reg:hover {
+    box-shadow: 2px 2px 0 #111;
+  }
+  .zine-reg-links .zine-reg:active {
+    box-shadow: 0 0 0 #111;
   }
 
   /* horizontal ticker tape — sticky between filter bar and last card */
@@ -1363,6 +1545,58 @@ permalink: /quacks/
   window.QUACKS_BASEURL = "{{ site.baseurl }}";
 </script>
 
+<div class="qq-splash" id="qq-splash">
+  <div class="qq-rays" aria-hidden="true"></div>
+  <div class="qq-glow" aria-hidden="true"></div>
+  <p class="qq-splash-kicker">Presenting</p>
+  <h1 class="qq-splash-title">Quarks <span>Quacks</span></h1>
+  <div class="qq-splash-poster">
+    <picture>
+      <source media="(max-width: 700px)"
+              srcset="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster-sm.webp" />
+      <img src="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster.webp"
+           alt="Quarks Quacks — 11 October" />
+    </picture>
+  </div>
+  <p class="qq-splash-date">11 October 2026</p>
+</div>
+<script>
+(function () {
+  var splash = document.getElementById('qq-splash');
+  if (!splash || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (splash) splash.style.display = 'none';
+    return;
+  }
+  document.body.style.overflow = 'hidden';
+  setTimeout(function () {
+    for (var i = 0; i < 20; i++) {
+      var s = document.createElement('div');
+      s.className = 'qq-spark';
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 80 + Math.random() * 200;
+      s.style.setProperty('--sx', (Math.cos(angle) * dist).toFixed(0) + 'px');
+      s.style.setProperty('--sy', (Math.sin(angle) * dist).toFixed(0) + 'px');
+      s.style.left = '50%';
+      s.style.top = '50%';
+      s.style.animationDelay = (Math.random() * 0.5).toFixed(2) + 's';
+      s.style.background = Math.random() > 0.5 ? '#ffc93c' : '#fff';
+      s.style.width = s.style.height = (4 + Math.random() * 6).toFixed(0) + 'px';
+      splash.appendChild(s);
+    }
+  }, 600);
+  var dismissed = false;
+  var dismiss = function () {
+    if (dismissed) return;
+    dismissed = true;
+    splash.classList.add('is-gone');
+    document.body.style.overflow = '';
+  };
+  splash.addEventListener('click', dismiss);
+  document.addEventListener('keydown', dismiss);
+  setTimeout(dismiss, 5000);
+})();
+</script>
+
 <section class="quacks">
   {% include quacks-pixels.html %}
 
@@ -1371,7 +1605,7 @@ permalink: /quacks/
   </div>
 
   <div class="quack-hero">
-    <p class="quack-kicker">Announcing</p>
+    <p class="quack-kicker">Presenting</p>
     <div class="quack-banner">
       <picture>
         <source media="(max-width: 700px)"

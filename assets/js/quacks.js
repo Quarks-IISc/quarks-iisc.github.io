@@ -1471,7 +1471,7 @@
         var events = rows.map(toEvent).filter(function (e) {
           if (!e.name) return false;
           var theme = detectTheme(e);
-          if (theme === 'competition') return false;
+          if (theme === 'competition' && !e.register) return false;
           return true;
         });
         start(events.length ? events : demoEvents(baseurl));
