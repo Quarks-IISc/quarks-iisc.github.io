@@ -139,6 +139,7 @@
       lastDate: field(row, [
         'Last date for registration', 'Last date', 'Registration deadline', 'Deadline'
       ]),
+      summary: field(row, ['Summary', 'Blurb', 'TLDR', 'One-liner']),
       thumb: thumb || fallbackPoster(),
       full: full || fallbackPoster(),
       isDemo: false
@@ -264,11 +265,11 @@
   // --- theme detection -------------------------------------------------------
 
   var THEME_RULES = [
-    { tag: 'workshop',    icon: 'qpx-brush',  words: ['workshop', 'clinic', 'class', 'hands-on', 'tutorial', 'origami', 'doodle'] },
-    { tag: 'competition', icon: 'qpx-star',   words: ['competition', 'contest', 'compete', 'quiz', 'debate', 'mega quiz', 'treasure', 'loot'] },
+    { tag: 'workshop',    icon: 'qpx-brush',  words: ['workshop', 'clinic', 'class', 'hands-on', 'tutorial', 'origami', 'doodle', 'branding'] },
+    { tag: 'competition', icon: 'qpx-star',   words: ['competition', 'contest', 'compete', 'quiz', 'debate', 'mega quiz', 'treasure', 'loot', 'royale', 'battle', 'challenge'] },
     { tag: 'performance', icon: 'qpx-mic',    words: ['concert', 'open mic', 'karaoke', 'improv', 'jam session', 'stage play', 'play', 'performance', 'dance'] },
     { tag: 'games',       icon: 'qpx-dice',   words: ['game', 'treasure hunt', 'board game', 'game room', 'gaming'] },
-    { tag: 'creative',    icon: 'qpx-camera',  words: ['photo', 'photobooth', 'film', 'frames', 'portrait', 'crossword', 'art'] },
+    { tag: 'creative',    icon: 'qpx-camera',  words: ['photo', 'photobooth', 'film', 'frames', 'portrait', 'crossword', 'art', 'palette', 'pallete', 'paint', 'sketch', 'design', 'mural'] },
     { tag: 'talks',       icon: 'qpx-face',   words: ['talk', 'fireside', 'chat', 'lecture', 'panel', 'discussion', 'lightning'] },
     { tag: 'social',      icon: 'qpx-lotus',  words: ['stall', 'food', 'ceremony', 'closing', 'opening', 'walk'] }
   ];
@@ -281,14 +282,14 @@
         if (haystack.indexOf(rule.words[j]) !== -1) return rule.tag;
       }
     }
-    return 'other';
+    return 'creative';
   }
 
   var THEME_LABELS = {
     'workshop': 'Workshops', 'competition': 'Competitions',
     'performance': 'Performances', 'games': 'Games',
     'creative': 'Creative', 'talks': 'Talks',
-    'social': 'Social', 'other': 'Other'
+    'social': 'Social'
   };
 
   // --- filter bar ------------------------------------------------------------
@@ -304,7 +305,7 @@
       themes[theme] = (themes[theme] || 0) + 1;
     });
 
-    var themeOrder = THEME_RULES.map(function (r) { return r.tag; }).concat(['other']);
+    var themeOrder = THEME_RULES.map(function (r) { return r.tag; });
     var themeIcons = {};
     THEME_RULES.forEach(function (r) { themeIcons[r.tag] = r.icon; });
     themeIcons['other'] = 'qpx-spark';
@@ -436,6 +437,7 @@
 
   // --- TLDR popup ------------------------------------------------------------
 
+
   function buildTLDR(events) {
     var list = document.getElementById('tldr-list');
     var overlay = document.getElementById('tldr-overlay');
@@ -445,9 +447,16 @@
 
     var html = '';
     events.forEach(function (e) {
+      var theme = e._theme || detectTheme(e);
+      var label = THEME_LABELS[theme] || '';
+      var blurb = e.summary || '';
       html += '<li class="tldr-item">' +
         '<span class="tldr-name">' + escapeHtml(e.name) + '</span>' +
         '<span class="tldr-time">' + escapeHtml(e.timing || 'TBA') + '</span>' +
+        '<span class="tldr-tags">' +
+          (label ? '<span class="tldr-tag">' + escapeHtml(label) + '</span>' : '') +
+          (blurb ? '<span class="tldr-blurb">' + escapeHtml(blurb) + '</span>' : '') +
+        '</span>' +
         (e.venue ? '<span class="tldr-venue">' + escapeHtml(e.venue) + '</span>' : '') +
         '</li>';
     });
@@ -567,7 +576,7 @@
         foot += '<span class="zine-walkin">just turn up</span>';
       }
 
-      var themeBadge = e._theme && e._theme !== 'other'
+      var themeBadge = e._theme && THEME_LABELS[e._theme]
         ? '<span class="zine-pill is-theme" data-theme="' + e._theme + '">' +
           THEME_LABELS[e._theme] + '</span>'
         : '';

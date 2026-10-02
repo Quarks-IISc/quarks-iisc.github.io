@@ -1642,6 +1642,31 @@ permalink: /quacks/
     text-align: right;
     white-space: nowrap;
   }
+  .tldr-tags {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .tldr-tag {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--edge);
+    background: rgba(var(--line), 0.08);
+    clip-path: var(--pixel-corner);
+  }
+  .tldr-blurb {
+    font-family: "Caveat", cursive;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
   .tldr-venue {
     grid-column: 1 / -1;
     font-size: 0.72rem;
