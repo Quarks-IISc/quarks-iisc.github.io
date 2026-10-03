@@ -1,0 +1,143 @@
+{% comment %}
+  Homepage strip for Quarks Quacks, sitting above Featured.
+
+  It shows the fest poster itself rather than any one event's, so the strip is
+  entirely static — no sheet call on the homepage, nothing to wait for.
+{% endcomment %}
+
+<style>
+  .qq-banner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 0 3rem;
+    padding: 2.4rem 2.6rem;
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 16% 22%, rgba(242, 193, 78, 0.22), transparent 48%),
+      radial-gradient(circle at 86% 80%, rgba(95, 158, 82, 0.2), transparent 50%),
+      #14323b;
+  }
+  .qq-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.26;
+    background-image: radial-gradient(rgba(228, 239, 230, 0.16) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .qq-banner > * {
+    position: relative;
+    z-index: 1;
+  }
+  .qq-kicker {
+    margin: 0 0 0.35rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #93b2a4;
+  }
+  .qq-title {
+    margin: 0 0 0.6rem;
+    font-family: "Caveat", cursive;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+    line-height: 0.88;
+    color: #e4efe6;
+  }
+  .qq-title span {
+    color: #f2c14e;
+  }
+  .qq-text {
+    margin: 0 0 1.3rem;
+    max-width: 520px;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #93b2a4;
+  }
+  .qq-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.7rem 1.7rem;
+    border-radius: 40px;
+    background: #f2c14e;
+    color: #163024;
+    font-size: 0.97rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .qq-cta:hover {
+    color: #163024;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(242, 193, 78, 0.38);
+  }
+
+  /* a 2:1 banner, propped at a slight angle like it has been stuck up on a
+     noticeboard */
+  .qq-poster {
+    justify-self: center;
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 2 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(228, 239, 230, 0.06);
+    border: 6px solid #fbf7ee;
+    transform: rotate(-4deg);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    transition: transform 0.35s ease;
+  }
+  .qq-banner:hover .qq-poster {
+    transform: rotate(0) scale(1.03);
+  }
+  .qq-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 860px) {
+    .qq-banner {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 2rem 1.4rem;
+      gap: 1.6rem;
+    }
+    .qq-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .qq-poster {
+      max-width: 340px;
+      order: -1;
+    }
+  }
+</style>
+
+<a class="qq-banner" href="{{ site.baseurl }}/quacks/" aria-label="Quarks Quacks — see the full line-up">
+  <div>
+    <p class="qq-kicker">Quarks presents &middot; 11 october</p>
+    <h2 class="qq-title">Quarks <span>Quacks</span></h2>
+    <p class="qq-text">
+      Six clubs, 10 AM to 11 PM, one full day. Workshops, a game room,
+      competitions, treasure hunts, debates, photobooths and whatnot &mdash; the
+      whole line-up is up.
+    </p>
+    <span class="qq-cta">See what's on <i class="fas fa-arrow-right"></i></span>
+  </div>
+  <div class="qq-poster" id="qq-poster">
+    <img src="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster-sm.webp"
+         alt="Quarks Quacks poster" loading="lazy" decoding="async" />
+  </div>
+</a>
+

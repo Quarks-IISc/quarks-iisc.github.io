@@ -1,0 +1,231 @@
+{% comment %}
+  Pixel doodles for Quacks, in an 8-bit hand rather than the site's usual
+  pen-and-ink ones, so they sit with the poster's own artwork: dice, camera,
+  note, face, question mark, mic, brush, fish, bubbles, lily pad, star and two
+  sparkles. They take their colours from the pond palette, so they follow the
+  theme with the rest of the page.
+
+  Defined once as <symbol>s and stamped out with <use>, because quacks.js drops
+  three or four around every event and inlining the markup each time would
+  bloat the page for nothing.
+
+  shape-rendering="crispEdges" keeps the squares square at any scale; without it
+  the browser antialiases the grid and the whole 8-bit effect softens away.
+{% endcomment %}
+
+<svg class="quack-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="qpx-dice" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="1" y="1" width="14" height="14" fill="var(--sun)" />
+    <rect x="3" y="3" width="3" height="3" fill="var(--pip)" />
+    <rect x="10" y="3" width="3" height="3" fill="var(--pip)" />
+    <rect x="6.5" y="6.5" width="3" height="3" fill="var(--pip)" />
+    <rect x="3" y="10" width="3" height="3" fill="var(--pip)" />
+    <rect x="10" y="10" width="3" height="3" fill="var(--pip)" />
+  </symbol>
+
+  <symbol id="qpx-camera" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="5" y="1" width="6" height="2" fill="var(--leaf)" />
+    <rect x="0" y="3" width="16" height="11" fill="var(--leaf)" />
+    <rect x="5" y="6" width="6" height="6" fill="var(--pip)" />
+    <rect x="7" y="8" width="2" height="2" fill="var(--leaf)" />
+    <rect x="12" y="4" width="2" height="2" fill="var(--pip)" />
+  </symbol>
+
+  <symbol id="qpx-note" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="8" y="1" width="2" height="9" fill="var(--drop)" />
+    <rect x="10" y="1" width="4" height="2" fill="var(--drop)" />
+    <rect x="12" y="3" width="2" height="2" fill="var(--drop)" />
+    <rect x="4" y="9" width="6" height="5" fill="var(--drop)" />
+  </symbol>
+
+  <symbol id="qpx-face" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="2" y="2" width="12" height="10" fill="var(--drop)" />
+    <rect x="4" y="12" width="8" height="2" fill="var(--drop)" />
+    <rect x="4" y="5" width="2" height="2" fill="var(--pip)" />
+    <rect x="10" y="5" width="2" height="2" fill="var(--pip)" />
+    <rect x="5" y="9" width="6" height="2" fill="var(--pip)" />
+    <rect x="4" y="8" width="1" height="1" fill="var(--pip)" />
+    <rect x="11" y="8" width="1" height="1" fill="var(--pip)" />
+  </symbol>
+
+  <symbol id="qpx-quiz" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="4" y="1" width="8" height="3" fill="var(--sun)" />
+    <rect x="10" y="4" width="3" height="3" fill="var(--sun)" />
+    <rect x="7" y="7" width="4" height="3" fill="var(--sun)" />
+    <rect x="7" y="10" width="3" height="2" fill="var(--sun)" />
+    <rect x="7" y="13" width="3" height="3" fill="var(--sun)" />
+  </symbol>
+
+  <symbol id="qpx-mic" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="6" y="1" width="4" height="7" fill="var(--leaf)" />
+    <rect x="4" y="6" width="1" height="3" fill="var(--leaf)" />
+    <rect x="11" y="6" width="1" height="3" fill="var(--leaf)" />
+    <rect x="5" y="9" width="6" height="1" fill="var(--leaf)" />
+    <rect x="7" y="10" width="2" height="4" fill="var(--leaf)" />
+    <rect x="5" y="14" width="6" height="2" fill="var(--leaf)" />
+  </symbol>
+
+  <symbol id="qpx-brush" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="9" y="0" width="3" height="7" fill="var(--ink-soft)" />
+    <rect x="7" y="6" width="5" height="3" fill="var(--drop)" />
+    <rect x="5" y="9" width="6" height="4" fill="var(--sun)" />
+    <rect x="6" y="13" width="4" height="3" fill="var(--sun)" />
+  </symbol>
+
+  <symbol id="qpx-spark" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="6" y="0" width="4" height="16" fill="var(--leaf)" />
+    <rect x="0" y="6" width="16" height="4" fill="var(--leaf)" />
+  </symbol>
+
+  <symbol id="qpx-fish" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="5"  y="5"  width="10" height="7" fill="var(--leaf)" />
+    <rect x="6"  y="4"  width="8"  height="1" fill="var(--leaf)" />
+    <rect x="6"  y="12" width="8"  height="1" fill="var(--leaf)" />
+    <rect x="3"  y="6"  width="2"  height="5" fill="var(--leaf)" />
+    <rect x="0"  y="3"  width="3"  height="4" fill="var(--leaf)" />
+    <rect x="0"  y="10" width="3"  height="4" fill="var(--leaf)" />
+    <rect x="11" y="6"  width="2"  height="2" fill="var(--pip)" />
+    <rect x="7"  y="9"  width="4"  height="1" fill="#0f8f7b" />
+  </symbol>
+
+  <symbol id="qpx-bubbles" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="5"  y="9"  width="5" height="5" fill="var(--drop)" />
+    <rect x="6"  y="8"  width="3" height="1" fill="var(--drop)" />
+    <rect x="6"  y="10" width="2" height="2" fill="var(--card)" />
+    <rect x="10" y="4"  width="3" height="3" fill="var(--drop)" />
+    <rect x="3"  y="2"  width="2" height="2" fill="var(--drop)" />
+  </symbol>
+
+  <symbol id="qpx-lily" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="2"  y="7"  width="12" height="5" fill="#3f9d55" />
+    <rect x="3"  y="6"  width="10" height="1" fill="#3f9d55" />
+    <rect x="3"  y="12" width="10" height="1" fill="#3f9d55" />
+    <rect x="8"  y="7"  width="6"  height="2" fill="var(--card)" />
+    <rect x="6"  y="2"  width="4"  height="3" fill="var(--sun)" />
+    <rect x="5"  y="3"  width="6"  height="1" fill="var(--sun)" />
+  </symbol>
+
+  <symbol id="qpx-star" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="7"  y="1"  width="2" height="14" fill="var(--sun)" />
+    <rect x="1"  y="7"  width="14" height="2" fill="var(--sun)" />
+    <rect x="4"  y="4"  width="8" height="8" fill="var(--sun)" />
+    <rect x="6"  y="6"  width="4" height="4" fill="#ffd24a" />
+  </symbol>
+
+  <symbol id="qpx-lotus" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="1"  y="9"  width="14" height="4" fill="var(--leaf)"/>
+    <rect x="2"  y="8"  width="12" height="1" fill="var(--leaf)"/>
+    <rect x="2"  y="13" width="12" height="1" fill="var(--leaf)"/>
+    <rect x="8"  y="9"  width="6"  height="2" fill="var(--card)"/>
+    <rect x="6"  y="3"  width="4"  height="5" fill="#f58fb0"/>
+    <rect x="4"  y="4"  width="2"  height="4" fill="#e97399"/>
+    <rect x="10" y="4"  width="2"  height="4" fill="#e97399"/>
+    <rect x="7"  y="2"  width="2"  height="1" fill="#ffc3d6"/>
+    <rect x="7"  y="5"  width="2"  height="2" fill="var(--sun)"/>
+  </symbol>
+
+  <symbol id="qpx-cattail" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="6"  y="1"  width="3"  height="6" fill="#8a5a33"/>
+    <rect x="7"  y="0"  width="1"  height="1" fill="#8a5a33"/>
+    <rect x="7"  y="7"  width="1"  height="9" fill="var(--leaf)"/>
+    <rect x="2"  y="8"  width="1"  height="8" fill="var(--leaf)"/>
+    <rect x="3"  y="6"  width="1"  height="3" fill="var(--leaf)"/>
+    <rect x="12" y="9"  width="1"  height="7" fill="var(--leaf)"/>
+    <rect x="11" y="7"  width="1"  height="3" fill="var(--leaf)"/>
+  </symbol>
+
+  <symbol id="qpx-turtle" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <!-- tail, then the body the shell sits on -->
+    <rect x="0"  y="8"  width="3"  height="2"  fill="#86c777"/>
+    <rect x="2"  y="9"  width="11" height="3"  fill="#86c777"/>
+    <!-- flippers -->
+    <rect x="3"  y="11" width="3"  height="3"  fill="#86c777"/>
+    <rect x="9"  y="11" width="3"  height="3"  fill="#86c777"/>
+    <!-- domed shell -->
+    <rect x="5"  y="2"  width="6"  height="1"  fill="#4a8a44"/>
+    <rect x="3"  y="3"  width="10" height="2"  fill="#5d9e50"/>
+    <rect x="2"  y="5"  width="12" height="4"  fill="#5d9e50"/>
+    <!-- plates -->
+    <rect x="6"  y="3"  width="4"  height="2"  fill="#3d7a3a"/>
+    <rect x="3"  y="6"  width="3"  height="2"  fill="#3d7a3a"/>
+    <rect x="7"  y="6"  width="3"  height="2"  fill="#3d7a3a"/>
+    <rect x="11" y="6"  width="2"  height="2"  fill="#3d7a3a"/>
+    <!-- head, facing right like everything else -->
+    <rect x="13" y="6"  width="3"  height="4"  fill="#86c777"/>
+    <rect x="14" y="5"  width="2"  height="1"  fill="#86c777"/>
+    <rect x="15" y="7"  width="1"  height="1"  fill="var(--pip)"/>
+  </symbol>
+
+  <symbol id="qpx-frog" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="3"  y="6"  width="10" height="7" fill="#5eb85a"/>
+    <rect x="4"  y="5"  width="3"  height="1" fill="#5eb85a"/>
+    <rect x="9"  y="5"  width="3"  height="1" fill="#5eb85a"/>
+    <rect x="4"  y="3"  width="3"  height="3" fill="#74cc6e"/>
+    <rect x="9"  y="3"  width="3"  height="3" fill="#74cc6e"/>
+    <rect x="5"  y="4"  width="1"  height="1" fill="var(--pip)"/>
+    <rect x="10" y="4"  width="1"  height="1" fill="var(--pip)"/>
+    <rect x="6"  y="10" width="4"  height="1" fill="#3d8c3c"/>
+    <rect x="1"  y="11" width="3"  height="2" fill="#5eb85a"/>
+    <rect x="12" y="11" width="3"  height="2" fill="#5eb85a"/>
+  </symbol>
+
+  <symbol id="qpx-pebble" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="3"  y="7"  width="10" height="5" fill="#8d9aa6"/>
+    <rect x="4"  y="6"  width="8"  height="1" fill="#9daab6"/>
+    <rect x="5"  y="12" width="6"  height="1" fill="#7b8894"/>
+    <rect x="5"  y="8"  width="3"  height="1" fill="#aab6c1"/>
+  </symbol>
+
+  <symbol id="qpx-weed" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="3"  y="6"  width="2"  height="4" fill="#3f8f52"/>
+    <rect x="4"  y="10" width="2"  height="6" fill="#3f8f52"/>
+    <rect x="8"  y="3"  width="2"  height="5" fill="#4ba463"/>
+    <rect x="7"  y="8"  width="2"  height="8" fill="#4ba463"/>
+    <rect x="12" y="7"  width="2"  height="4" fill="#3f8f52"/>
+    <rect x="11" y="11" width="2"  height="5" fill="#3f8f52"/>
+  </symbol>
+
+  <symbol id="qpx-dragonfly" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="7"  y="4"  width="2"  height="9" fill="var(--drop)"/>
+    <rect x="6"  y="2"  width="4"  height="2" fill="var(--drop)"/>
+    <rect x="1"  y="4"  width="5"  height="2" fill="#bfe9f7" opacity="0.9"/>
+    <rect x="10" y="4"  width="5"  height="2" fill="#bfe9f7" opacity="0.9"/>
+    <rect x="2"  y="7"  width="4"  height="1" fill="#bfe9f7" opacity="0.7"/>
+    <rect x="10" y="7"  width="4"  height="1" fill="#bfe9f7" opacity="0.7"/>
+  </symbol>
+
+  <symbol id="qpx-shark" viewBox="0 0 24 16" shape-rendering="crispEdges">
+    <rect x="9"  y="1"  width="3"  height="4" fill="#7d93a6"/>
+    <rect x="4"  y="5"  width="15" height="6" fill="#8fa6b8"/>
+    <rect x="6"  y="4"  width="11" height="1" fill="#8fa6b8"/>
+    <rect x="6"  y="11" width="10" height="1" fill="#7d93a6"/>
+    <rect x="8"  y="11" width="4"  height="2" fill="#7d93a6"/>
+    <rect x="0"  y="3"  width="4"  height="4" fill="#8fa6b8"/>
+    <rect x="0"  y="9"  width="4"  height="4" fill="#8fa6b8"/>
+    <rect x="19" y="6"  width="3"  height="3" fill="#8fa6b8"/>
+    <rect x="17" y="6"  width="2"  height="2" fill="var(--pip)"/>
+    <rect x="15" y="9"  width="7"  height="1" fill="#ffffff"/>
+    <rect x="16" y="10" width="1"  height="1" fill="#ffffff"/>
+    <rect x="18" y="10" width="1"  height="1" fill="#ffffff"/>
+    <rect x="20" y="10" width="1"  height="1" fill="#ffffff"/>
+  </symbol>
+
+  <symbol id="qpx-squid" viewBox="0 0 16 18" shape-rendering="crispEdges">
+    <rect x="4"  y="1"  width="8"  height="8" fill="#b06bd6"/>
+    <rect x="5"  y="0"  width="6"  height="1" fill="#c286e3"/>
+    <rect x="3"  y="3"  width="1"  height="5" fill="#b06bd6"/>
+    <rect x="12" y="3"  width="1"  height="5" fill="#b06bd6"/>
+    <rect x="5"  y="4"  width="2"  height="2" fill="var(--pip)"/>
+    <rect x="9"  y="4"  width="2"  height="2" fill="var(--pip)"/>
+    <rect x="4"  y="9"  width="8"  height="2" fill="#9a56bf"/>
+    <rect x="3"  y="11" width="2"  height="5" fill="#9a56bf"/>
+    <rect x="6"  y="11" width="2"  height="7" fill="#9a56bf"/>
+    <rect x="9"  y="11" width="2"  height="6" fill="#9a56bf"/>
+    <rect x="12" y="11" width="2"  height="4" fill="#9a56bf"/>
+  </symbol>
+
+  <symbol id="qpx-spark2" viewBox="0 0 16 16" shape-rendering="crispEdges">
+    <rect x="6" y="0" width="4" height="16" fill="var(--drop)" />
+    <rect x="0" y="6" width="16" height="4" fill="var(--drop)" />
+  </symbol>
+</svg>

@@ -1,0 +1,1877 @@
+---
+layout: default
+title: Quarks Quacks
+permalink: /quacks/
+---
+
+{% comment %}
+  QUARKS QUACKS
+
+  Everything comes from one Google Sheet; posters stay in Drive and are pulled
+  through Drive's thumbnail endpoint, so the repo carries no poster weight.
+
+  The pond is a game viewport, not part of the document scroll. Its world is a
+  single element moved by one transform — nothing reflows, no scroll events
+  fire, no observers wake. That is the whole reason it runs smoothly where the
+  previous scroll-driven version could not.
+
+  The full list of events sits below the pond as ordinary cards. Nobody has to
+  play to find out when anything starts.
+{% endcomment %}
+
+<style>
+  /* ---- splash intro ---- */
+  .qq-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    overflow: hidden;
+    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+  }
+  .qq-splash.is-gone {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* rotating sunburst rays */
+  .qq-rays {
+    position: absolute;
+    width: 200vmax;
+    height: 200vmax;
+    background: conic-gradient(
+      from 0deg,
+      #ffc93c 0deg, transparent 8deg,
+      transparent 30deg, #ffc93c 30deg, transparent 38deg,
+      transparent 60deg, #ffc93c 60deg, transparent 68deg,
+      transparent 90deg, #ffc93c 90deg, transparent 98deg,
+      transparent 120deg, #ffc93c 120deg, transparent 128deg,
+      transparent 150deg, #ffc93c 150deg, transparent 158deg,
+      transparent 180deg, #ffc93c 180deg, transparent 188deg,
+      transparent 210deg, #ffc93c 210deg, transparent 218deg,
+      transparent 240deg, #ffc93c 240deg, transparent 248deg,
+      transparent 270deg, #ffc93c 270deg, transparent 278deg,
+      transparent 300deg, #ffc93c 300deg, transparent 308deg,
+      transparent 330deg, #ffc93c 330deg, transparent 338deg
+    );
+    opacity: 0.35;
+    animation: rays-spin 30s linear infinite;
+  }
+  @keyframes rays-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* radial glow behind the poster */
+  .qq-glow {
+    position: absolute;
+    width: 80vmin;
+    height: 80vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,201,60,0.4) 0%, rgba(255,122,89,0.15) 50%, transparent 70%);
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow-pulse {
+    from { transform: scale(0.9); opacity: 0.7; }
+    to   { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* title slam */
+  .qq-splash-title {
+    position: relative;
+    z-index: 2;
+    font-family: "Caveat", cursive;
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    font-weight: 700;
+    color: #fff;
+    text-shadow:
+      3px 3px 0 #ffc93c,
+      6px 6px 0 rgba(0,0,0,0.4);
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    transform: scale(3);
+    animation: title-slam 0.6s cubic-bezier(0.2, 1.2, 0.3, 1) 0.3s forwards;
+  }
+  .qq-splash-title span {
+    color: #ffc93c;
+  }
+  @keyframes title-slam {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* "Presenting" kicker in splash */
+  .qq-splash-kicker {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 0.8rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 2px 12px rgba(255,201,60,0.4);
+    opacity: 0;
+    animation: kicker-fade 0.6s ease 0.1s forwards;
+  }
+  @keyframes kicker-fade {
+    from { opacity: 0; transform: translateY(14px) scale(0.9); letter-spacing: 0.5em; }
+    to   { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.2em; }
+  }
+
+  /* poster card flies up */
+  .qq-splash-poster {
+    position: relative;
+    z-index: 2;
+    max-width: min(560px, 80vw);
+    margin-top: 1.5rem;
+    border: 4px solid #ffc93c;
+    box-shadow: 0 0 40px rgba(255,201,60,0.5), 0 0 80px rgba(255,122,89,0.3);
+    opacity: 0;
+    transform: translateY(80px) scale(0.8);
+    animation: poster-rise 0.7s cubic-bezier(0.2, 1, 0.3, 1) 0.7s forwards;
+  }
+  .qq-splash-poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @keyframes poster-rise {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* date tag */
+  .qq-splash-date {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.2rem;
+    padding: 0.4rem 1.5rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: #ffc93c;
+    clip-path: var(--pixel-corner);
+    opacity: 0;
+    animation: date-pop 0.4s ease 1.2s forwards;
+  }
+  @keyframes date-pop {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* particles */
+  .qq-spark {
+    position: absolute;
+    z-index: 3;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffc93c;
+    opacity: 0;
+    animation: spark-fly 1.5s ease-out forwards;
+  }
+  @keyframes spark-fly {
+    0%  { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qq-splash { display: none; }
+  }
+
+  /* ---- palette ----
+     Water, foam, sun and one green for the lilies. Light is a bright
+     afternoon, dark is the same water after dark. */
+  .quacks {
+    /* Pool blue, not pond green. The green was what made it read as a swamp:
+       once water and foliage are the same family there is nothing clean about
+       it. Green is now only the lily pads. */
+    --water:      #6fcdee;
+    --water-deep: #2e9fd0;
+    --water-far:  #c3ecfb;
+    --foam:       #eaf8ff;
+    --sun:        #ffc93c;
+    --coral:      #ff7a59;
+    --leaf:       #49b265;
+    --ink:        #0a3a54;
+    --ink-soft:   #3c6d88;
+    --card:       #f7fcff;
+    --edge:       #12719e;
+    --drop:       #0f6f9c;
+    --pip:        #0a2f44;
+    --line:       10, 58, 84;
+
+    --pixel-corner: polygon(
+      8px 0, calc(100% - 8px) 0,
+      calc(100% - 8px) 4px, calc(100% - 4px) 4px,
+      calc(100% - 4px) 8px, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px),
+      calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px),
+      calc(100% - 8px) 100%, 8px 100%,
+      8px calc(100% - 4px), 4px calc(100% - 4px),
+      4px calc(100% - 8px), 0 calc(100% - 8px),
+      0 8px, 4px 8px, 4px 4px, 8px 4px
+    );
+  }
+  .dark-mode .quacks {
+    /* the same water after dark: deep blue, not desaturated teal */
+    --water:      #0b2f4d;
+    --water-deep: #06203a;
+    --water-far:  #14507c;
+    --foam:       #9fd8f2;
+    --sun:        #ffd166;
+    --coral:      #ff8a6b;
+    --leaf:       #3f9455;
+    --ink:        #e7f5fd;
+    --ink-soft:   #8fb9d4;
+    --card:       #0e3a5a;
+    --edge:       #5cc3ec;
+    --drop:       #6fd0f4;
+    --line:       231, 245, 253;
+  }
+
+  /* The <symbol> sprite is a definitions block, not a picture. Without this
+     it renders at an SVG's default 300x150 and shoves the whole page down —
+     which is why the hero header had drifted. */
+  .quack-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  /* ---- the banner ----
+     The poster already carries the name, the duck and the date, so there is no
+     black slab and no date line repeating it underneath. It is given a mount
+     and a little perspective instead, and leans toward you on hover. */
+  .quack-hero {
+    perspective: 1400px;
+    padding: 1.5rem 0 0.5rem;
+    text-align: center;
+  }
+  .quack-kicker {
+    margin: 0 0 1rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--heading-color);
+    opacity: 0.7;
+  }
+  .quack-banner {
+    display: block;
+    max-width: min(760px, 100%);
+    margin: 0 auto;
+    padding: 10px;
+    background: var(--card);
+    border: 3px solid var(--edge);
+    clip-path: var(--pixel-corner);
+    transform-style: preserve-3d;
+    transform: rotateX(7deg) rotateY(-4deg) translateZ(0);
+    box-shadow:
+      0 18px 30px -18px rgba(0, 0, 0, 0.55),
+      0 44px 60px -40px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1),
+                box-shadow 0.5s ease;
+    animation: banner-float 7s ease-in-out infinite;
+  }
+  .quack-banner:hover {
+    transform: rotateX(0deg) rotateY(0deg) scale(1.015);
+    box-shadow:
+      0 22px 34px -18px rgba(0, 0, 0, 0.5),
+      0 56px 74px -44px rgba(0, 0, 0, 0.45);
+    animation-play-state: paused;
+  }
+  .quack-banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @keyframes banner-float {
+    0%, 100% { transform: rotateX(7deg) rotateY(-4deg) translateY(0); }
+    50%      { transform: rotateX(5deg) rotateY(3deg) translateY(-8px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quack-banner { animation: none; transform: none; }
+  }
+
+  /* ---- the invitation into the pond ---- */
+  .pond-invite {
+    text-align: center;
+    margin: 2.6rem 0 1rem;
+  }
+  .pond-invite h2 {
+    margin: 0 0 0.15rem;
+    font-family: "Caveat", cursive;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--heading-color);
+  }
+  .pond-invite p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  /* Light on moving water. Two tiled sheets sliding past each other at
+     different speeds, each on its own composited layer and moved only by
+     transform — no repaint, and the interference between them is what stops
+     it reading as a repeating pattern. */
+  .pond-caustic {
+    position: absolute;
+    inset: -12% -60% -12% -60%;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: repeat;
+    will-change: transform;
+  }
+  .pond-caustic.c1 {
+    opacity: 0.5;
+    background-size: 220px 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' opacity='0.55'%3E%3Cpath d='M8 30 q18 -12 36 0 t36 0'/%3E%3Cpath d='M120 74 q16 -11 32 0 t32 0'/%3E%3Cpath d='M56 98 q14 -9 28 0'/%3E%3Cpath d='M150 18 q14 -9 28 0'/%3E%3C/g%3E%3C/svg%3E");
+    animation: pond-drift-a 26s linear infinite;
+  }
+  .pond-caustic.c2 {
+    opacity: 0.32;
+    background-size: 300px 160px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='160'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' opacity='0.5'%3E%3Cpath d='M20 120 q24 -16 48 0 t48 0'/%3E%3Cpath d='M170 46 q22 -15 44 0 t44 0'/%3E%3Cpath d='M96 26 q18 -12 36 0'/%3E%3C/g%3E%3C/svg%3E");
+    animation: pond-drift-b 41s linear infinite;
+  }
+  @keyframes pond-drift-a {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(220px, 0, 0); }
+  }
+  @keyframes pond-drift-b {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-300px, 0, 0); }
+  }
+  .dark-mode .pond-caustic.c1 { opacity: 0.22; }
+  .dark-mode .pond-caustic.c2 { opacity: 0.16; }
+
+  .pond {
+    position: relative;
+    height: clamp(420px, 74vh, 720px);
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+    background:
+      radial-gradient(ellipse 80% 60% at 28% 12%, var(--water-far), transparent 72%),
+      radial-gradient(ellipse 70% 55% at 80% 88%, var(--water-deep), transparent 74%),
+      var(--water);
+    clip-path: var(--pixel-corner);
+  }
+  .pond:active { cursor: grabbing; }
+
+  /* the world: one element, one transform, one layer */
+  .pond-world {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    will-change: transform;
+  }
+
+  /* A pad starts under the water with only its top showing, and surfaces when
+     the duck reaches it. The submerged part is clipped from the bottom, which
+     is where water would actually hide it. */
+  .pond-pad { position: absolute; z-index: 2; }
+  /* Water never stops moving around something floating in it, so every pad
+     keeps two rings going. They ride at the waterline while a pad is sunk and
+     drop to its base once it has surfaced. Transform and opacity only, so they
+     stay on the compositor and never trigger a repaint. */
+  .pond-pad::before,
+  .pond-pad::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    /* --ring-y is where the ring's CENTRE belongs — the waterline while the
+       pad is sunk, its base once it has surfaced. The box has to start half
+       its own height above that, or the ripple sits low of the poster. */
+    top: calc(var(--ring-y, 42%) - 14%);
+    width: 86%;
+    height: 28%;
+    margin-left: -43%;
+    border: 2px solid rgba(var(--line), 0.22);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: top 0.55s ease;
+  }
+  /* Only the pads actually in view keep their water moving. Sixty-odd live
+     animations is precisely what made an earlier version of this page chop,
+     and a ring rippling half a screen outside the pond is worth nothing. */
+  .pond-pad.in-view::before,
+  .pond-pad.in-view::after {
+    animation: pad-ring 3.6s ease-out infinite;
+  }
+  .pond-pad.in-view::after { animation-delay: -1.8s; }
+  /* Once the poster is up, the water it sits in is at its base — not partway
+     up it. The ring travels down as the pad rises, on the same timing. */
+  .pond-pad.is-found::before,
+  .pond-pad.is-found::after { --ring-y: 99%; }
+  @keyframes pad-ring {
+    0%   { transform: scale(0.34); opacity: 0; }
+    18%  { opacity: 0.6; }
+    100% { transform: scale(1.55); opacity: 0; }
+  }
+
+  /* and a slow band of light crossing the poster itself */
+  .pond-pad-inner { position: relative; }
+  .pond-pad-inner::after {
+    content: "";
+    position: absolute;
+    inset: -20% -40%;
+    background: linear-gradient(
+      104deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.22) 50%,
+      transparent 62%
+    );
+    pointer-events: none;
+    transform: translateX(-42%);
+  }
+  .pond-pad.in-view .pond-pad-inner::after {
+    animation: pad-sheen 6.5s linear infinite;
+  }
+  @keyframes pad-sheen {
+    from { transform: translateX(-42%); }
+    to   { transform: translateX(42%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pond-pad::before,
+    .pond-pad::after,
+    .pond-pad-inner::after { animation: none; }
+  }
+  .pond-pad-rise {
+    height: 100%;
+    padding: 4px;
+    background: var(--edge);
+    clip-path: inset(0 0 58% 0);
+    transform: translateY(10px);
+    opacity: 0.82;
+    filter: saturate(0.6) brightness(0.86);
+    transition:
+      clip-path 0.55s cubic-bezier(0.2, 1.3, 0.4, 1),
+      transform 0.55s cubic-bezier(0.2, 1.3, 0.4, 1),
+      opacity 0.4s ease, filter 0.4s ease, background 0.2s ease;
+  }
+  .pond-pad.is-found .pond-pad-rise {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+    opacity: 1;
+    filter: none;
+  }
+  .pond-pad.is-here .pond-pad-rise { background: var(--sun); }
+  .pond-waterline {
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    top: 42%;
+    height: 10px;
+    z-index: 2;
+    background: linear-gradient(var(--water-far), transparent);
+    opacity: 0.75;
+    pointer-events: none;
+    transition: opacity 0.4s ease, top 0.55s ease;
+  }
+  .pond-pad.is-found .pond-waterline { opacity: 0; top: 100%; }
+  .pond-pad-inner {
+    height: 100%;
+    background: var(--card);
+    clip-path: var(--pixel-corner);
+    padding: 7px;
+    overflow: hidden;
+  }
+  /* A fixed image box, so a pad's height is known before its poster loads. It
+     used to be measured afterwards, which meant the collision boxes were
+     whatever size the cards happened to be at that instant — and that is why
+     the duck could swim straight through one. */
+  .pond-pad img {
+    display: block;
+    width: 100%;
+    height: var(--art, 120px);
+    object-fit: contain;
+  }
+  .pond-pad-blank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: var(--ink-soft);
+  }
+  .pond-pad-name {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .pond-pad.is-here {
+    background: var(--sun);
+    transform: scale(1.05);
+  }
+
+  /* static pond decor — painted once into the world layer, never animated */
+  .pond-decor {
+    position: absolute;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  .pond-haz {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+  /* a shark that has spotted you sits up slightly — the only warning you get */
+  .pond-haz.is-hunting {
+    filter: drop-shadow(0 0 6px rgba(255, 122, 89, 0.7));
+  }
+  /* fish and turtles slip behind the posters; frogs and dragonflies pass over */
+  .pond-critter { z-index: 1; opacity: 0.92; }
+  .pond-critter.is-over { z-index: 4; opacity: 0.95; }
+
+  .pond.is-bitten { animation: pond-bite 0.6s ease-out; }
+  @keyframes pond-bite {
+    0%, 100% { filter: none; }
+    25%      { filter: saturate(1.9) hue-rotate(-28deg) brightness(1.08); }
+  }
+
+  .pond-duck {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: var(--duck-size, 52px);
+    height: auto;
+    margin: calc(var(--duck-size, 52px) * -0.38) 0 0
+            calc(var(--duck-size, 52px) * -0.5);
+    image-rendering: pixelated;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0);
+    /* opacity only — the transform is rewritten every frame from the custom
+       properties and must not be transitioned */
+    transition: opacity 0.25s ease;
+    will-change: transform;
+  }
+  /* the duck goes belly-up where it was caught, then drifts off */
+  .pond-dead {
+    position: absolute;
+    z-index: 5;
+    height: auto;
+    margin: -18px 0 0 -26px;
+    image-rendering: pixelated;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    animation: duck-gone 1.1s ease-in forwards;
+  }
+  @keyframes duck-gone {
+    0%   { transform: rotate(0deg)   translateY(0)     scale(1);    opacity: 1; }
+    22%  { transform: rotate(168deg) translateY(-14px) scale(1.12); opacity: 1; }
+    100% { transform: rotate(180deg) translateY(-46px) scale(0.9);  opacity: 0; }
+  }
+  .pond-duck.is-gone {
+    opacity: 0;
+  }
+
+  .pond-ripple {
+    position: absolute;
+    z-index: 3;
+    border: 2px solid rgba(var(--line), 0.28);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pond-ring 1.4s ease-out forwards;
+  }
+  @keyframes pond-ring {
+    from { transform: scale(0.4); opacity: 0.7; }
+    to   { transform: scale(1.9); opacity: 0; }
+  }
+
+  /* what the duck is standing next to */
+  .pond-card {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    z-index: 6;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--card);
+    color: var(--ink);
+    clip-path: var(--pixel-corner);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  }
+  .pond-card.is-on { display: flex; }
+  .pond-card h3 {
+    margin: 0 0 3px;
+    font-family: "Playfair Display", serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .pond-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .pond-card button {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--card);
+    background: var(--edge);
+    border: 0;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+  }
+
+  /* Full screen: the pond takes the lot. Everything inside is sized from its
+     measured box, so it simply re-measures and fills. */
+  .pond-wrap:fullscreen {
+    margin: 0;
+    background: var(--water);
+    display: flex;
+    align-items: center;
+  }
+  .pond-wrap:fullscreen .pond {
+    height: 100vh;
+    width: 100vw;
+    clip-path: none;
+  }
+
+  /* ---- the corner readout ---- */
+  .pond-hud {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 6;
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .pond-found {
+    margin: 0;
+    padding: 6px 12px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(var(--line), 0.1);
+    clip-path: var(--pixel-corner);
+  }
+  .pond-found b { color: var(--edge); font-size: 0.95rem; }
+  .pond-found.is-lost { animation: pond-lost 0.7s ease-out; }
+  @keyframes pond-lost {
+    0%, 100% { background: rgba(var(--line), 0.1); color: var(--ink); }
+    30%      { background: var(--coral); color: #fff; }
+  }
+  .pond-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    padding: 0;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: rgba(var(--line), 0.1);
+    border: 0;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+  }
+  .pond-full:hover { background: var(--sun); }
+
+  /* paused: off screen, tab hidden, window blurred, or a details window up */
+  .pond.is-paused .pond-caustic,
+  .pond.is-paused .pond-duck { opacity: 0.5; }
+  .pond.is-paused::after {
+    content: "paused";
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    z-index: 8;
+    transform: translateX(-50%);
+    padding: 5px 14px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(var(--line), 0.12);
+    clip-path: var(--pixel-corner);
+    pointer-events: none;
+  }
+
+  /* ---- what you get for finding the lot ---- */
+  .pond-prize {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    z-index: 7;
+    width: min(62%, 460px);
+    transform: translate(-50%, -30%);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.5s ease,
+      transform 0.9s cubic-bezier(0.18, 1.2, 0.35, 1),
+      visibility 0s linear 0.9s;
+  }
+  .pond-prize.is-up {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%);
+    transition:
+      opacity 0.5s ease,
+      transform 0.9s cubic-bezier(0.18, 1.2, 0.35, 1),
+      visibility 0s;
+  }
+  .pond-prize img {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    /* it breaks the surface rather than fading in */
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.9s cubic-bezier(0.18, 1.1, 0.35, 1) 0.1s;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4));
+  }
+  .pond-prize.is-up img { clip-path: inset(0 0 0 0); }
+  .pond-prize span {
+    display: inline-block;
+    margin-top: 0.8rem;
+    padding: 0.35rem 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.4rem;
+    color: var(--ink);
+    background: rgba(var(--line), 0.12);
+    clip-path: var(--pixel-corner);
+    opacity: 0;
+    transition: opacity 0.4s ease 0.7s;
+  }
+  .pond-prize.is-up span { opacity: 1; }
+  /* rings pushed out by whatever just surfaced */
+  .pond-prize::before,
+  .pond-prize::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 14%;
+    width: 60%;
+    height: 16%;
+    margin-left: -30%;
+    border: 2px solid rgba(var(--line), 0.3);
+    border-radius: 50%;
+    opacity: 0;
+  }
+  .pond-prize.is-up::before,
+  .pond-prize.is-up::after {
+    animation: prize-ring 2.6s ease-out infinite;
+  }
+  .pond-prize.is-up::after { animation-delay: -1.3s; }
+  @keyframes prize-ring {
+    0%   { transform: scale(0.4); opacity: 0; }
+    20%  { opacity: 0.55; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  .pond-hint {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    z-index: 5;
+    padding: 6px 11px;
+    font-size: 0.76rem;
+    color: var(--ink);
+    background: rgba(var(--line), 0.1);
+    clip-path: var(--pixel-corner);
+    pointer-events: none;
+  }
+
+  /* ---- controls ---- */
+  .pond-pad-keys {
+    position: absolute;
+    right: 12px;
+    bottom: 70px;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: repeat(3, 38px);
+    grid-template-rows: repeat(3, 38px);
+    gap: 4px;
+  }
+  .pond-pad-keys button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 0.8rem;
+    color: var(--card);
+    background: var(--edge);
+    border: 0;
+    cursor: pointer;
+    opacity: 0.85;
+    clip-path: var(--pixel-corner);
+    touch-action: manipulation;
+  }
+  .pond-pad-keys button:hover,
+  .pond-pad-keys button.is-held { background: var(--sun); color: var(--ink); }
+  .pond-pad-keys .k-up    { grid-area: 1 / 2; }
+  .pond-pad-keys .k-left  { grid-area: 2 / 1; }
+  .pond-pad-keys .k-right { grid-area: 2 / 3; }
+  .pond-pad-keys .k-down  { grid-area: 3 / 2; }
+
+  /* ---- the zine wall ---- */
+  .quack-list-head {
+    text-align: center;
+    margin: 3.5rem 0 0.6rem;
+    position: relative;
+  }
+  .quack-list-head h2 {
+    margin: 0 0 0.2rem;
+    font-family: "Caveat", cursive;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .quack-list-head p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  /* event count badge */
+  .zine-count-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.3rem 1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--edge);
+    background: rgba(var(--line), 0.07);
+    clip-path: var(--pixel-corner);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease 0.3s, transform 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) 0.3s;
+  }
+  .zine-count-badge.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* whatsapp channel link */
+  .zine-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding: 0.4rem 1.1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    text-decoration: none;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .zine-whatsapp:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+    color: #fff;
+    text-decoration: none;
+  }
+  .zine-whatsapp:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .zine-whatsapp i {
+    font-size: 1rem;
+  }
+
+  /* common registration links */
+  .zine-reg-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .zine-reg-links .zine-reg {
+    padding: 0.7rem 2rem;
+    font-size: 1.35rem;
+    box-shadow: 4px 4px 0 #111;
+  }
+  .zine-reg-links .zine-reg:hover {
+    box-shadow: 2px 2px 0 #111;
+  }
+  .zine-reg-links .zine-reg:active {
+    box-shadow: 0 0 0 #111;
+  }
+
+  /* horizontal ticker tape — sticky between filter bar and last card */
+  .zine-ticker {
+    max-width: 1020px;
+    margin: 0.8rem auto 0;
+    overflow: hidden;
+    position: sticky;
+    bottom: 1.5rem;
+    z-index: 50;
+    clip-path: var(--pixel-corner);
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  }
+  .zine-ticker::before,
+  .zine-ticker::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .zine-ticker::before {
+    left: 0;
+    background: linear-gradient(to right, var(--card-bg, #fff), transparent);
+  }
+  .zine-ticker::after {
+    right: 0;
+    background: linear-gradient(to left, var(--card-bg, #fff), transparent);
+  }
+  .zine-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 80s linear infinite;
+  }
+  .zine-ticker:hover .zine-ticker-track {
+    animation-play-state: paused;
+  }
+  .zine-ticker-item {
+    flex: 0 0 auto;
+    padding: 0.5rem 1.4rem;
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .zine-ticker-item:hover {
+    color: var(--coral);
+  }
+  .zine-ticker-dot {
+    flex: 0 0 auto;
+    padding: 0.5rem 0;
+    font-size: 0.6rem;
+    color: var(--coral);
+    line-height: 1.8;
+  }
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zine-ticker-track { animation: none; }
+  }
+
+  /* hand-drawn connector arrow between heading and wall */
+  .zine-connector {
+    display: block;
+    width: 80px;
+    height: 40px;
+    margin: 0.6rem auto 0;
+    color: var(--text-muted);
+    opacity: 0.45;
+  }
+
+  /* scattered pixel doodles around the wall */
+  .zine-doodle {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    image-rendering: pixelated;
+    z-index: 0;
+  }
+  .zine-doodle.is-visible {
+    opacity: 0.18;
+  }
+  .dark-mode .zine-doodle.is-visible {
+    opacity: 0.12;
+  }
+  @media (max-width: 760px) {
+    .zine-doodle { display: none; }
+  }
+
+  /* wall wrapper for positioning doodles */
+  .zine-wall-wrap {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ---- filter bar ---- */
+  .zine-filter-bar {
+    max-width: 1020px;
+    margin: 0.8rem auto 0;
+    padding: 0.7rem 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+  }
+  .zf-group {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .zf-label {
+    font-family: "Inter", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 0.2rem;
+  }
+  .zf-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.28rem 0.65rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(var(--line), 0.06);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    clip-path: var(--pixel-corner);
+  }
+  .zf-chip:hover {
+    background: rgba(var(--line), 0.12);
+    color: var(--heading-color);
+  }
+  .zf-chip.is-active {
+    background: var(--edge);
+    color: #fff;
+    border-color: var(--edge);
+  }
+  .zf-icon {
+    font-size: 0.82rem;
+    line-height: 1;
+  }
+  .zf-svg {
+    width: 14px;
+    height: 14px;
+    image-rendering: pixelated;
+  }
+  .zf-chip.is-active .zf-svg {
+    filter: brightness(10);
+  }
+  .zf-count {
+    font-size: 0.6rem;
+    opacity: 0.6;
+  }
+
+  .zine-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+  }
+
+  /* theme badge on cards */
+  .zine-pill.is-theme {
+    font-size: 0.6rem;
+    color: var(--edge);
+    background: rgba(var(--line), 0.08);
+  }
+
+  @media (max-width: 760px) {
+    .zine-filter-bar {
+      gap: 0.4rem 1rem;
+      padding: 0.5rem 0.8rem;
+    }
+    .zf-chip { font-size: 0.65rem; padding: 0.22rem 0.5rem; }
+  }
+
+  /* the board itself — uses CSS grid instead of columns to avoid
+     the card-splitting glitch that CSS columns causes with transforms */
+  .zine-wall {
+    max-width: 1020px;
+    margin: 1.2rem auto 0;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.6rem;
+  }
+
+  /* each clipping — scroll-reveal + hover lift + 3D tilt */
+  .zine-card {
+    position: relative;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color);
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transform: rotate(var(--tilt, 0deg)) translateY(24px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0.4, 1),
+                opacity 0.5s cubic-bezier(0.2, 0, 0.4, 1),
+                box-shadow 0.25s ease;
+    transform-style: preserve-3d;
+    perspective: 600px;
+  }
+  .zine-card.is-visible {
+    opacity: 1;
+    transform: rotate(var(--tilt, 0deg)) translateY(0)
+               rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+  .zine-card:hover {
+    box-shadow: 6px 10px 28px rgba(0,0,0,0.18);
+    z-index: 2;
+  }
+  .zine-card:hover .zine-poster img {
+    transform: scale(1.05);
+  }
+  .zine-card:hover .zine-tape {
+    opacity: 1;
+  }
+  .zine-card:hover .zine-name {
+    color: var(--coral);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zine-card {
+      opacity: 1;
+      transform: rotate(var(--tilt, 0deg));
+      transition: box-shadow 0.25s ease;
+    }
+  }
+
+  /* tape strip holding the card */
+  .zine-tape {
+    position: absolute;
+    top: -6px;
+    z-index: 3;
+    width: 52px;
+    height: 16px;
+    opacity: 0.85;
+    clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 100%, 0 100%);
+  }
+  .zine-tape.t-left  { left: 18%; transform: rotate(-8deg); }
+  .zine-tape.t-center { left: 50%; transform: translateX(-50%) rotate(2deg); }
+  .zine-tape.t-right { right: 18%; transform: rotate(6deg); }
+  .zine-tape.c-sun   { background: var(--sun); }
+  .zine-tape.c-coral { background: var(--coral); }
+  .zine-tape.c-leaf  { background: var(--leaf); }
+  .zine-tape.c-drop  { background: var(--drop); }
+
+  .zine-poster {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: rgba(var(--line), 0.05);
+  }
+  .zine-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  .zine-body {
+    padding: 0.7rem 0.85rem 0.8rem;
+  }
+  .zine-name {
+    margin: 0 0 0.2rem;
+    font-family: "Playfair Display", serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--heading-color);
+    transition: color 0.25s ease;
+  }
+  .zine-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+  .zine-pill {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .zine-pill.is-time {
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--coral);
+    background: rgba(var(--line), 0.06);
+    clip-path: var(--pixel-corner);
+  }
+  .zine-pill.is-venue {
+    color: var(--ink-soft);
+    background: rgba(var(--line), 0.06);
+    clip-path: var(--pixel-corner);
+  }
+  .zine-desc {
+    margin: 0 0 0.45rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .zine-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .zine-reg {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    text-decoration: none;
+    white-space: nowrap;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .zine-reg:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+    color: #fff;
+    text-decoration: none;
+  }
+  .zine-reg:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .zine-walkin {
+    font-family: "Caveat", cursive;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+  .zine-poster-btn {
+    margin-left: auto;
+    padding: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--edge);
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .zine-poster-btn:hover { color: var(--coral); }
+
+  .quack-more {
+    padding: 0;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--edge);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .quack-more:hover { color: var(--coral); }
+
+  @media (max-width: 760px) {
+    .zine-wall {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 0.8rem;
+    }
+    .zine-name { font-size: 0.95rem; }
+    .zine-poster { aspect-ratio: 3 / 4; }
+  }
+  @media (max-width: 480px) {
+    .zine-wall {
+      grid-template-columns: 1fr;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* ---- the sign-off ---- */
+  .quack-outro {
+    position: relative;
+    max-width: 680px;
+    margin: 4rem auto 1rem;
+    padding: 0 1rem 2.4rem;
+    text-align: center;
+  }
+  .quack-outro-kicker {
+    margin: 0 0 0.6rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .quack-outro-title {
+    margin: 0 0 1rem;
+    font-family: "Caveat", cursive;
+    font-size: clamp(2.6rem, 7vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.02;
+    color: var(--heading-color);
+  }
+  .quack-outro-text {
+    margin: 0 auto 1.4rem;
+    max-width: 560px;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+  .quack-outro-sign {
+    display: inline-block;
+    margin: 0;
+    padding: 0.4rem 1.1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(var(--line), 0.08);
+    clip-path: var(--pixel-corner);
+  }
+  /* one last duck, paddling off the end of the page */
+  .quack-outro-duck {
+    display: block;
+    width: 62px;
+    margin: 1.6rem auto 0;
+    image-rendering: pixelated;
+    animation: outro-paddle 4.5s ease-in-out infinite;
+  }
+  @keyframes outro-paddle {
+    0%, 100% { transform: translateX(-10px) rotate(-2deg); }
+    50%      { transform: translateX(10px) rotate(2deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quack-outro-duck { animation: none; }
+  }
+
+  .quack-status {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .pond { height: clamp(380px, 62vh, 520px); }
+    .pond-pad-keys {
+      grid-template-columns: repeat(3, 34px);
+      grid-template-rows: repeat(3, 34px);
+      right: 8px;
+      bottom: 82px;
+    }
+    .pond-card { gap: 10px; padding: 10px; }
+    .pond-card button { padding: 0.45rem 0.8rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pond-wrap { display: none; }
+  }
+
+  /* ---- details window ---- */
+  .quack-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.66);
+  }
+  .quack-modal.is-open {
+    display: flex;
+  }
+  .quack-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45);
+  }
+  .quack-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .quack-modal-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .quack-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .quack-modal-poster {
+    background: rgba(128, 128, 128, 0.08);
+  }
+  .quack-modal-poster img {
+    width: 100%;
+    height: 100%;
+    max-height: 88vh;
+    object-fit: contain;
+    display: block;
+  }
+  .quack-modal-side {
+    padding: 2rem 1.9rem;
+  }
+  .quack-modal-title {
+    margin: 0 0 0.9rem;
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .quack-modal-text {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin: 0 0 1.4rem;
+  }
+  .quack-detail {
+    display: flex;
+    gap: 14px;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.95rem;
+  }
+  .quack-detail-label {
+    flex: 0 0 120px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 3px;
+  }
+  .quack-detail-value {
+    flex: 1 1 auto;
+    color: var(--heading-color);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .quack-detail-value a {
+    font-weight: 700;
+    color: #d8503f;
+  }
+  .dark-mode .quack-detail-value a {
+    color: #ff8b80;
+  }
+  @media (max-width: 767px) {
+    .quack-modal-grid {
+      grid-template-columns: 1fr;
+    }
+    .quack-modal-poster img {
+      max-height: 44vh;
+    }
+    .quack-modal-side {
+      padding: 1.5rem 1.3rem 1.8rem;
+    }
+  }
+
+  /* ---- TLDR popup ---- */
+  .tldr-btn {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #333;
+    border: 0;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .tldr-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #111;
+  }
+  .tldr-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #111;
+  }
+  .tldr-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .tldr-overlay.is-open {
+    display: flex;
+  }
+  .tldr-card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--card-bg, #fff);
+    border: 3px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
+    padding: 1.8rem 1.5rem 1.4rem;
+  }
+  .tldr-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: #333;
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    clip-path: var(--pixel-corner);
+  }
+  .tldr-close:hover {
+    background: var(--coral);
+  }
+  .tldr-heading {
+    margin: 0 0 1rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    text-align: center;
+  }
+  .tldr-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tldr-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed var(--border-color);
+    align-items: baseline;
+  }
+  .tldr-item:last-child {
+    border-bottom: none;
+  }
+  .tldr-name {
+    font-family: "Playfair Display", serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .tldr-time {
+    font-family: "Caveat", cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--coral);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .tldr-tags {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .tldr-tag {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--edge);
+    background: rgba(var(--line), 0.08);
+    clip-path: var(--pixel-corner);
+  }
+  .tldr-blurb {
+    font-family: "Caveat", cursive;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .tldr-venue {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  @media (max-width: 480px) {
+    .tldr-card { padding: 1.4rem 1rem 1rem; }
+    .tldr-name { font-size: 0.85rem; }
+  }
+</style>
+
+<script>
+  window.QUACKS_BASEURL = "{{ site.baseurl }}";
+</script>
+
+<div class="qq-splash" id="qq-splash">
+  <div class="qq-rays" aria-hidden="true"></div>
+  <div class="qq-glow" aria-hidden="true"></div>
+  <p class="qq-splash-kicker">Presenting</p>
+  <h1 class="qq-splash-title">Quarks <span>Quacks</span></h1>
+  <div class="qq-splash-poster">
+    <picture>
+      <source media="(max-width: 700px)"
+              srcset="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster-sm.webp" />
+      <img src="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster.webp"
+           alt="Quarks Quacks — 11 October" />
+    </picture>
+  </div>
+  <p class="qq-splash-date">11 October 2026</p>
+</div>
+<script>
+(function () {
+  var splash = document.getElementById('qq-splash');
+  if (!splash || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (splash) splash.style.display = 'none';
+    return;
+  }
+  document.body.style.overflow = 'hidden';
+  setTimeout(function () {
+    for (var i = 0; i < 20; i++) {
+      var s = document.createElement('div');
+      s.className = 'qq-spark';
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 80 + Math.random() * 200;
+      s.style.setProperty('--sx', (Math.cos(angle) * dist).toFixed(0) + 'px');
+      s.style.setProperty('--sy', (Math.sin(angle) * dist).toFixed(0) + 'px');
+      s.style.left = '50%';
+      s.style.top = '50%';
+      s.style.animationDelay = (Math.random() * 0.5).toFixed(2) + 's';
+      s.style.background = Math.random() > 0.5 ? '#ffc93c' : '#fff';
+      s.style.width = s.style.height = (4 + Math.random() * 6).toFixed(0) + 'px';
+      splash.appendChild(s);
+    }
+  }, 600);
+  var dismissed = false;
+  var dismiss = function () {
+    if (dismissed) return;
+    dismissed = true;
+    splash.classList.add('is-gone');
+    document.body.style.overflow = '';
+  };
+  splash.addEventListener('click', dismiss);
+  document.addEventListener('keydown', dismiss);
+  setTimeout(dismiss, 5000);
+})();
+</script>
+
+<section class="quacks">
+  {% include quacks-pixels.html %}
+
+  <div class="section-title section-hero-header">
+    <h2><span>Quarks Quacks</span></h2>
+  </div>
+
+  <div class="quack-hero">
+    <p class="quack-kicker">Presenting</p>
+    <div class="quack-banner">
+      <picture>
+        <source media="(max-width: 700px)"
+                srcset="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster-sm.webp" />
+        <img src="{{ site.baseurl }}/assets/images/quarks-quacks/main-poster.webp"
+             alt="Quarks Quacks — 11 October" fetchpriority="high" decoding="async" />
+      </picture>
+    </div>
+  </div>
+
+  <div class="pond-invite">
+    <h2>Swim over!</h2>
+    <p>Nudge a poster and it floats up &mdash; but keep clear of the sharks</p>
+  </div>
+
+  <!-- the pond -->
+  <div class="pond-wrap" id="pond-wrap">
+    <div class="pond" id="pond">
+      <div class="pond-caustic c1" aria-hidden="true"></div>
+      <div class="pond-caustic c2" aria-hidden="true"></div>
+      <div class="pond-world" id="pond-world"></div>
+
+      <img class="pond-duck" id="pond-duck" alt="" aria-hidden="true"
+           src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" />
+
+      <div class="pond-hud">
+        <p class="pond-found"><b id="pond-count">0</b> / <span id="pond-total">0</span> surfaced</p>
+        <button type="button" class="pond-full" id="pond-full"
+                aria-label="Full screen" title="Full screen">
+          <i class="fas fa-expand"></i>
+        </button>
+      </div>
+      <p class="pond-hint" id="pond-hint">Drag, or use the arrow keys &mdash; and mind the shark</p>
+
+      <div class="pond-pad-keys" role="group" aria-label="Swim">
+        <button type="button" class="k-up" data-dir="up" aria-label="Up">&#9650;</button>
+        <button type="button" class="k-left" data-dir="left" aria-label="Left">&#9664;</button>
+        <button type="button" class="k-right" data-dir="right" aria-label="Right">&#9654;</button>
+        <button type="button" class="k-down" data-dir="down" aria-label="Down">&#9660;</button>
+      </div>
+
+      <div class="pond-prize" id="pond-prize" aria-hidden="true">
+        <img src="{{ site.baseurl }}/assets/images/quarks-quacks/wordmark.svg"
+             alt="" />
+        <span>the whole pond &mdash; see you on the 11th</span>
+      </div>
+
+      <div class="pond-card" id="pond-card">
+        <div>
+          <h3 id="pond-card-name"></h3>
+          <p id="pond-card-meta"></p>
+        </div>
+        <button type="button" id="pond-card-open">Know more</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- the full line-up, pinned to the zine wall -->
+  <div class="quack-list-head">
+    <h2>The Line-Up</h2>
+    <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem">
+      <span class="zine-count-badge" id="zine-count-badge"></span>
+      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<s>a</s>ick Schedule</button>
+    </div>
+    <a class="zine-whatsapp" href="https://whatsapp.com/channel/0029Vb8qihZ1HsppFp6b2m3b"
+       target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-whatsapp"></i> Follow on WhatsApp
+    </a>
+    <div class="zine-reg-links">
+      <a class="zine-reg" href="https://forms.gle/oU3tHMNAWEFCF4ma8"
+         target="_blank" rel="noopener noreferrer">Register for Competitions</a>
+      <a class="zine-reg" href="https://forms.gle/bH2CXSpw5BbpdkbAA"
+         target="_blank" rel="noopener noreferrer">Register for Workshops</a>
+    </div>
+    <svg class="zine-connector" viewBox="0 0 80 40" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <path d="M40 2 C 36 10, 44 14, 40 22 C 36 30, 40 34, 40 38" />
+      <path d="M40 38 L 35 30" />
+      <path d="M40 38 L 45 30" />
+    </svg>
+  </div>
+
+  <div class="zine-filter-bar" id="zine-filters"></div>
+
+  <p class="quack-status" id="quack-status">Loading the line-up&hellip;</p>
+  <div class="zine-wall-wrap">
+    <div class="zine-wall" id="zine-wall"></div>
+    <div class="zine-ticker" id="zine-ticker" style="display:none" aria-hidden="true"></div>
+  </div>
+  <div class="quack-outro">
+    <p class="quack-outro-kicker">See you by the water</p>
+    <h2 class="quack-outro-title">Waddle you doing<br />on the 11th?</h2>
+    <p class="quack-outro-text">
+      Ten in the morning until eleven at night, six clubs, one campus. Come for
+      a workshop and stay for the game room, or turn up at nine in the evening
+      knowing nothing about any of it. No ticket, no plan, no pond required.
+    </p>
+    <p class="quack-outro-sign">Quarks Quacks &middot; 11 October</p>
+    <img class="quack-outro-duck" alt="" aria-hidden="true"
+         src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" />
+  </div>
+</section>
+
+<!-- details -->
+<div class="quack-modal" id="quack-modal" role="dialog" aria-modal="true"
+     aria-label="Event details">
+  <div class="quack-modal-card">
+    <button type="button" class="quack-modal-close" id="quack-modal-close"
+            aria-label="Close">
+      <i class="fas fa-times"></i>
+    </button>
+    <div id="quack-modal-body"></div>
+  </div>
+</div>
+
+<div class="tldr-overlay" id="tldr-overlay" role="dialog" aria-modal="true" aria-label="Quick schedule">
+  <div class="tldr-card">
+    <button type="button" class="tldr-close" id="tldr-close" aria-label="Close">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 class="tldr-heading">Qu<s>a</s>ick Schedule</h3>
+    <ul class="tldr-list" id="tldr-list"></ul>
+  </div>
+</div>
+
+<script src="{{ site.baseurl }}/assets/js/sheets-data.js"></script>
+<script src="{{ site.baseurl }}/assets/js/quacks.js"></script>

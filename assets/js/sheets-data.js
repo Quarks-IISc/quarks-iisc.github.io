@@ -7,7 +7,7 @@
  *
  * Both sheets are read through the Google Visualization endpoint:
  *
- *   https://docs.google.com/spreadsheets/d/<id>/gviz/tq?tqx=out:json&sheet=<tab>
+ *   https://docs.google.com/spreadsheets/d/<id>/gviz/tq?tqx=out:json&headers=1&sheet=<tab>
  *
  * That endpoint is public for any sheet shared as "anyone with the link can
  * view", needs no key, sends permissive CORS headers, and has no request quota.
@@ -31,6 +31,21 @@ window.QuarksSheets = (function () {
       id: '1O56l5QnyMzO8mPfpbcf9UFCMxPeoNkRNhYUaMNayKL0',
       tab: 'Sheet1'
     },
+    // Quarks Quacks. Columns the event page expects: Name of event, Timing,
+    // Poster image, Venue, Speaker details, Event details, Registration link,
+    // Last date for registration. Poster cells hold Google Drive links, which
+    // the page turns into Drive's own resized thumbnails rather than checking
+    // twenty-odd posters into the repo.
+    quacks: {
+      id: '1jy7Jz381dNNlzTdndmrp4yC_uZbKBH53qeqPHsxaRU8',
+      tab: 'Sheet1'
+    },
+    // The Roast Roaster. Columns: Roast, Target, Byline, Date, Featured. A
+    // blank id renders the page empty with an invitation rather than an error.
+    roasts: {
+      id: '',
+      tab: 'Sheet1'
+    },
     // The UG@IISc calendar. Fill in the id of a link-viewable Google Sheet with
     // the columns the calendar page expects: Title, Date, Start Time, End Time,
     // End Date, Location, Category, Link, Description. Until then the calendar
@@ -48,10 +63,15 @@ window.QuarksSheets = (function () {
     return (
       'https://docs.google.com/spreadsheets/d/' +
       cfg.id +
-      '/gviz/tq?tqx=out:json&sheet=' +
+      '/gviz/tq?tqx=out:json&headers=1&sheet=' +
       encodeURIComponent(cfg.tab)
     );
   }
+  // headers=1 pins the first row as the header. Without it, gviz only detects a
+  // header when the columns below are typed differently from it (dates/numbers
+  // under text). An all-text sheet like Quacks leaves gviz unsure: it returns
+  // blank column labels and hands the header back as the first data row, so the
+  // labels toObjects() keys on come through empty and every field reads blank.
 
   // The body arrives wrapped in a JS callback:
   //   /*O_o*/ google.visualization.Query.setResponse({...});
