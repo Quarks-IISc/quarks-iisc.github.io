@@ -147,6 +147,34 @@ permalink: /quacks/
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
+  .qq-splash-sub {
+    display: block;
+    position: relative;
+    z-index: 2;
+    margin: 0.6rem 0 0;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-style: italic;
+    font-weight: 400;
+    color: transparent;
+    background: linear-gradient(90deg, #ffc93c, #fff, #ffc93c);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: sub-rise 0.8s ease forwards 0.85s, sub-shimmer 3s linear infinite 1.6s;
+  }
+  @keyframes sub-rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sub-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
   /* date tag */
   .qq-splash-date {
     position: relative;
@@ -269,6 +297,23 @@ permalink: /quacks/
     text-transform: uppercase;
     color: var(--heading-color);
     opacity: 0.7;
+  }
+  .quack-subtitle {
+    display: block;
+    margin: 0.1rem 0 1rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-align: center;
+    color: transparent;
+    background: linear-gradient(90deg, var(--edge), var(--heading-color), var(--edge));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: sub-shimmer 4s linear infinite;
   }
   .quack-banner {
     display: block;
@@ -1690,6 +1735,7 @@ permalink: /quacks/
   <div class="qq-glow" aria-hidden="true"></div>
   <p class="qq-splash-kicker">Presenting</p>
   <h1 class="qq-splash-title">Quarks <span>Quacks</span></h1>
+  <p class="qq-splash-sub">Creative Carnival</p>
   <div class="qq-splash-poster">
     <picture>
       <source media="(max-width: 700px)"
@@ -1754,6 +1800,7 @@ permalink: /quacks/
              alt="Quarks Quacks — 11 October" fetchpriority="high" decoding="async" />
       </picture>
     </div>
+    <p class="quack-subtitle" id="creative-carnival" style="cursor:pointer" title="Click me!">Creative Carnival</p>
   </div>
 
   <div class="pond-invite">
@@ -1873,5 +1920,117 @@ permalink: /quacks/
   </div>
 </div>
 
+<button type="button" class="egg-duck" id="egg-duck" title="Click the duck!">
+  <img src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" alt="" aria-hidden="true" />
+</button>
+
+<style>
+  .egg-duck {
+    position: fixed;
+    bottom: 1.5rem;
+    left: calc(50% - 580px);
+    z-index: 100;
+    width: 52px;
+    height: 52px;
+    padding: 8px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    cursor: pointer;
+    animation: egg-bob 2s ease-in-out infinite;
+    transition: transform 0.2s;
+  }
+  .egg-duck:hover {
+    transform: scale(1.2);
+  }
+  .egg-duck:active {
+    transform: scale(0.9);
+  }
+  .egg-duck img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  @keyframes egg-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -8px; }
+  }
+  @media (max-width: 1120px) {
+    .egg-duck {
+      left: 0.5rem;
+    }
+  }
+  @media (max-width: 600px) {
+    .egg-duck {
+      left: 0.3rem;
+      width: 44px;
+      height: 44px;
+      padding: 6px;
+    }
+  }
+</style>
+
 <script src="{{ site.baseurl }}/assets/js/sheets-data.js"></script>
 <script src="{{ site.baseurl }}/assets/js/quacks.js"></script>
+<script>
+// Block real keypresses from triggering easter eggs — only synthetic dispatches should.
+// The library listens on document 'keyup'; this capture-phase listener eats real keys.
+(function () {
+  var GAME_KEYS = {
+    65:1, 66:1, 67:1, 68:1, 69:1, 70:1, 71:1, 72:1, 73:1, 74:1, 75:1, 76:1, 77:1,
+    78:1, 79:1, 80:1, 81:1, 82:1, 83:1, 84:1, 85:1, 86:1, 87:1, 88:1, 89:1, 90:1
+  };
+  document.addEventListener('keyup', function (e) {
+    if (e.isTrusted && GAME_KEYS[e.which]) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/gh/WeiChiaChang/Easter-egg@master/easter-eggs-collection.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('creative-carnival');
+  if (!btn) return;
+
+  var eggs = [
+    'unicorn', 'balloon', 'nyancat', 'pikachu', 'pikarun', 'catrun',
+    'mario', 'sonic', 'spongebob', 'homer', 'kirby', 'psyduck',
+    'dragon', 'penguin', 'rabbit', 'fox', 'doggy', 'bird',
+    'robot', 'ufo', 'ghost', 'swim', 'fly',
+    'cool', 'bravo', 'winner', 'airguitar', 'earth',
+    'hippo', 'piggy', 'snorlax', 'koggy', 'salamander',
+    'walk', 'onmyway', 'board', 'sensei', 'pokeball',
+    'haha', 'travel', 'bat', 'hiphop', 'pie', 'lol', 'ohhh',
+    'gun', 'money', 'tank', 'hangover', 'haters',
+    'britney', 'handsome', 'joker', 'wink', 'hi',
+    'kumamon', 'thankyou', 'no', 'piqiu', 'dog'
+  ];
+
+  function typeWord(word) {
+    word.toUpperCase().split('').forEach(function (ch, i) {
+      setTimeout(function () {
+        var code = ch.charCodeAt(0);
+        var ev = document.createEvent('Event');
+        ev.initEvent('keyup', true, true);
+        ev.which = code;
+        ev.keyCode = code;
+        document.dispatchEvent(ev);
+      }, i * 30);
+    });
+  }
+
+  function trigger() {
+    var pick = eggs[Math.floor(Math.random() * eggs.length)];
+    typeWord(pick);
+  }
+
+  btn.addEventListener('click', trigger);
+
+  var duckBtn = document.getElementById('egg-duck');
+  if (duckBtn) duckBtn.addEventListener('click', trigger);
+
+  document.addEventListener('pond-discover', trigger);
+})();
+</script>

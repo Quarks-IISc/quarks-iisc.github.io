@@ -1172,8 +1172,8 @@
         found[pad.event.name] = true;
         foundCount++;
         if (countEl) countEl.textContent = foundCount;
-        // the whole pond: the name comes up out of the water
         if (prize && foundCount >= events.length) prize.classList.add('is-up');
+        document.dispatchEvent(new Event('pond-discover'));
       }
       cardName.textContent = pad.event.name;
       cardMeta.textContent = metaLine(pad.event) || 'Details to come';
