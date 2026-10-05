@@ -1,0 +1,130 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quarks Quacks — Carnival Day</title>
+  <meta http-equiv="refresh" content="2;url=http://10.192.53.15:3001" />
+  <style>
+    :root { --bg: #0a0a0a; --text: #e0ddd8; --accent: #d4a843; --coral: #c47a6a; --dim: #8a8780; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .title {
+      font-family: "Caveat", cursive;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .title span { color: var(--accent); }
+    .sub {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 0.4rem;
+    }
+    .date {
+      font-size: 0.85rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+    .loader {
+      width: 40px; height: 40px;
+      border: 3px solid var(--dim);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .info {
+      font-size: 0.95rem;
+      color: var(--text);
+      max-width: 360px;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+    .status { font-size: 0.9rem; color: var(--dim); }
+    .intranet {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--dim);
+      opacity: 0.7;
+    }
+    .fallback {
+      display: none;
+      margin-top: 2rem;
+      padding: 1.2rem 1.6rem;
+      background: #151515;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      max-width: 400px;
+    }
+    .fallback p { font-size: 0.85rem; color: var(--dim); margin-bottom: 0.5rem; }
+    .fallback code {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--accent);
+      padding: 0.5rem;
+      background: var(--bg);
+      border-radius: 4px;
+      user-select: all;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--bg);
+      background: var(--accent);
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <h1 class="title">Quarks <span>Quacks</span></h1>
+  <p class="sub">Creative Carnival</p>
+  <p class="date">11 October 2026</p>
+  <div class="loader" id="loader"></div>
+  <p class="status" id="status">Connecting to Quarks Quacks…</p>
+  <p class="intranet">Accessible only via IISc intranet</p>
+  <div class="fallback" id="fallback">
+    <p>Make sure you're on the <strong>IISc campus network</strong>, then visit:</p>
+    <code id="fallback-url">http://10.192.53.15:3001</code>
+    <a href="http://10.192.53.15:3001" class="btn">Try Again</a>
+  </div>
+  <script>
+    var SERVER = 'http://10.192.53.15:3001';
+    setTimeout(function () {
+      window.location.href = SERVER;
+    }, 1500);
+    setTimeout(function () {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('status').textContent = 'Could not connect automatically.';
+      document.getElementById('fallback').style.display = '';
+    }, 5000);
+  </script>
+</body>
+</html>

@@ -352,6 +352,89 @@ permalink: /quacks/
     .quack-banner { animation: none; transform: none; }
   }
 
+  /* ---- countdown timer ---- */
+  .qq-countdown {
+    text-align: center;
+    margin: 2.5rem auto 1rem;
+    max-width: 520px;
+  }
+  .qq-countdown-label {
+    font-family: "Caveat", cursive;
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 0.8rem;
+  }
+  .qq-countdown-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+  .qq-countdown-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+    padding: 0.7rem 0.5rem;
+    background: var(--card-bg, rgba(255,255,255,0.06));
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .qq-countdown-box:hover {
+    border-color: var(--heading-color, rgba(255,255,255,0.3));
+  }
+  .dark-mode .qq-countdown-box {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+  }
+  .qq-countdown-num {
+    font-family: "Caveat", cursive;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--heading-color);
+  }
+  .qq-countdown-unit {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+  .qq-countdown-sub {
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #c47a6a;
+    margin-top: 0.8rem;
+  }
+  .qq-countdown-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    border-radius: 6px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .qq-countdown-link:hover {
+    border-color: var(--heading-color);
+    background: rgba(255,255,255,0.04);
+  }
+  .qq-countdown-done {
+    font-family: "Caveat", cursive;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+
   /* ---- the invitation into the pond ---- */
   .pond-invite {
     text-align: center;
@@ -1586,6 +1669,21 @@ permalink: /quacks/
   }
 
   /* ---- TLDR popup ---- */
+  .pixel-strike {
+    position: relative;
+    color: var(--gold, #ffc93c);
+  }
+  .pixel-strike::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 50%;
+    height: 2px;
+    background-image: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 5px);
+    image-rendering: pixelated;
+    transform: translateY(-1px);
+  }
   .tldr-btn {
     display: inline-block;
     padding: 0.4rem 1.2rem;
@@ -1803,6 +1901,19 @@ permalink: /quacks/
     <p class="quack-subtitle" id="creative-carnival" style="cursor:pointer" title="Click me!">Creative Carnival</p>
   </div>
 
+  <div class="qq-countdown" id="qq-countdown">
+    <div class="qq-countdown-label">Quacks begins in</div>
+    <div class="qq-countdown-boxes" id="countdown-boxes">
+      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-days">--</span><span class="qq-countdown-unit">Days</span></div>
+      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-hours">--</span><span class="qq-countdown-unit">Hours</span></div>
+      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-mins">--</span><span class="qq-countdown-unit">Minutes</span></div>
+      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-secs">--</span><span class="qq-countdown-unit">Seconds</span></div>
+    </div>
+    <a href="{{ site.baseurl }}/quacks-day/" class="qq-countdown-link">
+      Visit Quacks Day <span style="font-size:0.85em;color:var(--text-muted)">(IISc Intranet only)</span>
+    </a>
+  </div>
+
   <div class="pond-invite">
     <h2>Swim over!</h2>
     <p>Nudge a poster and it floats up &mdash; but keep clear of the sharks</p>
@@ -1856,7 +1967,7 @@ permalink: /quacks/
     <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem">
       <span class="zine-count-badge" id="zine-count-badge"></span>
-      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<s>a</s>ick Schedule</button>
+      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<span class="pixel-strike">a</span>ick Schedule</button>
     </div>
     <a class="zine-whatsapp" href="https://whatsapp.com/channel/0029Vb8qihZ1HsppFp6b2m3b"
        target="_blank" rel="noopener noreferrer">
@@ -1915,7 +2026,7 @@ permalink: /quacks/
     <button type="button" class="tldr-close" id="tldr-close" aria-label="Close">
       <i class="fas fa-times"></i>
     </button>
-    <h3 class="tldr-heading">Qu<s>a</s>ick Schedule</h3>
+    <h3 class="tldr-heading">Qu<span class="pixel-strike">a</span>ick Schedule</h3>
     <ul class="tldr-list" id="tldr-list"></ul>
   </div>
 </div>
@@ -2032,5 +2143,59 @@ permalink: /quacks/
   if (duckBtn) duckBtn.addEventListener('click', trigger);
 
   document.addEventListener('pond-discover', trigger);
+})();
+</script>
+<script>
+(function () {
+  var target = new Date('2026-10-11T00:00:00+05:30').getTime();
+  var daysEl = document.getElementById('cd-days');
+  var hoursEl = document.getElementById('cd-hours');
+  var minsEl = document.getElementById('cd-mins');
+  var secsEl = document.getElementById('cd-secs');
+  var wrap = document.getElementById('qq-countdown');
+
+  function pad(n) { return n < 10 ? '0' + n : n; }
+
+  function tick() {
+    var now = Date.now();
+    var diff = target - now;
+    if (diff <= 0) {
+      wrap.innerHTML = '<div class="qq-countdown-done">Quacks is live!</div>';
+      return;
+    }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    daysEl.textContent = pad(d);
+    hoursEl.textContent = pad(h);
+    minsEl.textContent = pad(m);
+    secsEl.textContent = pad(s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  // Click to shuffle animation
+  document.getElementById('countdown-boxes').addEventListener('click', function (e) {
+    var box = e.target.closest('.qq-countdown-box');
+    if (!box) return;
+    var numEl = box.querySelector('.qq-countdown-num');
+    if (!numEl || numEl.dataset.shuffling) return;
+    numEl.dataset.shuffling = '1';
+    var real = numEl.textContent;
+    var count = 0;
+    var iv = setInterval(function () {
+      numEl.textContent = pad(Math.floor(Math.random() * 100));
+      numEl.style.color = 'hsl(' + (count * 30 % 360) + ', 60%, 65%)';
+      count++;
+      if (count >= 10) {
+        clearInterval(iv);
+        numEl.textContent = real;
+        numEl.style.color = '';
+        delete numEl.dataset.shuffling;
+      }
+    }, 60);
+  });
 })();
 </script>

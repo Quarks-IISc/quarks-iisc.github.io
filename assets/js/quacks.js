@@ -945,7 +945,7 @@
       if (totalEl) totalEl.textContent = events.length;
       if (!duckX && !duckY) {
         duckX = worldW / 2;
-        duckY = Math.min(140, worldH / 2);
+        duckY = worldH / 2;
       }
       draw(true);
     }
