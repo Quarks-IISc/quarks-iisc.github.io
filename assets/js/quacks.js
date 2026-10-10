@@ -388,7 +388,8 @@
              '<span class="zine-ticker-dot">♦</span>';
     }).join('');
 
-    ticker.innerHTML = '<div class="zine-ticker-track">' + items + items + '</div>';
+    var track = document.getElementById('zine-ticker-track');
+    if (track) track.innerHTML = items + items;
     ticker.style.display = '';
 
     ticker.addEventListener('click', function (ev) {

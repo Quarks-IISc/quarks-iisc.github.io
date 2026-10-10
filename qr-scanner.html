@@ -1,0 +1,68 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>QR Scanner — Quarks Quacks</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root{--bg:#0e0e12;--card:#1a1a24;--accent:#f5c842;--text:#e8e6e1;--border:#2a2a3a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem}
+  h1{font-size:1.3rem;margin-bottom:1rem;text-align:center;color:var(--accent)}
+  #reader{width:min(100%,400px);border-radius:12px;overflow:hidden;border:2px solid var(--border)}
+  #result{margin-top:1rem;padding:0.8rem 1.2rem;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.95rem;text-align:center;display:none;word-break:break-all}
+  #result.success{border-color:var(--accent);color:var(--accent)}
+  #status{margin-top:0.8rem;font-size:0.85rem;opacity:0.7;text-align:center}
+  .btn{display:inline-block;margin-top:1rem;padding:0.6rem 1.5rem;background:var(--accent);color:var(--bg);border:none;border-radius:6px;font-size:0.95rem;font-weight:600;cursor:pointer}
+  .btn:hover{opacity:0.9}
+</style>
+</head>
+<body>
+  <h1>Scan QR Code</h1>
+  <div id="reader"></div>
+  <div id="result"></div>
+  <div id="status">Point camera at a QR code</div>
+
+  <script>
+    var sent = false;
+    var scanner = new Html5Qrcode("reader");
+
+    function onScan(decoded) {
+      if (sent) return;
+      sent = true;
+      scanner.stop().catch(function(){});
+
+      var label = decoded;
+      try { var p = JSON.parse(decoded); if (p.team_name) label = p.team_name; } catch(e){}
+
+      var el = document.getElementById('result');
+      el.textContent = 'Scanned: ' + label;
+      el.className = 'success';
+      el.style.display = '';
+      document.getElementById('status').textContent = 'Sending back...';
+
+      if (window.opener) {
+        window.opener.postMessage({ type: 'qr-scan', data: decoded }, '*');
+        setTimeout(function() { window.close(); }, 600);
+      } else {
+        document.getElementById('status').textContent = 'No opener window found. Copy the code manually.';
+      }
+    }
+
+    function onError() {}
+
+    scanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      onScan,
+      onError
+    ).catch(function(err) {
+      document.getElementById('status').textContent = 'Camera error: ' + err;
+    });
+  </script>
+</body>
+</html>

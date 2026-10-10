@@ -1069,36 +1069,92 @@ permalink: /quacks/
     box-shadow: 0 0 0 #111;
   }
 
-  /* horizontal ticker tape — sticky between filter bar and last card */
-  .zine-ticker {
+  .zine-handbook-section {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .zine-handbook-heading {
+    font-family: var(--font-pixel);
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .zine-handbook-card {
+    display: inline-block;
+    text-decoration: none;
+    background: var(--card-bg, #fff);
+    border: 2px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+    box-shadow: 4px 4px 0 #111;
+    transition: box-shadow 0.15s, transform 0.15s;
+    overflow: hidden;
+  }
+  .zine-handbook-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0 #111;
+  }
+  .zine-handbook-card:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0 #111;
+  }
+  .zine-handbook-thumb {
+    display: block;
+    width: 220px;
+    height: auto;
+    border-bottom: 2px solid var(--border-color);
+  }
+  .zine-handbook-dl {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-pixel);
+    font-size: 0.95rem;
+    color: var(--accent);
+  }
+  @media (max-width: 600px) {
+    .zine-handbook-thumb { width: 180px; }
+    .zine-handbook-heading { font-size: 1.2rem; }
+  }
+
+  /* ticker row — duck + tape side by side */
+  .zine-ticker-row {
     max-width: 1020px;
     margin: 0.8rem auto 0;
-    overflow: hidden;
     position: sticky;
     bottom: 1.5rem;
     z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .zine-ticker-row .egg-duck {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+    border: none;
+    border-radius: 50%;
+    background: var(--card-bg, #fff);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    animation: egg-bob 2s ease-in-out infinite;
+    transition: transform 0.2s;
+  }
+  .zine-ticker-row .egg-duck:hover { transform: scale(1.15); }
+  .zine-ticker-row .egg-duck:active { transform: scale(0.9); }
+  .zine-ticker-row .egg-duck img { width: 100%; height: 100%; object-fit: contain; }
+  @keyframes egg-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -4px; }
+  }
+  /* horizontal ticker tape */
+  .zine-ticker {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
     clip-path: var(--pixel-corner);
     background: var(--card-bg, #fff);
     border: 1px solid var(--border-color);
     box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-  }
-  .zine-ticker::before,
-  .zine-ticker::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2.5rem;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .zine-ticker::before {
-    left: 0;
-    background: linear-gradient(to right, var(--card-bg, #fff), transparent);
-  }
-  .zine-ticker::after {
-    right: 0;
-    background: linear-gradient(to left, var(--card-bg, #fff), transparent);
   }
   .zine-ticker-track {
     display: flex;
@@ -1107,6 +1163,9 @@ permalink: /quacks/
   }
   .zine-ticker:hover .zine-ticker-track {
     animation-play-state: paused;
+  }
+  @media (max-width: 600px) {
+    .zine-ticker-row .egg-duck { width: 38px; height: 38px; padding: 5px; }
   }
   .zine-ticker-item {
     flex: 0 0 auto;
@@ -1979,6 +2038,15 @@ permalink: /quacks/
       <a class="zine-reg" href="https://forms.gle/bH2CXSpw5BbpdkbAA"
          target="_blank" rel="noopener noreferrer">Register for Workshops</a>
     </div>
+    <div class="zine-handbook-section">
+      <h3 class="zine-handbook-heading">Rules &amp; Handbook</h3>
+      <a class="zine-handbook-card" href="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.pdf"
+         download="Quarks-Quacks-Handbook.pdf">
+        <img class="zine-handbook-thumb" src="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.webp"
+             alt="Quarks Quacks Handbook" loading="lazy" />
+        <span class="zine-handbook-dl"><i class="fas fa-download"></i> Download PDF</span>
+      </a>
+    </div>
     <svg class="zine-connector" viewBox="0 0 80 40" fill="none"
          stroke="currentColor" stroke-width="2" stroke-linecap="round"
          stroke-linejoin="round" aria-hidden="true">
@@ -1993,7 +2061,14 @@ permalink: /quacks/
   <p class="quack-status" id="quack-status">Loading the line-up&hellip;</p>
   <div class="zine-wall-wrap">
     <div class="zine-wall" id="zine-wall"></div>
-    <div class="zine-ticker" id="zine-ticker" style="display:none" aria-hidden="true"></div>
+    <div class="zine-ticker-row" id="zine-ticker" style="display:none" aria-hidden="true">
+      <button type="button" class="egg-duck" id="egg-duck" title="Click the duck!">
+        <img src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" alt="" aria-hidden="true" />
+      </button>
+      <div class="zine-ticker">
+        <div class="zine-ticker-track" id="zine-ticker-track"></div>
+      </div>
+    </div>
   </div>
   <div class="quack-outro">
     <p class="quack-outro-kicker">See you by the water</p>
@@ -2031,56 +2106,6 @@ permalink: /quacks/
   </div>
 </div>
 
-<button type="button" class="egg-duck" id="egg-duck" title="Click the duck!">
-  <img src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" alt="" aria-hidden="true" />
-</button>
-
-<style>
-  .egg-duck {
-    position: fixed;
-    bottom: 1.5rem;
-    left: calc(50% - 580px);
-    z-index: 100;
-    width: 52px;
-    height: 52px;
-    padding: 8px;
-    border: none;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    cursor: pointer;
-    animation: egg-bob 2s ease-in-out infinite;
-    transition: transform 0.2s;
-  }
-  .egg-duck:hover {
-    transform: scale(1.2);
-  }
-  .egg-duck:active {
-    transform: scale(0.9);
-  }
-  .egg-duck img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  @keyframes egg-bob {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -8px; }
-  }
-  @media (max-width: 1120px) {
-    .egg-duck {
-      left: 0.5rem;
-    }
-  }
-  @media (max-width: 600px) {
-    .egg-duck {
-      left: 0.3rem;
-      width: 44px;
-      height: 44px;
-      padding: 6px;
-    }
-  }
-</style>
 
 <script src="{{ site.baseurl }}/assets/js/sheets-data.js"></script>
 <script src="{{ site.baseurl }}/assets/js/quacks.js"></script>
