@@ -1069,6 +1069,43 @@ permalink: /quacks/
     box-shadow: 0 0 0 #111;
   }
 
+  .zine-rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .zine-rules-card {
+    background: rgba(30, 28, 24, 0.7);
+    border: 1px solid rgba(212, 168, 67, 0.18);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+  }
+  .zine-rules-card h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    color: #f5ecd5;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .zine-rules-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.88rem;
+    color: #c8bfa0;
+    line-height: 1.7;
+  }
+  .zine-rules-card li::before {
+    content: '▸ ';
+    color: rgba(212, 168, 67, 0.5);
+  }
+  @media (max-width: 600px) {
+    .zine-rules-grid { grid-template-columns: 1fr; }
+  }
+
   .zine-handbook-section {
     text-align: center;
     margin-top: 1.5rem;
@@ -2041,7 +2078,7 @@ permalink: /quacks/
     <div class="zine-handbook-section">
       <h3 class="zine-handbook-heading">Rules &amp; Handbook</h3>
       <a class="zine-handbook-card" href="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.pdf"
-         download="Quarks-Quacks-Handbook.pdf">
+         target="_blank" rel="noopener noreferrer">
         <img class="zine-handbook-thumb" src="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.webp"
              alt="Quarks Quacks Handbook" loading="lazy" />
         <span class="zine-handbook-dl"><i class="fas fa-download"></i> Download PDF</span>
@@ -2054,6 +2091,26 @@ permalink: /quacks/
       <path d="M40 38 L 35 30" />
       <path d="M40 38 L 45 30" />
     </svg>
+
+    <!-- Game Rules -->
+    <div class="zine-rules-section" style="margin-top:2rem">
+      <h3 class="zine-handbook-heading"><i class="fas fa-scroll"></i> Game Rules</h3>
+
+      <div class="zine-rules-grid">
+        <div class="zine-rules-card">
+          <h4><i class="fas fa-search" style="color:#d4a843"></i> Treasure Hunt</h4>
+          <ul>
+            <li><!-- USER: Write TH rules here --></li>
+          </ul>
+        </div>
+        <div class="zine-rules-card">
+          <h4><i class="fas fa-dice" style="color:#6ba3a5"></i> Board Game</h4>
+          <ul>
+            <li><!-- USER: Write board game rules here --></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="zine-filter-bar" id="zine-filters"></div>
@@ -2172,7 +2229,7 @@ permalink: /quacks/
 </script>
 <script>
 (function () {
-  var target = new Date('2026-10-11T00:00:00+05:30').getTime();
+  var target = new Date('2026-10-11T10:00:00+05:30').getTime();
   var daysEl = document.getElementById('cd-days');
   var hoursEl = document.getElementById('cd-hours');
   var minsEl = document.getElementById('cd-mins');
