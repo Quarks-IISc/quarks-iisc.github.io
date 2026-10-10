@@ -36,13 +36,21 @@ layout: null
       sent = true;
       scanner.stop().catch(function(){});
 
+      var el = document.getElementById('result');
+      el.className = 'success';
+      el.style.display = '';
+
+      if (decoded.startsWith('http://') || decoded.startsWith('https://')) {
+        el.textContent = 'Redirecting...';
+        document.getElementById('status').textContent = '';
+        window.location.href = decoded;
+        return;
+      }
+
       var label = decoded;
       try { var p = JSON.parse(decoded); if (p.team_name) label = p.team_name; } catch(e){}
 
-      var el = document.getElementById('result');
       el.textContent = 'Scanned: ' + label;
-      el.className = 'success';
-      el.style.display = '';
       document.getElementById('status').textContent = 'Sending back...';
 
       if (window.opener) {

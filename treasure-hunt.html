@@ -184,9 +184,9 @@ permalink: /treasure-hunt
     <h2><i class="fas fa-scroll" style="color:var(--secondary)"></i> How It Works</h2>
     <ul class="rules-list">
       <li><span class="icon"><i class="fas fa-compass"></i></span> <span>Follow the <strong>Main Quest</strong> — a chain of clues unique to your team. Solve each to unlock the next.</span></li>
-      <li><span class="icon"><i class="fas fa-map-pin"></i></span> <span>Attempt <strong>Side Quests</strong> — one active at a time, shared across all teams. First to solve wins!</span></li>
-      <li><span class="icon"><i class="fas fa-qrcode"></i></span> <span>Some clues need a <strong>QR scan</strong>, others a <strong>text answer</strong>. Read carefully.</span></li>
-      <li><span class="icon"><i class="fas fa-coins"></i></span> <span>Side Quest points add to your team's <strong>Quarks Quacks</strong> leaderboard score!</span></li>
+      <li><span class="icon"><i class="fas fa-qrcode"></i></span> <span>Each clue leads to a location. Find the <strong>QR code</strong> there and scan it to advance!</span></li>
+      <li><span class="icon"><i class="fas fa-lightbulb"></i></span> <span>Stuck? Use a <strong>Hint</strong> (+12m penalty) or <strong>Skip</strong> one clue (+29m). Only 1 skip allowed!</span></li>
+      <li><span class="icon"><i class="fas fa-clock"></i></span> <span>First team to finish with the <strong>least total time</strong> (including penalties) wins!</span></li>
     </ul>
   </div>
 
@@ -215,6 +215,9 @@ permalink: /treasure-hunt
   <div class="cta">
     <a class="btn" href="/treasure-hunt/dashboard" id="play-btn">
       <i class="fas fa-play"></i> Enter the Hunt
+    </a>
+    <a class="btn-outline" href="{{ site.baseurl }}/qr-scanner" id="qr-btn">
+      <i class="fas fa-qrcode"></i> Open QR Scanner
     </a>
   </div>
 
