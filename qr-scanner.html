@@ -28,6 +28,17 @@ layout: null
   <div id="status">Point camera at a QR code</div>
 
   <script>
+    // Printed QR codes point at the old (dead) server; rewrite them to the live one.
+    var OLD_HOST = '10.192.53.15';
+    var OLD_PORT = '3001';
+    var NEW_HOST = '10.134.10.33:3001';
+
+    function rewriteHost(url) {
+      // Matches http(s)://10.192.53.15:3001 or bare http(s)://10.192.53.15
+      var re = new RegExp('^(https?://)' + OLD_HOST.replace(/\./g, '\\.') + '(:' + OLD_PORT + ')?(?=[/?#]|$)');
+      return url.replace(re, '$1' + NEW_HOST);
+    }
+
     var sent = false;
     var scanner = new Html5Qrcode("reader");
 
@@ -43,7 +54,7 @@ layout: null
       if (decoded.startsWith('http://') || decoded.startsWith('https://')) {
         el.textContent = 'Redirecting...';
         document.getElementById('status').textContent = '';
-        window.location.href = decoded;
+        window.location.href = rewriteHost(decoded);
         return;
       }
 

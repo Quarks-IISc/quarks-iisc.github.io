@@ -213,7 +213,7 @@ permalink: /treasure-hunt
   </div>
 
   <div class="cta">
-    <a class="btn" href="/treasure-hunt/dashboard" id="play-btn">
+    <a class="btn" href="http://10.134.10.33:3001/treasure-hunt/dashboard" id="play-btn">
       <i class="fas fa-play"></i> Enter the Hunt
     </a>
     <a class="btn-outline" href="{{ site.baseurl }}/qr-scanner" id="qr-btn">
@@ -224,9 +224,7 @@ permalink: /treasure-hunt
   <p class="back-link"><a href="{{ site.baseurl }}/quacks"><i class="fas fa-arrow-left"></i> Back to Quarks Quacks</a></p>
 
   <script>
-    var host = window.location.hostname;
-    var port = 3001;
-    document.getElementById('play-btn').href = 'http://' + host + ':' + port + '/treasure-hunt/dashboard';
+    document.getElementById('play-btn').href = 'http://10.134.10.33:3001/treasure-hunt/dashboard';
   </script>
 </body>
 </html>
