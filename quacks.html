@@ -488,6 +488,20 @@ permalink: /quacks/
   .qq-rank { font-family: "Caveat", cursive; font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--heading-color); width: 2rem; }
   .qq-team { font-weight: 600; white-space: nowrap; }
   .qq-score { white-space: nowrap; font-weight: 600; }
+  .qq-all { margin-top: 0.8rem; }
+  .qq-all summary {
+    display: inline-block; cursor: pointer; list-style: none;
+    padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600;
+    color: var(--heading-color);
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 6px;
+  }
+  .qq-all summary::-webkit-details-marker { display: none; }
+  .qq-all summary::after { content: " \25BE"; }
+  .qq-all[open] summary::after { content: " \25B4"; }
+  .qq-all[open] summary { margin-bottom: 0.6rem; }
+  .qq-all-scroll { max-height: 420px; overflow-y: auto; }
+  .qq-dq td { text-decoration: line-through; opacity: 0.55; }
+  .qq-dq-tag { display: inline-block; text-decoration: none; color: #c47a6a; font-weight: 700; }
   .qq-results-thanks { margin-top: 1rem; font-size: 0.92rem; color: var(--text-muted); }
 
   /* ---- the invitation into the pond ---- */
@@ -2069,8 +2083,72 @@ permalink: /quacks/
           <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td><td class="qq-score">5100</td></tr>
           <tr><td class="qq-rank">2</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td><td class="qq-score">4400</td></tr>
           <tr><td class="qq-rank">3</td><td class="qq-team">Quacka doodle doo</td><td>Arpit, Mradul</td><td class="qq-score">3750</td></tr>
+          <tr><td class="qq-rank">4</td><td class="qq-team">Epsilon-Delta</td><td>Vadika Dubey, Kamakhya, Manali</td><td class="qq-score">3500</td></tr>
+          <tr><td class="qq-rank">5</td><td class="qq-team">chikni chameli</td><td>Sankalp, Aditey</td><td class="qq-score">3105</td></tr>
         </tbody>
       </table>
+      <details class="qq-all">
+        <summary>See all scores</summary>
+        <div class="qq-all-scroll"><table class="qq-results-table">
+          <thead><tr><th>#</th><th>Team</th><th>Members</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td><td class="qq-score">5100</td></tr>
+            <tr><td class="qq-rank">2</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td><td class="qq-score">4400</td></tr>
+            <tr><td class="qq-rank">3</td><td class="qq-team">Quacka doodle doo</td><td>Arpit, Mradul</td><td class="qq-score">3750</td></tr>
+            <tr><td class="qq-rank">4</td><td class="qq-team">Epsilon-Delta</td><td>Vadika Dubey, Kamakhya, Manali</td><td class="qq-score">3500</td></tr>
+            <tr><td class="qq-rank">5</td><td class="qq-team">chikni chameli</td><td>Sankalp, Aditey</td><td class="qq-score">3105</td></tr>
+            <tr><td class="qq-rank">6</td><td class="qq-team">Gesundheit</td><td>Mannat Chaudhary, Shrikrishna Hegde, Sriram R</td><td class="qq-score">3000</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">lolqwe</td><td>advait, nandakishore, advik</td><td class="qq-score">2900</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">Team ASR</td><td>Samyukta, Reha Shah, Akshat</td><td class="qq-score">2900</td></tr>
+            <tr><td class="qq-rank">9</td><td class="qq-team">uwu</td><td>Aradhya</td><td class="qq-score">2750</td></tr>
+            <tr><td class="qq-rank">10</td><td class="qq-team">VRS</td><td>Vishrut R Srinivas</td><td class="qq-score">2500</td></tr>
+            <tr><td class="qq-rank">11</td><td class="qq-team">Like we know</td><td>Aniket Rao, Pranav Aditya Bharadwaj</td><td class="qq-score">1900</td></tr>
+            <tr><td class="qq-rank">12</td><td class="qq-team">VAN</td><td>Vibha, Nandana, Amirdha Varshni</td><td class="qq-score">1750</td></tr>
+            <tr><td class="qq-rank">13</td><td class="qq-team">Plancks</td><td>Sreeja, Anjana, Anshika</td><td class="qq-score">1500</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">Alok</td><td>Alok</td><td class="qq-score">1400</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">LateArrivals</td><td>Darshan, Chinmay, Yugant</td><td class="qq-score">1400</td></tr>
+            <tr><td class="qq-rank">16</td><td class="qq-team">Plath</td><td>Shreya</td><td class="qq-score">1350</td></tr>
+            <tr><td class="qq-rank">17</td><td class="qq-team">Higgs</td><td>Rajpreet, Prashant, Arijit</td><td class="qq-score">1300</td></tr>
+            <tr><td class="qq-rank">18</td><td class="qq-team">NOSFERATU</td><td>Divya, Akshita, Avani</td><td class="qq-score">1200</td></tr>
+            <tr><td class="qq-rank">19</td><td class="qq-team">187 gang</td><td>Manikya, Nikhil, Prabhnoor</td><td class="qq-score">1050</td></tr>
+            <tr><td class="qq-rank">20</td><td class="qq-team">Beak breakers</td><td>Manjaree, Subraja, Jyoshna</td><td class="qq-score">650</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Anj</td><td>Anjali</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Baba Ramdev</td><td>Krishna</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Pila-pila pikachu</td><td>Naman</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">white1rose</td><td>Idris, Ayan, Garv</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">25</td><td class="qq-team">Rocket</td><td>Nipun Gupta, Harshit gharewal, S janardan</td><td class="qq-score">300</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Advait</td><td>Advait</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">AMA</td><td>Anushka, Abhishek, Manasa</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Champion</td><td>Nijasree</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Code</td><td>Nijasree</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">HeHe</td><td>Arnav Shastri</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Hello</td><td>Mihir</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">INSPIRE</td><td>Marasu Thanvi, V.S.S.Lakshmu</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Kasukabe defence group</td><td>K Chetan Varun, Arun, Viral</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Lioooor</td><td>A, B, C</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Mesons</td><td>Srishti, Tanvi</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">notsofunny</td><td>S K pritika, Ashwanth</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Paradise</td><td>Akshitha, Mopal Sathwika, Suma Geethika</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Paradise</td><td>Akshitha, Mopal Sathwika, Suma Geethika</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">paradisee</td><td>Mopal Sathwika, Suma Geethika, Akshitha Dornala</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Peace</td><td>Reethikka S S</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">quack</td><td>Advait, nandakishore, advik</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Quack Attack</td><td>Manauv Vyas, Sarath Chandar M, Dyutith N</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Quacking Werewolves</td><td>Ahaan Duggal, Harshvardhan Singh, Krishn Anantharam</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Seven</td><td>SasiRekha</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Solo Bolo</td><td>Baijayanta Nag</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Soya sticks</td><td>Laksman, Jai</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">soya stix</td><td>Jai, lsks, Vishva</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Spidey</td><td>Raghav J Mallen</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Starbucks Payasam</td><td>Abhishek</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Team Name</td><td>Sameer, Nikunj, Ruchit</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Team Rocket Original</td><td>Nipun Gupta, Harshit, Janardan</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">the.grims</td><td>Agrim Gupta</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">53</td><td class="qq-team">Kumara</td><td>Kumaraswamy</td><td class="qq-score">0</td></tr>
+            <tr><td class="qq-rank">54</td><td class="qq-team">Gugugaga</td><td>Parth</td><td class="qq-score">-5200</td></tr>
+          </tbody>
+        </table></div>
+      </details>
     </div>
 
     <div class="qq-results-board">
@@ -2083,6 +2161,35 @@ permalink: /quacks/
           <tr><td class="qq-rank">3</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td></tr>
         </tbody>
       </table>
+      <details class="qq-all">
+        <summary>See all scores</summary>
+        <div class="qq-all-scroll"><table class="qq-results-table">
+          <thead><tr><th>#</th><th>Team</th><th>Members</th></tr></thead>
+          <tbody>
+            <tr class="qq-dq"><td class="qq-rank">&mdash;</td><td class="qq-team">chikni chameli <span class="qq-dq-tag">[RageBait]</span></td><td>Sankalp, Aditey</td></tr>
+            <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td></tr>
+            <tr><td class="qq-rank">2</td><td class="qq-team">LateArrivals</td><td>Darshan, Chinmay, Yugant</td></tr>
+            <tr><td class="qq-rank">3</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td></tr>
+            <tr><td class="qq-rank">4</td><td class="qq-team">soya stix</td><td>Jai, lsks, Vishva</td></tr>
+            <tr><td class="qq-rank">5</td><td class="qq-team">Quack Attack</td><td>Manauv Vyas, Sarath Chandar M, Dyutith N</td></tr>
+            <tr><td class="qq-rank">6</td><td class="qq-team">Quacking Werewolves</td><td>Ahaan Duggal, Harshvardhan Singh, Krishn Anantharam</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">Kasukabe defence group</td><td>K Chetan Varun, Arun, Viral</td></tr>
+            <tr><td class="qq-rank">8</td><td class="qq-team">Rocket</td><td>Nipun Gupta, Harshit gharewal, S janardan</td></tr>
+            <tr><td class="qq-rank">9</td><td class="qq-team">Epsilon-Delta</td><td>Vadika Dubey, Kamakhya, Manali</td></tr>
+            <tr><td class="qq-rank">10</td><td class="qq-team">Higgs</td><td>Rajpreet, Prashant, Arijit</td></tr>
+            <tr><td class="qq-rank">11</td><td class="qq-team">187 gang</td><td>Manikya, Nikhil, Prabhnoor</td></tr>
+            <tr><td class="qq-rank">12</td><td class="qq-team">paradisee</td><td>Mopal Sathwika, Suma Geethika, Akshitha Dornala</td></tr>
+            <tr><td class="qq-rank">13</td><td class="qq-team">white1rose</td><td>Idris, Ayan, Garv</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">Plancks</td><td>Sreeja, Anjana, Anshika</td></tr>
+            <tr><td class="qq-rank">15</td><td class="qq-team">HeHe</td><td>Arnav Shastri</td></tr>
+            <tr><td class="qq-rank">16</td><td class="qq-team">INSPIRE</td><td>Marasu Thanvi, V.S.S.Lakshmu</td></tr>
+            <tr><td class="qq-rank">17</td><td class="qq-team">Like we know</td><td>Aniket Rao, Pranav Aditya Bharadwaj</td></tr>
+            <tr><td class="qq-rank">18</td><td class="qq-team">lolqwe</td><td>advait, nandakishore, advik</td></tr>
+            <tr><td class="qq-rank">19</td><td class="qq-team">Seven</td><td>SasiRekha</td></tr>
+            <tr><td class="qq-rank">20</td><td class="qq-team">VAN</td><td>Vibha, Nandana, Amirdha Varshni</td></tr>
+          </tbody>
+        </table></div>
+      </details>
     </div>
     <p class="qq-results-thanks">Thank you to every team that quacked with us on 11 October!</p>
   </div>
