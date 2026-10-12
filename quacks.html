@@ -2798,11 +2798,41 @@ permalink: /quacks/
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       if (typeof initCarousel !== "function") return;
-      initCarousel("qq-moments-carousel", "qq-moments-track", {
-        autoScroll: true, scrollSpeed: 1, scrollAmount: 320,
-      });
-      initCarousel("qq-th-carousel", "qq-th-track", {
-        autoScroll: true, scrollSpeed: 1, scrollAmount: 320,
+
+      // initCarousel copies the track so the auto-scroll can wrap without a
+      // visible jump: at the halfway mark the next copy is pixel-identical to
+      // the start. Its own loop respects that boundary, but the arrow buttons
+      // scroll straight past it, which walks you into the copy and makes the
+      // gallery look like it holds every photo twice. Fold manual paging back
+      // into the first half — the two halves are identical, so the correction
+      // cannot be seen.
+      function loopArrows(containerId) {
+        var carousel = document.getElementById(containerId);
+        var name = "scroll_" + containerId.replace(/-/g, "_");
+        var step = window[name];
+        if (!carousel || typeof step !== "function") return;
+        var track = carousel.querySelector(".carousel-track");
+
+        window[name] = function (direction) {
+          var half = track ? track.scrollWidth / 2 : 0;
+          // Rewind before paging left off the front, so there is somewhere to go.
+          if (half && direction === "left" && carousel.scrollLeft < 1) {
+            carousel.scrollLeft = half;
+          }
+          step(direction);
+          if (!half) return;
+          // scrollBy is smooth, so normalise once it has come to rest.
+          setTimeout(function () {
+            if (carousel.scrollLeft >= half) carousel.scrollLeft -= half;
+          }, 500);
+        };
+      }
+
+      ["qq-moments-carousel", "qq-th-carousel"].forEach(function (id) {
+        initCarousel(id, id.replace("-carousel", "-track"), {
+          autoScroll: true, scrollSpeed: 1, scrollAmount: 320,
+        });
+        loopArrows(id);
       });
     });
   </script>
