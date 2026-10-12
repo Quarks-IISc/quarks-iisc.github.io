@@ -435,6 +435,61 @@ permalink: /quacks/
     color: var(--heading-color);
   }
 
+  /* ---- results (after the event) ---- */
+  .qq-results { max-width: 760px; margin: 2.5rem auto 1rem; text-align: center; }
+  .qq-results-grand {
+    padding: 1.4rem 1rem 1.2rem;
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    border-radius: 6px;
+    background: var(--card-bg, rgba(255,255,255,0.06));
+  }
+  .qq-results-kicker {
+    margin: 0;
+    font-family: "Caveat", cursive;
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .qq-results-winner {
+    margin: 0.1rem 0 0.2rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2.4rem, 8vw, 3.4rem);
+    line-height: 1.1;
+    color: var(--heading-color);
+  }
+  .qq-results-members { margin: 0; font-size: 0.92rem; color: var(--text-muted); }
+  .qq-results-prize { margin: 0.8rem 0 0; font-size: 0.98rem; }
+  .qq-results-board {
+    margin-top: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    border-radius: 6px;
+    text-align: left;
+    overflow-x: auto;
+  }
+  .qq-results-board h3 {
+    margin: 0 0 0.6rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .qq-results-board h3 small { font-family: "Inter", sans-serif; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+  .qq-results-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .qq-results-table th {
+    text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); font-weight: 600; padding: 0 0.6rem 0.4rem 0;
+  }
+  .qq-results-table td {
+    padding: 0.5rem 0.6rem 0.5rem 0;
+    border-top: 1px solid var(--border-color, rgba(255,255,255,0.08));
+    vertical-align: top;
+  }
+  .qq-rank { font-family: "Caveat", cursive; font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--heading-color); width: 2rem; }
+  .qq-team { font-weight: 600; white-space: nowrap; }
+  .qq-score { white-space: nowrap; font-weight: 600; }
+  .qq-results-thanks { margin-top: 1rem; font-size: 0.92rem; color: var(--text-muted); }
+
   /* ---- the invitation into the pond ---- */
   .pond-invite {
     text-align: center;
@@ -1997,17 +2052,39 @@ permalink: /quacks/
     <p class="quack-subtitle" id="creative-carnival" style="cursor:pointer" title="Click me!">Creative Carnival</p>
   </div>
 
-  <div class="qq-countdown" id="qq-countdown">
-    <div class="qq-countdown-label">Quacks begins in</div>
-    <div class="qq-countdown-boxes" id="countdown-boxes">
-      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-days">--</span><span class="qq-countdown-unit">Days</span></div>
-      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-hours">--</span><span class="qq-countdown-unit">Hours</span></div>
-      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-mins">--</span><span class="qq-countdown-unit">Minutes</span></div>
-      <div class="qq-countdown-box"><span class="qq-countdown-num" id="cd-secs">--</span><span class="qq-countdown-unit">Seconds</span></div>
+  <!-- results: Quarks Quacks 2026 is over -->
+  <div class="qq-results">
+    <div class="qq-results-grand">
+      <p class="qq-results-kicker">Grand Prize Winner</p>
+      <h3 class="qq-results-winner">Idk</h3>
+      <p class="qq-results-members">Nihal &middot; Bhargav &middot; Avyay</p>
+      <p class="qq-results-prize">Takes home <strong>1 screen projector</strong>, <strong>2 bean bags</strong> and <strong>1 board game</strong></p>
     </div>
-    <a href="{{ site.baseurl }}/quacks-day/" class="qq-countdown-link">
-      Visit Quacks Day <span style="font-size:0.85em;color:var(--text-muted)">(IISc Intranet only)</span>
-    </a>
+
+    <div class="qq-results-board">
+      <h3>Main Event</h3>
+      <table class="qq-results-table">
+        <thead><tr><th>#</th><th>Team</th><th>Members</th><th>Points</th></tr></thead>
+        <tbody>
+          <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td><td class="qq-score">5100</td></tr>
+          <tr><td class="qq-rank">2</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td><td class="qq-score">4400</td></tr>
+          <tr><td class="qq-rank">3</td><td class="qq-team">Quacka doodle doo</td><td>Arpit, Mradul</td><td class="qq-score">3750</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="qq-results-board">
+      <h3>Treasure Hunt <small>Duck Duck Loot</small></h3>
+      <table class="qq-results-table">
+        <thead><tr><th>#</th><th>Team</th><th>Members</th></tr></thead>
+        <tbody>
+          <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td></tr>
+          <tr><td class="qq-rank">2</td><td class="qq-team">LateArrivals</td><td>Darshan, Chinmay, Yugant</td></tr>
+          <tr><td class="qq-rank">3</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="qq-results-thanks">Thank you to every team that quacked with us on 11 October!</p>
   </div>
 
   <div class="pond-invite">
@@ -2231,59 +2308,5 @@ permalink: /quacks/
   if (duckBtn) duckBtn.addEventListener('click', trigger);
 
   document.addEventListener('pond-discover', trigger);
-})();
-</script>
-<script>
-(function () {
-  var target = new Date('2026-10-11T10:00:00+05:30').getTime();
-  var daysEl = document.getElementById('cd-days');
-  var hoursEl = document.getElementById('cd-hours');
-  var minsEl = document.getElementById('cd-mins');
-  var secsEl = document.getElementById('cd-secs');
-  var wrap = document.getElementById('qq-countdown');
-
-  function pad(n) { return n < 10 ? '0' + n : n; }
-
-  function tick() {
-    var now = Date.now();
-    var diff = target - now;
-    if (diff <= 0) {
-      wrap.innerHTML = '<div class="qq-countdown-done">Quacks is live!</div>';
-      return;
-    }
-    var d = Math.floor(diff / 86400000);
-    var h = Math.floor((diff % 86400000) / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-    daysEl.textContent = pad(d);
-    hoursEl.textContent = pad(h);
-    minsEl.textContent = pad(m);
-    secsEl.textContent = pad(s);
-  }
-
-  tick();
-  setInterval(tick, 1000);
-
-  // Click to shuffle animation
-  document.getElementById('countdown-boxes').addEventListener('click', function (e) {
-    var box = e.target.closest('.qq-countdown-box');
-    if (!box) return;
-    var numEl = box.querySelector('.qq-countdown-num');
-    if (!numEl || numEl.dataset.shuffling) return;
-    numEl.dataset.shuffling = '1';
-    var real = numEl.textContent;
-    var count = 0;
-    var iv = setInterval(function () {
-      numEl.textContent = pad(Math.floor(Math.random() * 100));
-      numEl.style.color = 'hsl(' + (count * 30 % 360) + ', 60%, 65%)';
-      count++;
-      if (count >= 10) {
-        clearInterval(iv);
-        numEl.textContent = real;
-        numEl.style.color = '';
-        delete numEl.dataset.shuffling;
-      }
-    }, 60);
-  });
 })();
 </script>
