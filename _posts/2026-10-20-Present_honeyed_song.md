@@ -8,6 +8,7 @@ categories: [poems]
 image: "/assets/images/Poems/present_song.jpg"
 excerpt: "Today’s bitter moments may become tomorrow’s sweetest memories. Perhaps the present is a gift we only learn to cherish when it becomes the past."
 all: true
+featured: true
 ---
 
 “Present, present, what art thou?” <br><br>

@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/celebrating_ordinary.jpg"
 excerpt: "Life isn’t made up of milestones alone. Sometimes, the smallest moments deserve a little confetti too."
 all: true
+featured: true
 ---
 
 Ever wondered what happens to all the moments that don't come with decorations? 

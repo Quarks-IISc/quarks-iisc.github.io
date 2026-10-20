@@ -8,7 +8,6 @@ categories: [poems]
 image: "/assets/images/Poems/a_walk_of_life.jpg"
 excerpt: "From misty mornings to moonlit dusks, life finds its rhythm in the little things."
 all: true
-featured: true
 ---
 
 A lazy walk through a hazy morn' <br>

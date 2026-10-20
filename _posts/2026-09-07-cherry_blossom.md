@@ -6,7 +6,6 @@ categories: [pictures]
 image: "/assets/images/Pictures/cherry_blossom.jpg"
 excerpt: ""
 description: "My first acrylic painting!"
-featured: true
 ---
 
 A serence waterfall, shades of pink in cherry blossom whose branches make up a sihoutte.

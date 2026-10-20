@@ -6,6 +6,7 @@ categories: [pictures]
 image: "/assets/images/Pictures/echofceleb.jpg"
 excerpt: ""
 description: "Rhythm, Passion, and Celebration"
+featured: true
 ---
 
 

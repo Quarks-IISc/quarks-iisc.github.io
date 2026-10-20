@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/letter_to_older.jpg"
 excerpt: "A letter from the future, reminding a younger self to stay curious, keep asking questions, and never lose faith in the journey."
 all: true
+featured: true
 ---
 
 **Hey kiddo** (and I mean it, literally\!),

@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/well-oiled-train.jpg"
 excerpt: "Every voice has its place, every note its purpose. And somewhere between the struggle and the harmony, the magic finally clicks."
 all: true
+featured: true
 ---
 
 For most people on campus, November marks the culmination of a busy semester, with the final challenge of proving oneself in the end-sem exams. Meanwhile, for a particular bunch, even with those same responsibilities, it is a time akin to magic. It’s not so much the “woah\!” accompanying the bunny being pulled out of the hat, but rather the complete experience of a magic trick. The initial feeling of smugness, like you cannot be challenged; the frustration of being unable to understand something right in front of you; and finally making sense of it, which somehow feels even more magical than merely observing a trick in the first place. 

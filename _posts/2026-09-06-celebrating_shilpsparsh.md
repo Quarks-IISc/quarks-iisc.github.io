@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Stories/celebrating_shilpsparsh.jpg"
 excerpt: "Years may pass, but some classrooms never really leave us. A journey back to ShilpSparsh and the children of T. Begur, where knowledge crossed boundaries, friendships took root, and learning became something beautifully mutual."
 all: true
-featured: true
 ---
 In all my school years, there were really only two days I consistently looked forward to. One, of course, was everyone’s favorite, the annual school trip – it’s difficult to remain unexcited by the prospect of a day within the circle of classmates and teachers but beyond the confines of classrooms and lectures. The second was a day, albeit less universally experienced, but one that never failed to have a profound impact on me – the *ShilpSparsh* experience. And while I remain conscious of the fact that this is the most appropriate juncture to get you all acquainted with ShilpSparsh, I also am starting to think that defining it to a non-Shilpite (Shilpite: alumnus from Vidyashilp Academy, like myself) is quite a tricky task – particularly when I could find no helpful words on the school’s website even after scouring through it for a quarter hour.
 

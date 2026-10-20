@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Stories/student-suicide/Picture1.jpg"
 excerpt: "A student is more thsan their grades, their research, their career, or their failures. This piece explores how academic pressure, financial burdens, isolation, and a lack of student representation can turn an institution of learning into a source of distress."
 all: true
-featured: true
 ---
 
 The two recent tragic student suicides on campus have greatly upset all of us. Student suicides are not just a problem at our campus; they are widespread across IITs and IISERs.

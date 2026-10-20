@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Stories/part_unread.jpg"
 excerpt: "Sometimes, all it takes to keep a story going is one more morning, one unfinished conversation, or one reason to see what happens next. At twenty-one, I am learning that an unfinished story is not a failed one."
 all: true
-featured: true
 ---
 
 I turn twenty-one.
