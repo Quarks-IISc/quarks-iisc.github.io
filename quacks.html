@@ -105,10 +105,15 @@ permalink: /quacks/
     to { opacity: 1; transform: scale(1); }
   }
 
-  /* "Presenting" kicker in splash */
+  /* Splash kicker. The event has been and gone, so the old "Presenting" is
+     struck out on screen and the thank-you lands under it. */
   .qq-splash-kicker {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
     margin: 0 0 0.8rem;
     font-family: "Playfair Display", serif;
     font-size: clamp(1.6rem, 5vw, 2.4rem);
@@ -124,6 +129,39 @@ permalink: /quacks/
   @keyframes kicker-fade {
     from { opacity: 0; transform: translateY(14px) scale(0.9); letter-spacing: 0.5em; }
     to   { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.2em; }
+  }
+  .qq-splash-struck {
+    position: relative;
+    /* 0.6x the kicker, written out rather than in em so the floor is legible
+       at a glance: 15.4px at the smallest, not the 9.6px an em implies. */
+    font-size: clamp(0.96rem, 3vw, 1.44rem);
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+  }
+  /* Drawn rather than text-decoration, so the rule is pixelated like the rest
+     of the page and can be swiped on instead of just being there. */
+  .qq-splash-struck::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    top: 52%;
+    height: 3px;
+    background-image: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 5px);
+    image-rendering: pixelated;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: splash-strike 0.45s ease 0.8s forwards;
+  }
+  @keyframes splash-strike { to { transform: scaleX(1); } }
+  .qq-splash-thanks {
+    color: #ffc93c;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: splash-thanks 0.5s ease 1.2s forwards;
+  }
+  @keyframes splash-thanks {
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* poster card flies up */
@@ -145,6 +183,34 @@ permalink: /quacks/
   }
   @keyframes poster-rise {
     to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .qq-splash-sub {
+    display: block;
+    position: relative;
+    z-index: 2;
+    margin: 0.6rem 0 0;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-style: italic;
+    font-weight: 400;
+    color: transparent;
+    background: linear-gradient(90deg, #ffc93c, #fff, #ffc93c);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: sub-rise 0.8s ease forwards 0.85s, sub-shimmer 3s linear infinite 1.6s;
+  }
+  @keyframes sub-rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sub-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
   }
 
   /* date tag */
@@ -260,6 +326,10 @@ permalink: /quacks/
     text-align: center;
   }
   .quack-kicker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
     margin: 0 0 1rem;
     font-family: "Playfair Display", serif;
     font-size: clamp(1.2rem, 3vw, 1.6rem);
@@ -269,6 +339,39 @@ permalink: /quacks/
     text-transform: uppercase;
     color: var(--heading-color);
     opacity: 0.7;
+  }
+  .quack-kicker s {
+    position: relative;
+    font-size: clamp(0.78rem, 1.9vw, 1rem);
+    opacity: 0.6;
+    text-decoration: none;
+  }
+  .quack-kicker s::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    top: 52%;
+    height: 2px;
+    background-image: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 5px);
+    image-rendering: pixelated;
+  }
+  .quack-subtitle {
+    display: block;
+    margin: 0.1rem 0 1rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-align: center;
+    color: transparent;
+    background: linear-gradient(90deg, var(--edge), var(--heading-color), var(--edge));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: sub-shimmer 4s linear infinite;
   }
   .quack-banner {
     display: block;
@@ -306,6 +409,451 @@ permalink: /quacks/
   @media (prefers-reduced-motion: reduce) {
     .quack-banner { animation: none; transform: none; }
   }
+
+
+
+  /* ---- results (after the event) ---- */
+  .qq-results { max-width: 760px; margin: 2.5rem auto 1rem; text-align: center; }
+
+  /* grand prize animated card */
+  .qq-results-grand {
+    position: relative;
+    padding: 2.4rem 1.5rem 2rem;
+    border-radius: 16px;
+    background:
+      radial-gradient(ellipse 120% 80% at 20% 10%, rgba(255,215,0,0.06), transparent 50%),
+      radial-gradient(ellipse 100% 90% at 80% 90%, rgba(255,122,89,0.05), transparent 50%),
+      var(--card-bg, rgba(255,255,255,0.06));
+    overflow: hidden;
+  }
+  .qq-results-grand::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 3px;
+    background: linear-gradient(135deg, #ffd700, #ff7a59, #e040fb, #00e5ff, #ffd700, #ff7a59);
+    background-size: 400% 400%;
+    animation: grand-glow 5s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  @keyframes grand-glow {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 0%; }
+  }
+  .qq-results-grand::after {
+    content: '';
+    position: absolute;
+    top: -80%;
+    left: -80%;
+    width: 260%;
+    height: 260%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.06), transparent, rgba(255,122,89,0.04), transparent);
+    animation: grand-sweep 8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes grand-sweep { to { transform: rotate(360deg); } }
+  .qq-results-gift {
+    font-size: 2.6rem;
+    display: inline-block;
+    animation: gift-bounce 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(255,215,0,0.3));
+  }
+  @keyframes gift-bounce {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+  }
+  .qq-results-kicker {
+    position: relative;
+    margin: 0.6rem 0 0;
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .qq-results-winner {
+    position: relative;
+    margin: 0.3rem 0 0.3rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2.8rem, 9vw, 4rem);
+    line-height: 1.05;
+    font-weight: 700;
+    font-style: italic;
+    color: transparent;
+    background: linear-gradient(135deg, #ffd700, #fff, #ffd700);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: winner-shimmer 3s ease infinite;
+    filter: drop-shadow(0 2px 8px rgba(255,215,0,0.25));
+  }
+  @keyframes winner-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .qq-results-members {
+    position: relative;
+    margin: 0.2rem 0 0;
+    font-family: "Caveat", cursive;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    opacity: 0.8;
+  }
+  .qq-results-prize {
+    position: relative;
+    margin: 1rem 0 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.92rem;
+    display: inline-block;
+    background: rgba(var(--line), 0.06);
+    border-radius: 8px;
+    clip-path: var(--pixel-corner);
+  }
+
+  /* confetti canvas */
+  .qq-confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .qq-confetti-piece {
+    position: absolute;
+    top: -12px;
+    width: 8px;
+    height: 12px;
+    animation: confetti-fall linear infinite;
+  }
+  @keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(0) translateX(0) rotate(0deg); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(var(--fall)) translateX(var(--drift)) rotate(var(--spin)); }
+  }
+
+  /* leaderboard sections */
+  .qq-results-board {
+    margin-top: 1.2rem;
+    padding: 1.2rem;
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+    border-radius: 10px;
+    background: var(--card-bg, rgba(255,255,255,0.04));
+    text-align: left;
+  }
+  .qq-results-board h3 {
+    margin: 0 0 0.8rem;
+    font-family: "Caveat", cursive;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--heading-color);
+  }
+  .qq-results-board h3 small { font-family: "Inter", sans-serif; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+
+  /* card-style leaderboard rows */
+  .qq-lb-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    clip-path: var(--pixel-corner);
+    background: rgba(var(--line), 0.05);
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: qq-row-in 0.4s ease forwards;
+    transition: transform 0.2s ease;
+  }
+  .qq-lb-row:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+  .qq-lb-row:nth-child(1) { animation-delay: 0.1s; }
+  .qq-lb-row:nth-child(2) { animation-delay: 0.25s; }
+  .qq-lb-row:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes qq-row-in {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* gold / silver / bronze */
+  .qq-lb-row.is-gold {
+    background: linear-gradient(135deg, rgba(255,215,0,0.18) 0%, rgba(255,170,0,0.08) 100%);
+    border: 1px solid rgba(255,215,0,0.25);
+  }
+  .qq-lb-row.is-silver {
+    background: linear-gradient(135deg, rgba(192,192,192,0.15) 0%, rgba(169,169,169,0.06) 100%);
+    border: 1px solid rgba(192,192,192,0.2);
+  }
+  .qq-lb-row.is-bronze {
+    background: linear-gradient(135deg, rgba(205,127,50,0.15) 0%, rgba(180,110,40,0.06) 100%);
+    border: 1px solid rgba(205,127,50,0.2);
+  }
+
+  .qq-lb-icon {
+    font-size: 1.3rem;
+    flex: 0 0 auto;
+    width: 2rem;
+    text-align: center;
+  }
+  .qq-lb-info { flex: 1; min-width: 0; }
+  .qq-lb-team {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--heading-color);
+    line-height: 1.2;
+  }
+  .qq-lb-members {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+  .qq-lb-score {
+    flex: 0 0 auto;
+    font-family: "Caveat", cursive;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--heading-color);
+  }
+  .qq-results-thanks { margin-top: 1.2rem; font-size: 0.92rem; color: var(--text-muted); }
+
+  /* winner photo + grand prize — wide, centred */
+  .qq-results-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    max-width: 1100px;
+    margin: 2.5rem auto 1.5rem;
+    padding: 0 1rem;
+  }
+  .qq-results-row .qq-results-grand {
+    flex: 0 1 520px;
+    min-width: 0;
+    text-align: center;
+  }
+  /* arrow bridge between card and photo */
+  .qq-results-bridge {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    align-self: center;
+  }
+  .qq-results-bridge-label {
+    font-family: "Caveat", cursive;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transform: rotate(-4deg);
+  }
+  .qq-results-bridge svg {
+    width: 96px;
+    height: 34px;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .qq-results-winner-photo-wrap {
+    flex: 0 0 auto;
+    text-align: center;
+  }
+  .qq-results-winner-photo {
+    width: 300px;
+    height: 380px;
+    object-fit: cover;
+    border: 7px solid #fff;
+    border-bottom-width: 26px;
+    border-radius: 3px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+    transform: rotate(4deg);
+    transition: transform 0.3s ease;
+  }
+  .qq-results-winner-photo:hover {
+    transform: rotate(0deg) scale(1.04);
+  }
+  @media (max-width: 700px) {
+    .qq-results-row {
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .qq-results-bridge {
+      flex-direction: row;
+      gap: 8px;
+    }
+    .qq-results-bridge svg {
+      width: 50px;
+      height: 24px;
+      transform: rotate(90deg);
+    }
+    .qq-results-bridge-label {
+      transform: none;
+    }
+    .qq-results-winner-photo {
+      width: 240px;
+      height: 310px;
+    }
+  }
+
+  /* gallery carousels — site-standard carousel, glossy photo tiles */
+  .qq-gallery { max-width: 1100px; margin: 3.5rem auto 0; }
+  /* A shared perspective on the rail, so every tile is seen from the same
+     camera rather than each turning about its own centre. */
+  .qq-gallery .carousel-track { perspective: 1400px; padding: 14px 0 34px; }
+  /* Width comes from the photo. One fixed height keeps the row even while
+     portrait and landscape shots stay their own shape — no letterbox bars. */
+  .qq-gallery .carousel-item-custom {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+  }
+  figure.qq-gallery-item {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    transform: rotateY(-5deg) translateZ(0);
+    transform-style: preserve-3d;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.18),
+      0 10px 20px -6px rgba(0,0,0,0.3),
+      0 26px 46px -18px rgba(0,0,0,0.45);
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1),
+      box-shadow 0.5s ease;
+  }
+  .qq-gallery-item:hover {
+    transform: rotateY(0deg) translateY(-8px) scale(1.03);
+    box-shadow:
+      0 4px 8px rgba(0,0,0,0.2),
+      0 16px 30px -8px rgba(0,0,0,0.34),
+      0 40px 70px -24px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+  .qq-gallery-item img {
+    display: block;
+    height: 420px;
+    width: auto;
+    max-width: none;
+  }
+  /* The glass: a fixed sheen baked into the tile, and a brighter band that
+     travels across it on hover. Both sit above the photo, below the caption. */
+  .qq-gallery-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      145deg,
+      rgba(255,255,255,0.28) 0%,
+      rgba(255,255,255,0.06) 26%,
+      transparent 48%
+    );
+    pointer-events: none;
+  }
+  .qq-gallery-item::after {
+    content: "";
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    left: -70%;
+    width: 45%;
+    z-index: 2;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      rgba(255,255,255,0.42),
+      transparent
+    );
+    transform: translateX(0) rotate(8deg);
+    pointer-events: none;
+    transition: transform 0.85s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  .qq-gallery-item:hover::after { transform: translateX(400%) rotate(8deg); }
+
+  .qq-gallery-sub {
+    margin: -0.4rem 0 0.8rem;
+    text-align: center;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  /* The name rides on the photo, over a scrim dark enough to stay legible
+     whatever is underneath it. */
+  .qq-gallery-cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    padding: 2.4rem 0.9rem 0.8rem;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.82) 0%,
+      rgba(0,0,0,0.5) 45%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+  .qq-gallery-team {
+    display: block;
+    font-family: "Playfair Display", serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+  .qq-gallery-place {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.82);
+    text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+  }
+
+  @media (max-width: 600px) {
+    .qq-gallery-item img { height: 300px; }
+    figure.qq-gallery-item { transform: none; }
+    .qq-gallery-item:hover { transform: translateY(-5px) scale(1.02); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    figure.qq-gallery-item { transform: none; transition: none; }
+    .qq-gallery-item::after { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qq-lb-row { opacity: 1; transform: none; animation: none; }
+    .qq-results-grand::before { animation: none; }
+    .qq-results-grand::after { animation: none; }
+    .qq-results-gift { animation: none; }
+  }
+  .qq-rank { font-family: "Caveat", cursive; font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--heading-color); width: 2rem; }
+  .qq-team { font-weight: 600; white-space: nowrap; }
+  .qq-score { white-space: nowrap; font-weight: 600; }
+  .qq-all { margin-top: 0.8rem; }
+  .qq-all summary {
+    display: inline-block; cursor: pointer; list-style: none;
+    padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600;
+    color: var(--heading-color);
+    border: 1px solid var(--border-color, rgba(255,255,255,0.1)); border-radius: 6px;
+  }
+  .qq-all summary::-webkit-details-marker { display: none; }
+  .qq-all summary::after { content: " \25BE"; }
+  .qq-all[open] summary::after { content: " \25B4"; }
+  .qq-all[open] summary { margin-bottom: 0.6rem; }
+  .qq-all-scroll { max-height: 420px; overflow-y: auto; }
+  .qq-dq td { text-decoration: line-through; opacity: 0.55; }
+  .qq-dq-tag { display: inline-block; text-decoration: none; color: #c47a6a; font-weight: 700; }
 
   /* ---- the invitation into the pond ---- */
   .pond-invite {
@@ -941,36 +1489,129 @@ permalink: /quacks/
     box-shadow: 0 0 0 #111;
   }
 
-  /* horizontal ticker tape — sticky between filter bar and last card */
-  .zine-ticker {
+  .zine-rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .zine-rules-card {
+    background: rgba(30, 28, 24, 0.7);
+    border: 1px solid rgba(212, 168, 67, 0.18);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+  }
+  .zine-rules-card h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    color: #f5ecd5;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .zine-rules-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.88rem;
+    color: #c8bfa0;
+    line-height: 1.7;
+  }
+  .zine-rules-card li::before {
+    content: '▸ ';
+    color: rgba(212, 168, 67, 0.5);
+  }
+  @media (max-width: 600px) {
+    .zine-rules-grid { grid-template-columns: 1fr; }
+  }
+
+  .zine-handbook-section {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .zine-handbook-heading {
+    font-family: var(--font-pixel);
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .zine-handbook-card {
+    display: inline-block;
+    text-decoration: none;
+    background: var(--card-bg, #fff);
+    border: 2px solid var(--border-color);
+    clip-path: var(--pixel-corner);
+    box-shadow: 4px 4px 0 #111;
+    transition: box-shadow 0.15s, transform 0.15s;
+    overflow: hidden;
+  }
+  .zine-handbook-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0 #111;
+  }
+  .zine-handbook-card:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0 #111;
+  }
+  .zine-handbook-thumb {
+    display: block;
+    width: 220px;
+    height: auto;
+    border-bottom: 2px solid var(--border-color);
+  }
+  .zine-handbook-dl {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-pixel);
+    font-size: 0.95rem;
+    color: var(--accent);
+  }
+  @media (max-width: 600px) {
+    .zine-handbook-thumb { width: 180px; }
+    .zine-handbook-heading { font-size: 1.2rem; }
+  }
+
+  /* ticker row — duck + tape side by side */
+  .zine-ticker-row {
     max-width: 1020px;
     margin: 0.8rem auto 0;
-    overflow: hidden;
     position: sticky;
     bottom: 1.5rem;
     z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .zine-ticker-row .egg-duck {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+    border: none;
+    border-radius: 50%;
+    background: var(--card-bg, #fff);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    animation: egg-bob 2s ease-in-out infinite;
+    transition: transform 0.2s;
+  }
+  .zine-ticker-row .egg-duck:hover { transform: scale(1.15); }
+  .zine-ticker-row .egg-duck:active { transform: scale(0.9); }
+  .zine-ticker-row .egg-duck img { width: 100%; height: 100%; object-fit: contain; }
+  @keyframes egg-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -4px; }
+  }
+  /* horizontal ticker tape */
+  .zine-ticker {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
     clip-path: var(--pixel-corner);
     background: var(--card-bg, #fff);
     border: 1px solid var(--border-color);
     box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-  }
-  .zine-ticker::before,
-  .zine-ticker::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2.5rem;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .zine-ticker::before {
-    left: 0;
-    background: linear-gradient(to right, var(--card-bg, #fff), transparent);
-  }
-  .zine-ticker::after {
-    right: 0;
-    background: linear-gradient(to left, var(--card-bg, #fff), transparent);
   }
   .zine-ticker-track {
     display: flex;
@@ -979,6 +1620,9 @@ permalink: /quacks/
   }
   .zine-ticker:hover .zine-ticker-track {
     animation-play-state: paused;
+  }
+  @media (max-width: 600px) {
+    .zine-ticker-row .egg-duck { width: 38px; height: 38px; padding: 5px; }
   }
   .zine-ticker-item {
     flex: 0 0 auto;
@@ -1541,6 +2185,21 @@ permalink: /quacks/
   }
 
   /* ---- TLDR popup ---- */
+  .pixel-strike {
+    position: relative;
+    color: var(--gold, #ffc93c);
+  }
+  .pixel-strike::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 50%;
+    height: 2px;
+    background-image: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 5px);
+    image-rendering: pixelated;
+    transform: translateY(-1px);
+  }
   .tldr-btn {
     display: inline-block;
     padding: 0.4rem 1.2rem;
@@ -1688,8 +2347,12 @@ permalink: /quacks/
 <div class="qq-splash" id="qq-splash">
   <div class="qq-rays" aria-hidden="true"></div>
   <div class="qq-glow" aria-hidden="true"></div>
-  <p class="qq-splash-kicker">Presenting</p>
+  <p class="qq-splash-kicker">
+    <s class="qq-splash-struck">Presenting</s>
+    <span class="qq-splash-thanks">Thanks for coming</span>
+  </p>
   <h1 class="qq-splash-title">Quarks <span>Quacks</span></h1>
+  <p class="qq-splash-sub">Creative Carnival</p>
   <div class="qq-splash-poster">
     <picture>
       <source media="(max-width: 700px)"
@@ -1745,7 +2408,10 @@ permalink: /quacks/
   </div>
 
   <div class="quack-hero">
-    <p class="quack-kicker">Presenting</p>
+    <p class="quack-kicker">
+      <s>Presenting</s>
+      <span>Thanks for coming</span>
+    </p>
     <div class="quack-banner">
       <picture>
         <source media="(max-width: 700px)"
@@ -1754,6 +2420,197 @@ permalink: /quacks/
              alt="Quarks Quacks — 11 October" fetchpriority="high" decoding="async" />
       </picture>
     </div>
+    <p class="quack-subtitle" id="creative-carnival" style="cursor:pointer" title="Click me!">Creative Carnival</p>
+  </div>
+
+  <!-- results: Quarks Quacks 2026 is over -->
+  <div class="qq-results-row">
+    <div class="qq-results-grand" id="qq-grand">
+      <div class="qq-confetti" id="qq-confetti"></div>
+      <span class="qq-results-gift" aria-hidden="true">&#127873;</span>
+      <p class="qq-results-kicker">Grand Prize Winner</p>
+      <h3 class="qq-results-winner">Idk</h3>
+      <p class="qq-results-members">Nihal &middot; Bhargav &middot; Avyay</p>
+      <p class="qq-results-prize">Takes home <strong>1 screen projector</strong>, <strong>2 bean bags</strong> and <strong>1 board game</strong></p>
+    </div>
+    <script>
+    (function(){
+      var box = document.getElementById('qq-confetti');
+      if (!box || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var colors = ['#ffd700','#ff7a59','#e040fb','#00e5ff','#49b265','#ff4081','#ffc93c'];
+      var grand = document.getElementById('qq-grand');
+      var h = grand.offsetHeight + 20;
+      for (var i = 0; i < 50; i++) {
+        var p = document.createElement('div');
+        p.className = 'qq-confetti-piece';
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.setProperty('--fall', h + 'px');
+        p.style.setProperty('--drift', (-30 + Math.random() * 60) + 'px');
+        p.style.setProperty('--spin', (360 + Math.random() * 720) + 'deg');
+        p.style.animationDuration = (3 + Math.random() * 4) + 's';
+        p.style.animationDelay = (-Math.random() * 7) + 's';
+        p.style.width = (5 + Math.random() * 6) + 'px';
+        p.style.height = (8 + Math.random() * 8) + 'px';
+        p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        box.appendChild(p);
+      }
+    })();
+    </script>
+    <div class="qq-results-bridge">
+      <span class="qq-results-bridge-label">These Quack-pots</span>
+      <svg viewBox="0 0 96 34" fill="none" aria-hidden="true"
+           stroke="currentColor" stroke-width="2.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 26 C 16 4, 60 2, 84 20" />
+        <path d="M86 21 L 75 20" />
+        <path d="M86 21 L 82 11" />
+      </svg>
+    </div>
+    <div class="qq-results-winner-photo-wrap">
+      <img class="qq-results-winner-photo"
+           src="{{ site.baseurl }}/assets/images/quarks-quacks/quackers.jpeg"
+           alt="Team Idk — Grand Prize Winners" loading="lazy" />
+    </div>
+  </div>
+
+  <div class="qq-results" style="max-width:760px;margin:0 auto">
+    <div class="qq-results-board">
+      <h3>Main Event</h3>
+      <div class="qq-lb-row is-gold">
+        <span class="qq-lb-icon">&#128081;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Idk</div><div class="qq-lb-members">Nihal, Bhargav, Avyay</div></div>
+        <span class="qq-lb-score">5100</span>
+      </div>
+      <div class="qq-lb-row is-silver">
+        <span class="qq-lb-icon">&#129352;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Team Rocket</div><div class="qq-lb-members">Smayan Gada, Ankit Kumar, Kabir Thakwani</div></div>
+        <span class="qq-lb-score">4400</span>
+      </div>
+      <div class="qq-lb-row is-bronze">
+        <span class="qq-lb-icon">&#129353;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Quacka doodle doo</div><div class="qq-lb-members">Arpit, Mradul</div></div>
+        <span class="qq-lb-score">3750</span>
+      </div>
+      <div class="qq-lb-row">
+        <span class="qq-lb-icon">4</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Epsilon-Delta</div><div class="qq-lb-members">Vadika Dubey, Kamakhya, Manali</div></div>
+        <span class="qq-lb-score">3500</span>
+      </div>
+      <div class="qq-lb-row">
+        <span class="qq-lb-icon">5</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">chikni chameli</div><div class="qq-lb-members">Sankalp, Aditey</div></div>
+        <span class="qq-lb-score">3105</span>
+      </div>
+      <details class="qq-all">
+        <summary>See all scores</summary>
+        <div class="qq-all-scroll"><table class="qq-results-table">
+          <thead><tr><th>#</th><th>Team</th><th>Members</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td><td class="qq-score">5100</td></tr>
+            <tr><td class="qq-rank">2</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td><td class="qq-score">4400</td></tr>
+            <tr><td class="qq-rank">3</td><td class="qq-team">Quacka doodle doo</td><td>Arpit, Mradul</td><td class="qq-score">3750</td></tr>
+            <tr><td class="qq-rank">4</td><td class="qq-team">Epsilon-Delta</td><td>Vadika Dubey, Kamakhya, Manali</td><td class="qq-score">3500</td></tr>
+            <tr><td class="qq-rank">5</td><td class="qq-team">chikni chameli</td><td>Sankalp, Aditey</td><td class="qq-score">3105</td></tr>
+            <tr><td class="qq-rank">6</td><td class="qq-team">Gesundheit</td><td>Mannat Chaudhary, Shrikrishna Hegde, Sriram R</td><td class="qq-score">3000</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">lolqwe</td><td>advait, nandakishore, advik</td><td class="qq-score">2900</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">Team ASR</td><td>Samyukta, Reha Shah, Akshat</td><td class="qq-score">2900</td></tr>
+            <tr><td class="qq-rank">9</td><td class="qq-team">uwu</td><td>Aradhya</td><td class="qq-score">2750</td></tr>
+            <tr><td class="qq-rank">10</td><td class="qq-team">VRS</td><td>Vishrut R Srinivas</td><td class="qq-score">2500</td></tr>
+            <tr><td class="qq-rank">11</td><td class="qq-team">Like we know</td><td>Aniket Rao, Pranav Aditya Bharadwaj</td><td class="qq-score">1900</td></tr>
+            <tr><td class="qq-rank">12</td><td class="qq-team">VAN</td><td>Vibha, Nandana, Amirdha Varshni</td><td class="qq-score">1750</td></tr>
+            <tr><td class="qq-rank">13</td><td class="qq-team">Plancks</td><td>Sreeja, Anjana, Anshika</td><td class="qq-score">1500</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">Alok</td><td>Alok</td><td class="qq-score">1400</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">LateArrivals</td><td>Darshan, Chinmay, Yugant</td><td class="qq-score">1400</td></tr>
+            <tr><td class="qq-rank">16</td><td class="qq-team">Plath</td><td>Shreya</td><td class="qq-score">1350</td></tr>
+            <tr><td class="qq-rank">17</td><td class="qq-team">Higgs</td><td>Rajpreet, Prashant, Arijit</td><td class="qq-score">1300</td></tr>
+            <tr><td class="qq-rank">18</td><td class="qq-team">NOSFERATU</td><td>Divya, Akshita, Avani</td><td class="qq-score">1200</td></tr>
+            <tr><td class="qq-rank">19</td><td class="qq-team">187 gang</td><td>Manikya, Nikhil, Prabhnoor</td><td class="qq-score">1050</td></tr>
+            <tr><td class="qq-rank">20</td><td class="qq-team">Beak breakers</td><td>Manjaree, Subraja, Jyoshna</td><td class="qq-score">650</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Anj</td><td>Anjali</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Baba Ramdev</td><td>Krishna</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">Pila-pila pikachu</td><td>Naman</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">21</td><td class="qq-team">white1rose</td><td>Idris, Ayan, Garv</td><td class="qq-score">400</td></tr>
+            <tr><td class="qq-rank">25</td><td class="qq-team">Rocket</td><td>Nipun Gupta, Harshit gharewal, S janardan</td><td class="qq-score">300</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Advait</td><td>Advait</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">AMA</td><td>Anushka, Abhishek, Manasa</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Champion</td><td>Nijasree</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Code</td><td>Nijasree</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">HeHe</td><td>Arnav Shastri</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Hello</td><td>Mihir</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">INSPIRE</td><td>Marasu Thanvi, V.S.S.Lakshmu</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Kasukabe defence group</td><td>K Chetan Varun, Arun, Viral</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Lioooor</td><td>A, B, C</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Mesons</td><td>Srishti, Tanvi</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">notsofunny</td><td>S K pritika, Ashwanth</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Paradise</td><td>Akshitha, Mopal Sathwika, Suma Geethika</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Paradise</td><td>Akshitha, Mopal Sathwika, Suma Geethika</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">paradisee</td><td>Mopal Sathwika, Suma Geethika, Akshitha Dornala</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Peace</td><td>Reethikka S S</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">quack</td><td>Advait, nandakishore, advik</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Quack Attack</td><td>Manauv Vyas, Sarath Chandar M, Dyutith N</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Quacking Werewolves</td><td>Ahaan Duggal, Harshvardhan Singh, Krishn Anantharam</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Seven</td><td>SasiRekha</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Solo Bolo</td><td>Baijayanta Nag</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Soya sticks</td><td>Laksman, Jai</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">soya stix</td><td>Jai, lsks, Vishva</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Spidey</td><td>Raghav J Mallen</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Starbucks Payasam</td><td>Abhishek</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Team Name</td><td>Sameer, Nikunj, Ruchit</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">Team Rocket Original</td><td>Nipun Gupta, Harshit, Janardan</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">26</td><td class="qq-team">the.grims</td><td>Agrim Gupta</td><td class="qq-score">100</td></tr>
+            <tr><td class="qq-rank">53</td><td class="qq-team">Kumara</td><td>Kumaraswamy</td><td class="qq-score">0</td></tr>
+            <tr><td class="qq-rank">54</td><td class="qq-team">Gugugaga</td><td>Parth</td><td class="qq-score">-5200</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+    </div>
+
+    <div class="qq-results-board">
+      <h3>Treasure Hunt <small>Duck Duck Loot</small></h3>
+      <div class="qq-lb-row is-gold">
+        <span class="qq-lb-icon">&#128081;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Idk</div><div class="qq-lb-members">Nihal, Bhargav, Avyay</div></div>
+      </div>
+      <div class="qq-lb-row is-silver">
+        <span class="qq-lb-icon">&#129352;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">LateArrivals</div><div class="qq-lb-members">Darshan, Chinmay, Yugant</div></div>
+      </div>
+      <div class="qq-lb-row is-bronze">
+        <span class="qq-lb-icon">&#129353;</span>
+        <div class="qq-lb-info"><div class="qq-lb-team">Team Rocket</div><div class="qq-lb-members">Smayan Gada, Ankit Kumar, Kabir Thakwani</div></div>
+      </div>
+      <details class="qq-all">
+        <summary>See all positions</summary>
+        <div class="qq-all-scroll"><table class="qq-results-table">
+          <thead><tr><th>#</th><th>Team</th><th>Members</th></tr></thead>
+          <tbody>
+            <tr class="qq-dq"><td class="qq-rank">&mdash;</td><td class="qq-team">chikni chameli <span class="qq-dq-tag">[RageBait]</span></td><td>Sankalp, Aditey</td></tr>
+            <tr><td class="qq-rank">1</td><td class="qq-team">Idk</td><td>Nihal, Bhargav, Avyay</td></tr>
+            <tr><td class="qq-rank">2</td><td class="qq-team">LateArrivals</td><td>Darshan, Chinmay, Yugant</td></tr>
+            <tr><td class="qq-rank">3</td><td class="qq-team">Team Rocket</td><td>Smayan Gada, Ankit Kumar, Kabir Thakwani</td></tr>
+            <tr><td class="qq-rank">4</td><td class="qq-team">soya stix</td><td>Jai, lsks, Vishva</td></tr>
+            <tr><td class="qq-rank">5</td><td class="qq-team">Quack Attack</td><td>Manauv Vyas, Sarath Chandar M, Dyutith N</td></tr>
+            <tr><td class="qq-rank">6</td><td class="qq-team">Quacking Werewolves</td><td>Ahaan Duggal, Harshvardhan Singh, Krishn Anantharam</td></tr>
+            <tr><td class="qq-rank">7</td><td class="qq-team">Kasukabe defence group</td><td>K Chetan Varun, Arun, Viral</td></tr>
+            <tr><td class="qq-rank">8</td><td class="qq-team">Rocket</td><td>Nipun Gupta, Harshit gharewal, S janardan</td></tr>
+            <tr><td class="qq-rank">9</td><td class="qq-team">Epsilon-Delta</td><td>Vadika Dubey, Kamakhya, Manali</td></tr>
+            <tr><td class="qq-rank">10</td><td class="qq-team">Higgs</td><td>Rajpreet, Prashant, Arijit</td></tr>
+            <tr><td class="qq-rank">11</td><td class="qq-team">187 gang</td><td>Manikya, Nikhil, Prabhnoor</td></tr>
+            <tr><td class="qq-rank">12</td><td class="qq-team">paradisee</td><td>Mopal Sathwika, Suma Geethika, Akshitha Dornala</td></tr>
+            <tr><td class="qq-rank">13</td><td class="qq-team">white1rose</td><td>Idris, Ayan, Garv</td></tr>
+            <tr><td class="qq-rank">14</td><td class="qq-team">Plancks</td><td>Sreeja, Anjana, Anshika</td></tr>
+            <tr><td class="qq-rank">15</td><td class="qq-team">HeHe</td><td>Arnav Shastri</td></tr>
+            <tr><td class="qq-rank">16</td><td class="qq-team">INSPIRE</td><td>Marasu Thanvi, V.S.S.Lakshmu</td></tr>
+            <tr><td class="qq-rank">17</td><td class="qq-team">Like we know</td><td>Aniket Rao, Pranav Aditya Bharadwaj</td></tr>
+            <tr><td class="qq-rank">18</td><td class="qq-team">lolqwe</td><td>advait, nandakishore, advik</td></tr>
+            <tr><td class="qq-rank">19</td><td class="qq-team">Seven</td><td>SasiRekha</td></tr>
+            <tr><td class="qq-rank">20</td><td class="qq-team">VAN</td><td>Vibha, Nandana, Amirdha Varshni</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+    </div>
+    <p class="qq-results-thanks">Thank you to every team that quacked with us on 11 October!</p>
   </div>
 
   <div class="pond-invite">
@@ -1809,7 +2666,7 @@ permalink: /quacks/
     <p>We have got a day full of events for you, don&rsquo;t miss out!</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem">
       <span class="zine-count-badge" id="zine-count-badge"></span>
-      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<s>a</s>ick Schedule</button>
+      <button class="tldr-btn" id="tldr-open" type="button">Click to see Qu<span class="pixel-strike">a</span>ick Schedule</button>
     </div>
     <a class="zine-whatsapp" href="https://whatsapp.com/channel/0029Vb8qihZ1HsppFp6b2m3b"
        target="_blank" rel="noopener noreferrer">
@@ -1821,6 +2678,15 @@ permalink: /quacks/
       <a class="zine-reg" href="https://forms.gle/bH2CXSpw5BbpdkbAA"
          target="_blank" rel="noopener noreferrer">Register for Workshops</a>
     </div>
+    <div class="zine-handbook-section">
+      <h3 class="zine-handbook-heading">Rules &amp; Handbook</h3>
+      <a class="zine-handbook-card" href="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.pdf"
+         target="_blank" rel="noopener noreferrer">
+        <img class="zine-handbook-thumb" src="{{ site.baseurl }}/assets/images/quarks-quacks/handbook.webp"
+             alt="Quarks Quacks Handbook" loading="lazy" />
+        <span class="zine-handbook-dl"><i class="fas fa-download"></i> Download PDF</span>
+      </a>
+    </div>
     <svg class="zine-connector" viewBox="0 0 80 40" fill="none"
          stroke="currentColor" stroke-width="2" stroke-linecap="round"
          stroke-linejoin="round" aria-hidden="true">
@@ -1828,6 +2694,7 @@ permalink: /quacks/
       <path d="M40 38 L 35 30" />
       <path d="M40 38 L 45 30" />
     </svg>
+
   </div>
 
   <div class="zine-filter-bar" id="zine-filters"></div>
@@ -1835,8 +2702,140 @@ permalink: /quacks/
   <p class="quack-status" id="quack-status">Loading the line-up&hellip;</p>
   <div class="zine-wall-wrap">
     <div class="zine-wall" id="zine-wall"></div>
-    <div class="zine-ticker" id="zine-ticker" style="display:none" aria-hidden="true"></div>
+    <div class="zine-ticker-row" id="zine-ticker" style="display:none" aria-hidden="true">
+      <button type="button" class="egg-duck" id="egg-duck" title="Click the duck!">
+        <img src="{{ site.baseurl }}/assets/images/quarks-quacks/duck.svg" alt="" aria-hidden="true" />
+      </button>
+      <div class="zine-ticker">
+        <div class="zine-ticker-track" id="zine-ticker-track"></div>
+      </div>
+    </div>
   </div>
+  <!-- gallery carousel -->
+  <div class="qq-gallery">
+    <div class="section-title section-hero-header">
+      <h2><span>Moments from the Day</span></h2>
+    </div>
+    <div class="carousel-container fade-up-element">
+      <button class="carousel-arrow left" onclick="window.scroll_qq_moments_carousel('left')" aria-label="Scroll Left">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="latest-carousel" id="qq-moments-carousel">
+        <div class="carousel-track" id="qq-moments-track">
+          <div class="carousel-item-custom">
+            <figure class="qq-gallery-item">
+              <img src="{{ site.baseurl }}/assets/images/quarks-quacks/board_games.jpeg"
+                   alt="Board games at Quarks Quacks" loading="lazy" />
+              <figcaption class="qq-gallery-cap">
+                <span class="qq-gallery-team">Board Games</span>
+                <span class="qq-gallery-place">The game room</span>
+              </figcaption>
+            </figure>
+          </div>
+          <div class="carousel-item-custom">
+            <figure class="qq-gallery-item">
+              <img src="{{ site.baseurl }}/assets/images/quarks-quacks/whatsapp-event.jpeg"
+                   alt="A session in progress at Quarks Quacks" loading="lazy" />
+              <figcaption class="qq-gallery-cap">
+                <span class="qq-gallery-team">In Session</span>
+                <span class="qq-gallery-place">Quacks Day</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-arrow right" onclick="window.scroll_qq_moments_carousel('right')" aria-label="Scroll Right">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  {% comment %}
+    Treasure hunt check-ins, read straight off the folder so dropping a new
+    photo in is the whole job. Filenames carry the caption:
+    Team_clueNN_Location-In-Dashes_HHMMSS[_admin-pass].jpg
+  {% endcomment %}
+  {% assign th_pics = site.static_files
+       | where_exp: "f", "f.path contains '/assets/images/quarks-quacks/th/'" %}
+  {% if th_pics.size > 0 %}
+  <div class="qq-gallery">
+    <div class="section-title section-hero-header">
+      <h2><span>Duck Duck Loot</span></h2>
+    </div>
+    <p class="qq-gallery-sub">Teams checking in at the clues</p>
+    <div class="carousel-container fade-up-element">
+      <button class="carousel-arrow left" onclick="window.scroll_qq_th_carousel('left')" aria-label="Scroll Left">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="latest-carousel" id="qq-th-carousel">
+        <div class="carousel-track" id="qq-th-track">
+          {% for f in th_pics %}
+            {% assign parts = f.basename | split: "_" %}
+            {% assign team = parts[0] | replace: "-", " " %}
+            {% assign place = parts[2] | replace: "-", " " %}
+            {% assign clue = parts[1] | replace: "clue", "" %}
+          <div class="carousel-item-custom">
+            <figure class="qq-gallery-item">
+              <img src="{{ site.baseurl }}{{ f.path }}"
+                   alt="{{ team }} at {{ place }}" loading="lazy" />
+              <figcaption class="qq-gallery-cap">
+                <span class="qq-gallery-team">{{ team }}</span>
+                <span class="qq-gallery-place">Clue {{ clue }} &middot; {{ place }}</span>
+              </figcaption>
+            </figure>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <button class="carousel-arrow right" onclick="window.scroll_qq_th_carousel('right')" aria-label="Scroll Right">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+  <script src="{{ site.baseurl }}/assets/js/carousel-logic.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof initCarousel !== "function") return;
+
+      // initCarousel copies the track so the auto-scroll can wrap without a
+      // visible jump: at the halfway mark the next copy is pixel-identical to
+      // the start. Its own loop respects that boundary, but the arrow buttons
+      // scroll straight past it, which walks you into the copy and makes the
+      // gallery look like it holds every photo twice. Fold manual paging back
+      // into the first half — the two halves are identical, so the correction
+      // cannot be seen.
+      function loopArrows(containerId) {
+        var carousel = document.getElementById(containerId);
+        var name = "scroll_" + containerId.replace(/-/g, "_");
+        var step = window[name];
+        if (!carousel || typeof step !== "function") return;
+        var track = carousel.querySelector(".carousel-track");
+
+        window[name] = function (direction) {
+          var half = track ? track.scrollWidth / 2 : 0;
+          // Rewind before paging left off the front, so there is somewhere to go.
+          if (half && direction === "left" && carousel.scrollLeft < 1) {
+            carousel.scrollLeft = half;
+          }
+          step(direction);
+          if (!half) return;
+          // scrollBy is smooth, so normalise once it has come to rest.
+          setTimeout(function () {
+            if (carousel.scrollLeft >= half) carousel.scrollLeft -= half;
+          }, 500);
+        };
+      }
+
+      ["qq-moments-carousel", "qq-th-carousel"].forEach(function (id) {
+        initCarousel(id, id.replace("-carousel", "-track"), {
+          autoScroll: true, scrollSpeed: 1, scrollAmount: 320,
+        });
+        loopArrows(id);
+      });
+    });
+  </script>
   <div class="quack-outro">
     <p class="quack-outro-kicker">See you by the water</p>
     <h2 class="quack-outro-title">Waddle you doing<br />on the 11th?</h2>
@@ -1868,10 +2867,72 @@ permalink: /quacks/
     <button type="button" class="tldr-close" id="tldr-close" aria-label="Close">
       <i class="fas fa-times"></i>
     </button>
-    <h3 class="tldr-heading">Qu<s>a</s>ick Schedule</h3>
+    <h3 class="tldr-heading">Qu<span class="pixel-strike">a</span>ick Schedule</h3>
     <ul class="tldr-list" id="tldr-list"></ul>
   </div>
 </div>
 
+
 <script src="{{ site.baseurl }}/assets/js/sheets-data.js"></script>
 <script src="{{ site.baseurl }}/assets/js/quacks.js"></script>
+<script>
+// Block real keypresses from triggering easter eggs — only synthetic dispatches should.
+// The library listens on document 'keyup'; this capture-phase listener eats real keys.
+(function () {
+  var GAME_KEYS = {
+    65:1, 66:1, 67:1, 68:1, 69:1, 70:1, 71:1, 72:1, 73:1, 74:1, 75:1, 76:1, 77:1,
+    78:1, 79:1, 80:1, 81:1, 82:1, 83:1, 84:1, 85:1, 86:1, 87:1, 88:1, 89:1, 90:1
+  };
+  document.addEventListener('keyup', function (e) {
+    if (e.isTrusted && GAME_KEYS[e.which]) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/gh/WeiChiaChang/Easter-egg@master/easter-eggs-collection.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('creative-carnival');
+  if (!btn) return;
+
+  var eggs = [
+    'unicorn', 'balloon', 'nyancat', 'pikachu', 'pikarun', 'catrun',
+    'mario', 'sonic', 'spongebob', 'homer', 'kirby', 'psyduck',
+    'dragon', 'penguin', 'rabbit', 'fox', 'doggy', 'bird',
+    'robot', 'ufo', 'ghost', 'swim', 'fly',
+    'cool', 'bravo', 'winner', 'airguitar', 'earth',
+    'hippo', 'piggy', 'snorlax', 'koggy', 'salamander',
+    'walk', 'onmyway', 'board', 'sensei', 'pokeball',
+    'haha', 'travel', 'bat', 'hiphop', 'pie', 'lol', 'ohhh',
+    'gun', 'money', 'tank', 'hangover', 'haters',
+    'britney', 'handsome', 'joker', 'wink', 'hi',
+    'kumamon', 'thankyou', 'no', 'piqiu', 'dog'
+  ];
+
+  function typeWord(word) {
+    word.toUpperCase().split('').forEach(function (ch, i) {
+      setTimeout(function () {
+        var code = ch.charCodeAt(0);
+        var ev = document.createEvent('Event');
+        ev.initEvent('keyup', true, true);
+        ev.which = code;
+        ev.keyCode = code;
+        document.dispatchEvent(ev);
+      }, i * 30);
+    });
+  }
+
+  function trigger() {
+    var pick = eggs[Math.floor(Math.random() * eggs.length)];
+    typeWord(pick);
+  }
+
+  btn.addEventListener('click', trigger);
+
+  var duckBtn = document.getElementById('egg-duck');
+  if (duckBtn) duckBtn.addEventListener('click', trigger);
+
+  document.addEventListener('pond-discover', trigger);
+})();
+</script>

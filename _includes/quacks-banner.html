@@ -54,6 +54,26 @@
   .qq-title span {
     color: #f2c14e;
   }
+  .qq-subtitle {
+    display: block;
+    margin: 0.3rem 0 1rem;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(1rem, 2.8vw, 1.4rem);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: transparent;
+    background: linear-gradient(90deg, #f2c14e, #e4efe6, #f2c14e);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: qq-shimmer 4s linear infinite;
+  }
+  @keyframes qq-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
   .qq-text {
     margin: 0 0 1.3rem;
     max-width: 520px;
@@ -128,6 +148,7 @@
   <div>
     <p class="qq-kicker">Quarks presents &middot; 11 october</p>
     <h2 class="qq-title">Quarks <span>Quacks</span></h2>
+    <p class="qq-subtitle">Creative Carnival</p>
     <p class="qq-text">
       Six clubs, 10 AM to 11 PM, one full day. Workshops, a game room,
       competitions, treasure hunts, debates, photobooths and whatnot &mdash; the

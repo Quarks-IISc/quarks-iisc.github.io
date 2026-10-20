@@ -388,7 +388,8 @@
              '<span class="zine-ticker-dot">♦</span>';
     }).join('');
 
-    ticker.innerHTML = '<div class="zine-ticker-track">' + items + items + '</div>';
+    var track = document.getElementById('zine-ticker-track');
+    if (track) track.innerHTML = items + items;
     ticker.style.display = '';
 
     ticker.addEventListener('click', function (ev) {
@@ -945,7 +946,7 @@
       if (totalEl) totalEl.textContent = events.length;
       if (!duckX && !duckY) {
         duckX = worldW / 2;
-        duckY = Math.min(140, worldH / 2);
+        duckY = worldH / 2;
       }
       draw(true);
     }
@@ -1172,8 +1173,8 @@
         found[pad.event.name] = true;
         foundCount++;
         if (countEl) countEl.textContent = foundCount;
-        // the whole pond: the name comes up out of the water
         if (prize && foundCount >= events.length) prize.classList.add('is-up');
+        document.dispatchEvent(new Event('pond-discover'));
       }
       cardName.textContent = pad.event.name;
       cardMeta.textContent = metaLine(pad.event) || 'Details to come';
