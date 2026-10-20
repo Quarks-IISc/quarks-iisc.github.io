@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fireworks: A Spark Spread Across The Globe
+title: Fireworks - A Spark Spread Across The Globe
 author: Avyay Chandrashekhar
 categories: [stories]
 image: "/assets/images/Stories/fireworks.jpg"

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A Well-Oiled Machine: How IISc Students Put Together a Professional Concert
+title: A Well-Oiled Machine - How IISc Students Put Together a Professional Concert
 author: Ryan Ray
 categories: [stories]
 image: "/assets/images/Stories/well-oiled-train.jpg"
