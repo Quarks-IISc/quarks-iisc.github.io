@@ -18,7 +18,7 @@ It was to be acapella (i.e., without instruments), and hence came the smug phase
 
 Then came the frustration. I was even given the easier harmonies since it was my first year in the club, and it was still maddening. Turns out, belting a song in the shower versus holding your own in a group with nothing but your voice for support is an entirely different ballgame. My line, which sounded so obvious on the recording, kept sliding towards the main melody like a magnet to a fridge, no matter how many fingers I shoved into my ear to hear only myself. “Stay on your note,” Rajameenakshi, the Song In-Charge, would say, with the patience of a saint on the verge of retirement. I would nod solemnly and stay on my note for exactly four bars. The smugness had quietly packed its bags and left.
 
-![image1]({{ site.baseurl }}/assets/images/Stories/student-suicide/image1.jpg)
+![image1]({{ site.baseurl }}/assets/images/Stories/well-oiled/image1.jpg)
 ***Caption: The typical practice session at SAC’s music room. Pic. credits: Hrishee Ray***
 
 For weeks, the song was a locked box, and everyone else seemed to have the key. (Perhaps an exaggeration, but that’s how it felt listening to practice recordings)
@@ -31,15 +31,15 @@ The idea for the event was simple: complete beginners, a row of keyboards, and t
 
 Then we showed them the notes, the chords printed out on A4 sheets, and I watched my own journey play out in fast-forward. First the smugness (“oh, this looks easy”), then the frustration (“wait, which key?\!”), and finally, a face lighting up as their own two hands produced a song they’d heard a hundred times. The trick had been revealed, and the best part was finding out that with practice, they could do it too.
 
-![image2]({{ site.baseurl }}/assets/images/Stories/student-suicide/image2.jpg)
+![image2]({{ site.baseurl }}/assets/images/Stories/well-oiled/image2.jpg)
 ***Caption: A scene from the Quarks Quacks music workshop. Pic. credits: Vivek Menon***
 
 And that’s what I kept coming back to. The best part of making music isn’t being the magician. It’s the moment you go from watching the trick to being in on it.
 
 Which, I suppose, is exactly what the showcase is: weeks of locked boxes, finally opened, and handed to whoever walks through the door. So if you want a glimpse of all the folly, the struggle, and the triumph (not without a few hiccups at soundcheck of course), come to Rhythmica’s Diwali Showcase this November 15th. Leave the headphones at the door. We’ll be doing this magic live.
 
-![image3]({{ site.baseurl }}/assets/images/Stories/student-suicide/image3.jpg)
+![image3]({{ site.baseurl }}/assets/images/Stories/well-oiled/image3.jpg)
 ***Caption: A shot of the stage and the audience at the last Founder’s Day Showcase 2026\. Pic. credits: Geeth Sameer.***
 
-![image4]({{ site.baseurl }}/assets/images/Stories/student-suicide/image4.jpg)
+![image4]({{ site.baseurl }}/assets/images/Stories/well-oiled/image4.jpg)
 ***Caption: A group photo. Pic. credits: Geeth Sameer***  
