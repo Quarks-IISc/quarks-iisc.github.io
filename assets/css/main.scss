@@ -871,6 +871,26 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .carousel-arrow.left { left: 0; }
 .carousel-arrow.right { right: 0; }
 
+@media (max-width: 576px) {
+    .carousel-container {
+        padding: 0 12px;
+    }
+    .carousel-container .carousel-arrow {
+        display: none;
+    }
+    .carousel-item-custom {
+        flex: 0 0 260px;
+        width: 260px;
+        max-width: 260px;
+    }
+    .carousel-item-custom .card {
+        height: 440px !important;
+    }
+    .carousel-item-custom .maxthumb {
+        height: 240px;
+    }
+}
+
 /* --- Crossword Page & Widget Styles --- */
 .check-answer-btn {
     background: var(--text-color);
@@ -1270,6 +1290,12 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
         flex-wrap: wrap;
         justify-content: center;
         row-gap: 10px;
+        padding: 0 16px;
+    }
+    .reels-heading-title {
+        white-space: normal;
+        text-align: center;
+        font-size: 1.6rem;
     }
     .reels-heading-rule { display: none; }
     .reels-heading-insta { flex-basis: 100%; justify-content: center; }

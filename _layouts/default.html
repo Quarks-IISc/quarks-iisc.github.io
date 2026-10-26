@@ -160,6 +160,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarMediumish">
+          <button class="nav-scroll-arrow nav-scroll-left" aria-label="Scroll left">&lsaquo;</button>
           <!-- Begin Menu -->
 
           <ul class="navbar-nav ml-auto">
@@ -255,7 +256,7 @@
               </div>
             </li>
 
-            <li class="nav-item d-flex align-items-center ml-4">
+            <li class="nav-item d-flex align-items-center ml-lg-4">
               {% include search-lunr.html %}
               <a
                 class="nav-link dark-mode-toggle ml-1"
@@ -269,9 +270,11 @@
           </ul>
 
           <!-- End Menu -->
+          <button class="nav-scroll-arrow nav-scroll-right" aria-label="Scroll right">&rsaquo;</button>
         </div>
       </div>
     </nav>
+
     <!-- End Navigation
 ================================================== -->
 
@@ -481,6 +484,29 @@
           }
         }
       });
+    </script>
+    <!-- Nav scroll arrows + mobile submenu toggle -->
+    <script>
+    (function(){
+      var nav = document.querySelector('.navbar-collapse .navbar-nav');
+      var left = document.querySelector('.nav-scroll-left');
+      var right = document.querySelector('.nav-scroll-right');
+      if(nav&&left&&right){
+        left.addEventListener('click',function(){ nav.scrollBy({left:-120,behavior:'smooth'}); });
+        right.addEventListener('click',function(){ nav.scrollBy({left:120,behavior:'smooth'}); });
+      }
+      var sub = document.querySelector('.dropdown-submenu .dropdown-toggle-side');
+      if(sub){
+        sub.addEventListener('click',function(e){
+          if(window.innerWidth<992){
+            e.preventDefault();
+            e.stopPropagation();
+            var menu = this.nextElementSibling;
+            if(menu) menu.classList.toggle('show');
+          }
+        });
+      }
+    })();
     </script>
   </body>
 </html>

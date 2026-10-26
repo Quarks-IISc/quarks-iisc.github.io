@@ -12,8 +12,8 @@ title: Home
 <style>
     /* Interactive ASCII masthead filling the whole banner */
     /* taller banner = bigger ripple area (logo is width-based, so it stays put) */
-    .hero-header { overflow: hidden; min-height: 68vh; }
-    @media (max-width: 768px) { .hero-header { min-height: 56vh; } }
+    .hero-header { overflow: hidden; min-height: 68vh; max-width: 100vw; }
+    @media (max-width: 768px) { .hero-header { min-height: 38vh; } }
     .hero-header .hero-ascii {
         position: absolute;
         inset: 0;
@@ -30,6 +30,7 @@ title: Home
     .hero-ascii canvas {
         display: block;
         max-width: 100%;
+        max-height: 100%;
         user-select: none;
         -webkit-user-select: none;
         filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
@@ -78,7 +79,7 @@ title: Home
     <p class="powerful-intro-text mx-auto">
         Quarks is the undergraduate magazine of IISc, offering a glimpse into our vibrant student community.
     </p>
-    <div class="mt-4 d-flex justify-content-center align-items-center flex-wrap" style="gap: 7rem;">
+    <div class="mt-4 d-flex justify-content-center align-items-center flex-wrap" style="gap: 1.5rem 4rem;">
         <a href="{{ site.baseurl }}/previous-editions" class="magazine-link">Check out latest newsletter <span class="arrow">&xrarr;</span></a>
         <a href="#site-footer" class="magazine-link">Subscribe to our newsletter <span class="arrow">&xrarr;</span></a>
     </div>

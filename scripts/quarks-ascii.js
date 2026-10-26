@@ -31,12 +31,12 @@
     // target glyph size (px per cell) for the banner-fill layout
     cellDesktop: 8,
     cellTablet: 6,
-    cellMobile: 5.4,
+    cellMobile: 8,
     mobileBreak: 560,    // below this width: solid glyphs (no living-text noise)
     // logo width as a fraction of banner width (wider on small screens)
     logoFracDesktop: 0.72,
     logoFracTablet: 0.8,
-    logoFracMobile: 0.88,
+    logoFracMobile: 0.92,
     maxLogoPx: 1200,     // cap the logo width on ultrawide screens
     padX: 3,
     padYRatio: 0.4,
@@ -84,8 +84,7 @@
   };
 
   var BG_RAMP = [' ', '·', ':', '~', '*', '+'];
-  // clean block-shade ramp for phones: solid, anti-aliased letterforms
-  var MOBILE_RAMP = ' ░▒▓█'.split('');
+  var MOBILE_RAMP = ' ·:=*#@'.split('');
   var FX_DEFAULTS = { ripple: false, livingText: true, tilt: true, burst: true, reveal: true };
   var FX_ITEMS = [
     { key: 'ripple', label: 'Ripple' },
@@ -140,6 +139,7 @@
     var css =
       '.quarks-ascii-wrap canvas{will-change:transform;}' +
       '.qa-controls{position:absolute;top:8px;right:8px;z-index:6;}' +
+      '@media(max-width:991px){.qa-controls{top:52px;}}' +
       '.qa-kebab{width:30px;height:30px;border-radius:50%;border:1px solid var(--card-border,rgba(140,140,140,.35));' +
       'background:var(--card-bg,rgba(25,25,25,.55));color:var(--text-color,#999);font-size:18px;line-height:1;' +
       'cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.45;' +
@@ -546,7 +546,7 @@
         var base = F[i];
         var wave = Z[i] - base * CONFIG.extrude;
         var isLetter = base > CONFIG.inkThreshold;
-        if (!isLetter && Math.abs(wave) < CONFIG.bgGhost) continue;
+        if (!isLetter && (this.small || Math.abs(wave) < CONFIG.bgGhost)) continue;
 
         var rk = isLetter ? this.revealK(x, y) : 1;
         if (rk <= 0.001) continue;
@@ -561,8 +561,8 @@
           var inten = clamp(shade * (0.72 + 0.4 * base) + wave * 0.22, 0, 1);
           var custom = this.glyphForCell(i);
           if (this.small) {
-            // phones: clean, bold block-shade letterforms (reveal fades via alpha)
-            glyph = MOBILE_RAMP[clamp(Math.round(lerp(1, 4, inten)), 1, 4)];
+            var mN = MOBILE_RAMP.length - 1;
+            glyph = MOBILE_RAMP[clamp(Math.round(lerp(1, mN, inten)), 1, mN)];
           } else if (rk < 0.7) {
             // ink-bloom: dots condense into the glyph
             glyph = custom || lram[Math.round(lerp(2, lN, inten))];

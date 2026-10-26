@@ -1019,18 +1019,120 @@ iframe {
     margin-left: 12px; /* Squeezed from 15px */
 }
 
+/* ── Mobile: restyle navbar as scrollable tab strip ── */
 .navbar-toggler {
-    display: none; /* Hides the toggle button (hamburger menu) */
+    display: none;
 }
-
 @media (max-width: 991px) {
-    .navbar-nav {
-        display: block;
+    .mediumnavigation .container {
+        flex-wrap: wrap;
+        padding: 0 8px;
     }
-
+    .navbar-collapse {
+        display: flex !important;
+        flex-basis: 100%;
+        order: 3;
+        align-items: center;
+        overflow: visible;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        padding: 0;
+    }
+    .dark-mode .navbar-collapse {
+        border-top-color: rgba(255,255,255,0.08);
+    }
+    .navbar-nav {
+        flex: 1 1 auto;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 6px 4px;
+        margin: 0 !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .navbar-nav::-webkit-scrollbar { display: none; }
     .navbar-nav .nav-item {
+        flex: 0 0 auto;
         margin-left: 0;
     }
+    .navbar-nav .nav-link {
+        white-space: nowrap;
+        padding: 4px 12px !important;
+        font-size: 0.82rem;
+        border-radius: 18px;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    .dark-mode .navbar-nav .nav-link {
+        border-color: rgba(255,255,255,0.12);
+    }
+    .navbar-nav .nav-item.active .nav-link {
+        background: var(--heading-color, #111);
+        color: #fff !important;
+        border-color: var(--heading-color, #111);
+    }
+    .dark-mode .navbar-nav .nav-item.active .nav-link {
+        background: var(--heading-color, #eee);
+        color: #111 !important;
+        border-color: var(--heading-color, #eee);
+    }
+    /* Search + dark mode pill at end of strip */
+    .navbar-nav .nav-item:last-child {
+        margin-left: auto;
+        padding-left: 4px;
+    }
+    .navbar-nav .nav-item:last-child .lunrsearch-wrapper .form-control {
+        width: 100px;
+        height: 28px;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 14px;
+    }
+    /* Dropdown menus: open above the overflow clip */
+    .navbar-nav .dropdown-menu {
+        position: fixed;
+        top: auto;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-height: 60vh;
+        overflow-y: auto;
+        z-index: 1040;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+    /* Clubs submenu inline on mobile */
+    .dropdown-submenu .dropdown-menu {
+        position: static !important;
+        box-shadow: none;
+        border: none;
+        padding-left: 12px;
+        max-height: none;
+    }
+    /* Scroll arrows flanking the nav strip */
+    .nav-scroll-arrow {
+        flex: 0 0 auto;
+        width: 22px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        color: var(--text-muted, #888);
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 0;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+    .nav-scroll-arrow:hover { opacity: 1; }
+}
+/* Hide arrows on desktop */
+@media (min-width: 992px) {
+    .nav-scroll-arrow { display: none; }
 }
 
 .mainheading h1 {
@@ -1567,22 +1669,12 @@ iframe {
     top: 0;
 }
 
-@media (max-width: 992px) {
+
+@media (min-width: 992px) {
     .navbar-collapse {
-        background-color: rgba(255, 255, 255, 0.9); 
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex !important;
+        justify-content: flex-end;
     }
-}
-
-.navbar-toggler {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.navbar-collapse {
-    display: flex;
-    justify-content: flex-end;
 }
 
 .collapse {
