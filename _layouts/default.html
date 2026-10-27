@@ -496,14 +496,20 @@
         right.addEventListener('click',function(){ nav.scrollBy({left:120,behavior:'smooth'}); });
       }
       var sub = document.querySelector('.dropdown-submenu .dropdown-toggle-side');
-      if(sub){
+      var subMenu = sub ? sub.nextElementSibling : null;
+      if(sub&&subMenu){
         sub.addEventListener('click',function(e){
           if(window.innerWidth<992){
             e.preventDefault();
             e.stopPropagation();
-            var menu = this.nextElementSibling;
-            if(menu) menu.classList.toggle('show');
+            subMenu.classList.toggle('show');
           }
+        });
+      }
+      // When the parent UG@IISc dropdown closes, also close the Clubs submenu
+      if(subMenu && window.jQuery){
+        $('.navbar-nav .dropdown').on('hide.bs.dropdown',function(){
+          subMenu.classList.remove('show');
         });
       }
     })();

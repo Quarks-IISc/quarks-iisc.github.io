@@ -1024,28 +1024,34 @@ iframe {
     display: none;
 }
 @media (max-width: 991px) {
+    .mediumnavigation.navbar {
+        padding: 4px 0;
+    }
     .mediumnavigation .container {
-        flex-wrap: wrap;
-        padding: 0 8px;
+        flex-wrap: nowrap;
+        padding: 0 4px;
+    }
+    /* Logo smaller on mobile */
+    .navbar-brand {
+        padding: 0;
+        margin-right: 4px !important;
+    }
+    .navbar-brand img {
+        height: 26px;
     }
     .navbar-collapse {
         display: flex !important;
-        flex-basis: 100%;
-        order: 3;
+        flex: 1 1 0;
         align-items: center;
         overflow: visible;
-        border-top: 1px solid rgba(0,0,0,0.06);
         padding: 0;
-    }
-    .dark-mode .navbar-collapse {
-        border-top-color: rgba(255,255,255,0.08);
     }
     .navbar-nav {
         flex: 1 1 auto;
         flex-direction: row !important;
         flex-wrap: nowrap;
-        gap: 4px;
-        padding: 6px 4px;
+        gap: 3px;
+        padding: 0 2px;
         margin: 0 !important;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -1059,9 +1065,9 @@ iframe {
     }
     .navbar-nav .nav-link {
         white-space: nowrap;
-        padding: 4px 12px !important;
-        font-size: 0.82rem;
-        border-radius: 18px;
+        padding: 3px 8px !important;
+        font-size: 0.72rem;
+        border-radius: 14px;
         border: 1px solid rgba(0,0,0,0.1);
     }
     .dark-mode .navbar-nav .nav-link {
@@ -1077,24 +1083,20 @@ iframe {
         color: #111 !important;
         border-color: var(--heading-color, #eee);
     }
-    /* Search + dark mode pill at end of strip */
-    .navbar-nav .nav-item:last-child {
-        margin-left: auto;
-        padding-left: 4px;
-    }
+    /* Search + dark mode compact */
     .navbar-nav .nav-item:last-child .lunrsearch-wrapper .form-control {
-        width: 100px;
-        height: 28px;
-        font-size: 0.75rem;
-        padding: 2px 8px;
-        border-radius: 14px;
+        width: 80px;
+        height: 24px;
+        font-size: 0.7rem;
+        padding: 1px 6px;
+        border-radius: 12px;
     }
-    /* Dropdown menus: open above the overflow clip */
-    .navbar-nav .dropdown-menu {
+    /* Dropdown: fixed below the navbar */
+    .navbar-nav .dropdown-menu.show {
         position: fixed;
-        top: auto;
-        left: 8px;
-        right: 8px;
+        top: 52px;
+        left: 4px;
+        right: 4px;
         width: auto;
         max-height: 60vh;
         overflow-y: auto;
@@ -1109,19 +1111,24 @@ iframe {
         border: none;
         padding-left: 12px;
         max-height: none;
+        display: none;
+    }
+    .dropdown-submenu .dropdown-menu.show {
+        display: block;
+        position: static !important;
     }
     /* Scroll arrows flanking the nav strip */
     .nav-scroll-arrow {
         flex: 0 0 auto;
-        width: 22px;
-        height: 32px;
+        width: 16px;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: none;
         border: none;
         color: var(--text-muted, #888);
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         font-weight: 700;
         cursor: pointer;
         padding: 0;
