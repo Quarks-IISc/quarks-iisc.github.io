@@ -24,19 +24,23 @@
 
   /* ----------------------------- tunables --------------------------------- */
   var CONFIG = {
+    // Phone and desktop run the same renderer. Grid resolution is the only
+    // thing that varies, and it interpolates across this width range rather
+    // than stepping, so rotating a phone doesn't pop the glyph size.
+    fluidFrom: 360,
+    fluidTo: 1440,
     // grid density for the standalone (non-fill) layout
-    colsDesktop: 150,
-    colsTablet: 110,
-    colsMobile: 74,
+    colsMin: 74,
+    colsMax: 150,
     // target glyph size (px per cell) for the banner-fill layout
-    cellDesktop: 8,
-    cellTablet: 6,
-    cellMobile: 5,
-    mobileBreak: 560,    // below this width: solid glyphs (no living-text noise)
+    cellMin: 4,
+    cellMax: 8,
     // logo width as a fraction of banner width (wider on small screens)
-    logoFracDesktop: 0.72,
-    logoFracTablet: 0.8,
-    logoFracMobile: 0.88,
+    logoFracMin: 0.88,
+    logoFracMax: 0.72,
+    // the one breakpoint left: below it the frame rate is capped to save
+    // battery. It changes nothing about how the banner looks.
+    mobileBreak: 560,
     maxLogoPx: 1200,     // cap the logo width on ultrawide screens
     padX: 3,
     padYRatio: 0.4,
@@ -84,7 +88,6 @@
   };
 
   var BG_RAMP = [' ', '·', ':', '~', '*', '+'];
-  var MOBILE_RAMP = ' .:-+#@'.split('');
   var FX_DEFAULTS = { ripple: false, livingText: true, tilt: true, burst: true, reveal: true };
   var FX_ITEMS = [
     { key: 'ripple', label: 'Ripple' },
@@ -225,22 +228,21 @@
     img.src = this.src;
   };
 
+  // 0 at fluidFrom, 1 at fluidTo — the single knob every size below rides on
+  function widthT(w) {
+    return clamp((w - CONFIG.fluidFrom) / (CONFIG.fluidTo - CONFIG.fluidFrom), 0, 1);
+  }
+
   QuarksAscii.prototype.targetCols = function (w) {
-    if (w < 560) return CONFIG.colsMobile;
-    if (w < 920) return CONFIG.colsTablet;
-    return CONFIG.colsDesktop;
+    return Math.round(lerp(CONFIG.colsMin, CONFIG.colsMax, widthT(w)));
   };
 
   QuarksAscii.prototype.cellTarget = function (w) {
-    if (w < 560) return CONFIG.cellMobile;
-    if (w < 920) return CONFIG.cellTablet;
-    return CONFIG.cellDesktop;
+    return lerp(CONFIG.cellMin, CONFIG.cellMax, widthT(w));
   };
 
   QuarksAscii.prototype.logoFraction = function (w) {
-    if (w < 560) return CONFIG.logoFracMobile;
-    if (w < 920) return CONFIG.logoFracTablet;
-    return CONFIG.logoFracDesktop;
+    return lerp(CONFIG.logoFracMin, CONFIG.logoFracMax, widthT(w));
   };
 
   QuarksAscii.prototype.build = function () {
@@ -249,7 +251,7 @@
     var height = rect.height || width * 0.42;
     if (!this.fill) width = Math.min(width, CONFIG.maxWidth);
     if (width < 80) { width = 800; height = 340; }
-    // on phones the woven title text is illegible — render solid letterforms
+    // phone mode: coarser cells and a halved frame rate; same rendering path
     this.small = width < CONFIG.mobileBreak;
 
     var imgW = this.imgOK ? this.image.naturalWidth : 712;
@@ -441,7 +443,7 @@
   };
 
   QuarksAscii.prototype.glyphForCell = function (i) {
-    if (this.fx.livingText && !this.small && this.stream.length && this.streamIdx[i] >= 0) {
+    if (this.fx.livingText && this.stream.length && this.streamIdx[i] >= 0) {
       return this.stream.charAt((this.streamIdx[i] + this.scrollOff) % this.stream.length);
     }
     return null; // caller falls back to the brightness ramp
@@ -547,7 +549,7 @@
         var base = F[i];
         var wave = Z[i] - base * CONFIG.extrude;
         var isLetter = base > CONFIG.inkThreshold;
-        if (!isLetter && (this.small || Math.abs(wave) < CONFIG.bgGhost)) continue;
+        if (!isLetter && Math.abs(wave) < CONFIG.bgGhost) continue;
 
         var rk = isLetter ? this.revealK(x, y) : 1;
         if (rk <= 0.001) continue;
@@ -561,10 +563,7 @@
         if (isLetter) {
           var inten = clamp(shade * (0.72 + 0.4 * base) + wave * 0.22, 0, 1);
           var custom = this.glyphForCell(i);
-          if (this.small) {
-            var mN = MOBILE_RAMP.length - 1;
-            glyph = MOBILE_RAMP[clamp(Math.round(lerp(1, mN, inten)), 1, mN)];
-          } else if (rk < 0.7) {
+          if (rk < 0.7) {
             // ink-bloom: dots condense into the glyph
             glyph = custom || lram[Math.round(lerp(2, lN, inten))];
             if (rk < 0.4) glyph = lram[1 + Math.round(rk / 0.4 * 2)]; // · : -

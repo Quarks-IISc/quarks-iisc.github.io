@@ -11,9 +11,17 @@ title: Home
 {% if page.url == "/" %}
 <style>
     /* Interactive ASCII masthead filling the whole banner */
-    /* taller banner = bigger ripple area (logo is width-based, so it stays put) */
-    .hero-header { overflow: hidden; min-height: 68vh; max-width: 100vw; }
-    @media (max-width: 768px) { .hero-header { min-height: 38vh; } }
+    /* taller banner = bigger ripple area (logo is width-based, so it stays put).
+       Fluid rather than a 38vh/68vh pair: the old step changed height at 768px
+       while quarks-ascii.js changes render mode at 560px, so 560-768px got the
+       dense collage crammed into the short banner. One fluid curve means the
+       only breakpoint left in this component is the script's mode switch.
+       The max also caps the banner on tall tablets, where 68vh ran to ~800px. */
+    .hero-header {
+        overflow: hidden;
+        min-height: clamp(260px, 46vh, 620px);
+        max-width: 100vw;
+    }
     .hero-header .hero-ascii {
         position: absolute;
         inset: 0;
