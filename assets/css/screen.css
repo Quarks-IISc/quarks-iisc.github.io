@@ -49,11 +49,16 @@ pre {
     min-height: 300px;
 }
 
+/* The bar is position:fixed, so content has to be pushed down by its height.
+   That height is measured at runtime into --navbar-height (see the script
+   after </nav>); the literal here is only the pre-script fallback. */
 .site-content {
     min-height: 60vh;
     padding-top: 1.5rem;
-    margin-top: 57px;
-    transition: all 0.4s;
+    margin-top: var(--navbar-height, 57px);
+    /* Colours only. "all" would animate the margin-top above every time the
+       measured bar height changes, sliding the page on each rotation. */
+    transition: background-color 0.4s, color 0.4s;
 }
 
 section {
@@ -278,7 +283,12 @@ span.post-read-more a:hover {
     border-radius: 30px;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.09);
-    min-width: 180px;
+}
+
+@media (min-width: 992px) {
+    .mediumnavigation .form-control {
+        min-width: 180px;
+    }
 }
 
 .mediumnavigation .form-inline {
@@ -1025,33 +1035,45 @@ iframe {
 }
 @media (max-width: 991px) {
     .mediumnavigation.navbar {
-        padding: 4px 0;
+        padding: 0.25rem 0;
     }
     .mediumnavigation .container {
         flex-wrap: nowrap;
-        padding: 0 4px;
+        align-items: center;
+        padding: 0 0.5rem;
     }
-    /* Logo smaller on mobile */
+    /* The logo is the one thing that must never be squeezed: it is the only
+       flex item here with no min-width of its own, so without flex-shrink:0
+       the scrolling strip next to it collapses it to nothing. */
     .navbar-brand {
+        flex: 0 0 auto;
         padding: 0;
-        margin-right: 4px !important;
+        margin-right: 0.5rem !important;
     }
     .navbar-brand img {
-        height: 26px;
+        max-height: 1.75rem;
+        height: auto;
+        width: auto;
     }
     .navbar-collapse {
         display: flex !important;
         flex: 1 1 0;
+        min-width: 0;
         align-items: center;
         overflow: visible;
         padding: 0;
     }
+    /* min-width:0 is what makes overflow-x actually scroll. Flex items default
+       to min-width:auto, which pins this strip at its full content width and
+       pushes the logo out of the bar instead of scrolling. */
     .navbar-nav {
-        flex: 1 1 auto;
+        flex: 1 1 0;
+        min-width: 0;
         flex-direction: row !important;
         flex-wrap: nowrap;
-        gap: 3px;
-        padding: 0 2px;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0 0.125rem;
         margin: 0 !important;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -1061,44 +1083,60 @@ iframe {
     .navbar-nav::-webkit-scrollbar { display: none; }
     .navbar-nav .nav-item {
         flex: 0 0 auto;
+        display: flex;
+        align-items: center;
         margin-left: 0;
     }
+    /* em padding so the pill scales with its own text instead of a px guess */
     .navbar-nav .nav-link {
         white-space: nowrap;
-        padding: 3px 8px !important;
+        padding: 0.3em 0.7em !important;
         font-size: 0.72rem;
-        border-radius: 14px;
+        line-height: 1.35;
+        border-radius: 999px;
         border: 1px solid rgba(0,0,0,0.1);
     }
     .dark-mode .navbar-nav .nav-link {
         border-color: rgba(255,255,255,0.12);
     }
+    /* main.css sets background-color:transparent !important on every .nav-link
+       to kill focus styling, so the fill needs the same weight here or the
+       active pill renders as white text on no background. */
     .navbar-nav .nav-item.active .nav-link {
-        background: var(--heading-color, #111);
+        background-color: var(--heading-color, #111) !important;
         color: #fff !important;
         border-color: var(--heading-color, #111);
     }
     .dark-mode .navbar-nav .nav-item.active .nav-link {
-        background: var(--heading-color, #eee);
+        background-color: var(--heading-color, #eee) !important;
         color: #111 !important;
         border-color: var(--heading-color, #eee);
     }
     /* Search + dark mode compact */
     .navbar-nav .nav-item:last-child .lunrsearch-wrapper .form-control {
-        width: 80px;
-        height: 24px;
+        width: 5rem;
+        min-width: 0;
+        height: auto;
         font-size: 0.7rem;
-        padding: 1px 6px;
-        border-radius: 12px;
+        padding: 0.3em 0.6em;
+        line-height: 1.35;
+        border-radius: 999px;
     }
-    /* Dropdown: fixed below the navbar */
-    .navbar-nav .dropdown-menu.show {
+    /* Bootstrap sets navbar dropdowns to position:static below lg, assuming the
+       bar collapses into a hamburger sheet where an inline panel is right. This
+       bar stays a horizontal strip and main.css keeps the panel display:block
+       for its fade, so a static panel sits *inside* the strip and adds its full
+       height to the bar while invisible. Taking it out of flow in both states
+       is what keeps the bar one row tall.
+       Child selector, so the inline Clubs submenu below is not caught by it.
+       Beats Bootstrap's .navbar-expand-lg .navbar-nav .dropdown-menu. */
+    .navbar-expand-lg .navbar-nav > .nav-item > .dropdown-menu {
         position: fixed;
-        top: 52px;
-        left: 4px;
-        right: 4px;
+        top: var(--navbar-height, 52px);
+        left: 0.25rem;
+        right: 0.25rem;
         width: auto;
-        max-height: 60vh;
+        max-height: calc(100vh - var(--navbar-height, 52px) - 1rem);
         overflow-y: auto;
         z-index: 1040;
         border-radius: 12px;

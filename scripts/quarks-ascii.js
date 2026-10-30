@@ -31,12 +31,12 @@
     // target glyph size (px per cell) for the banner-fill layout
     cellDesktop: 8,
     cellTablet: 6,
-    cellMobile: 8,
+    cellMobile: 5,
     mobileBreak: 560,    // below this width: solid glyphs (no living-text noise)
     // logo width as a fraction of banner width (wider on small screens)
     logoFracDesktop: 0.72,
     logoFracTablet: 0.8,
-    logoFracMobile: 0.92,
+    logoFracMobile: 0.88,
     maxLogoPx: 1200,     // cap the logo width on ultrawide screens
     padX: 3,
     padYRatio: 0.4,
@@ -84,7 +84,7 @@
   };
 
   var BG_RAMP = [' ', '·', ':', '~', '*', '+'];
-  var MOBILE_RAMP = ' ·:=*#@'.split('');
+  var MOBILE_RAMP = ' .:-+#@'.split('');
   var FX_DEFAULTS = { ripple: false, livingText: true, tilt: true, burst: true, reveal: true };
   var FX_ITEMS = [
     { key: 'ripple', label: 'Ripple' },
@@ -362,7 +362,8 @@
 
   QuarksAscii.prototype.configCtx = function () {
     this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-    this.ctx.font = '700 ' + this.fontSize.toFixed(2) +
+    var weight = this.small ? '400' : '700';
+    this.ctx.font = weight + ' ' + this.fontSize.toFixed(2) +
       'px "JetBrains Mono","Fira Code","SFMono-Regular",Menlo,Consolas,monospace';
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'center';

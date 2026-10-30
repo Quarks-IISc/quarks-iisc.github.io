@@ -278,6 +278,30 @@
     <!-- End Navigation
 ================================================== -->
 
+    <!-- The bar is position:fixed, so its height has to be handed to the layout
+         as a number. Measuring it beats hardcoding one: it changes with the
+         breakpoint, the webfont swap, the logo loading and text zoom. Runs here
+         rather than on DOMContentLoaded so .site-content gets the value in its
+         first layout and never visibly jumps. -->
+    <script>
+      (function () {
+        var nav = document.querySelector("nav.mediumnavigation");
+        if (!nav) return;
+        function sync() {
+          // offsetHeight ignores the nav-up scroll offset, so this stays
+          // correct while the bar is parked off-screen mid-scroll.
+          document.documentElement.style.setProperty(
+            "--navbar-height",
+            nav.offsetHeight + "px"
+          );
+        }
+        sync();
+        window.addEventListener("resize", sync);
+        window.addEventListener("load", sync);
+        if (window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+      })();
+    </script>
+
     <div class="site-content">
       <div class="container">
         <!-- Content -->

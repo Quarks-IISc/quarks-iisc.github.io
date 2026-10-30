@@ -435,21 +435,17 @@
     .dropdown-item.dropdown-toggle-side::after {
         content: none;
     }
-    /* the whole panel can get tall with the clubs expanded */
+    /* The bar is a horizontal scrolling strip, not a drop-down panel. The
+       padding that used to sit here was the bar's extra height, and the
+       max-height/overflow-y belonged to the old hamburger sheet. The offset
+       below the bar is measured into --navbar-height instead of hardcoded. */
     .navbar-collapse {
-        max-height: calc(100vh - 76px);
-        overflow-y: auto;
-        padding: 0.5rem 1rem 1rem;
+        padding: 0;
     }
-    .navbar-toggler {
-        /* a thumb-sized target, not a 30px line */
-        min-width: 44px;
-        min-height: 44px;
-    }
-    /* screen.css assumes a 57px bar; a 44px tap target makes it taller than
-       that, and the first line of every page ends up under it. */
-    .site-content {
-        margin-top: 68px;
+    /* screen.css pins the open panel with position:fixed under the bar, so the
+       desktop gap would otherwise reappear as a gap inside that offset. */
+    .navbar-nav .dropdown-menu {
+        margin-top: 0 !important;
     }
 }
 
@@ -529,6 +525,20 @@
 }
 .dark-mode-toggle i {
     font-size: 0.9rem;
+}
+
+/* Must sit after the rule above, not with the other mobile overrides: same
+   specificity, so source order decides. A fixed 35px here was the tallest
+   thing in the scrolling strip and set the bar's height on its own. */
+@media (max-width: 991px) {
+    .dark-mode-toggle {
+        width: 1.75em;
+        height: 1.75em;
+        margin-left: 0.25rem;
+    }
+    .dark-mode-toggle i {
+        font-size: 0.7rem;
+    }
 }
 
 .magazine-link {
