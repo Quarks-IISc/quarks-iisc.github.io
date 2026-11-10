@@ -30,9 +30,6 @@ sitemap: false
   </noscript>
 
   <div id="hub-content" hidden>
-    <p id="hub-preview-banner" class="hub-preview-banner" hidden>
-      Preview mode: local only, nobody is actually signed in.
-    </p>
 
     <div class="hub-account">
       <div>
@@ -160,10 +157,6 @@ sitemap: false
   const HOME = {{ "/" | prepend: site.baseurl | jsonify }};
   const AUTH_MODULE = {{ "/assets/js/student-hub-auth.js" | prepend: site.baseurl | jsonify }};
 
-  // Local preview: http://localhost:4000/student-hub/?preview shows the
-  // signed-in page with a fake user, for working on the layout. Only
-  // `jekyll serve` builds include it: the GitHub Actions build sets
-  // JEKYLL_ENV=production, which turns this into `false`.
   const PREVIEW = {% if jekyll.environment == "production" %}false{% else %}
     ["localhost", "127.0.0.1"].includes(window.location.hostname) &&
     new URLSearchParams(window.location.search).has("preview"){% endif %};
@@ -173,7 +166,7 @@ sitemap: false
 
   if (PREVIEW) {
     student = { name: "Preview Student", email: "preview@iisc.ac.in" };
-    document.getElementById("hub-preview-banner").hidden = false;
+
   } else {
     try {
       auth = await import(AUTH_MODULE);
