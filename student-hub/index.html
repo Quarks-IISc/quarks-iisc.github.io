@@ -1,0 +1,219 @@
+---
+layout: default
+title: Student Hub
+permalink: /student-hub/
+sitemap: false
+---
+
+<!--
+  Student Hub: only for signed-in IISc accounts.
+
+  How the gate works (script at the bottom of this file):
+    1. MSAL      -> get the visitor's Microsoft ID token
+    2. Supabase  -> verify-session Edge Function checks that token
+    3. Anything else -> redirect to the home page
+
+  This HTML is static, so every visitor can download it. Keep only layout and
+  placeholders here; load private data (mess menus, club updates, ...) from
+  Supabase after the gate passes, sending the same Microsoft token.
+-->
+
+<section class="student-hub">
+  <div class="section-title section-hero-header">
+    <h2><span>Student Hub</span></h2>
+  </div>
+
+  <p id="hub-status" class="hub-status" role="status">Checking your IISc sign-in&hellip;</p>
+
+  <noscript>
+    <p class="hub-status">The Student Hub needs JavaScript to check your IISc sign-in.</p>
+  </noscript>
+
+  <div id="hub-content" hidden>
+    <p id="hub-preview-banner" class="hub-preview-banner" hidden>
+      Preview mode: local only, nobody is actually signed in.
+    </p>
+
+    <div class="hub-account">
+      <div>
+        <span class="hub-account-label">Signed in as</span>
+        <strong id="hub-user-name"></strong>
+        <span id="hub-user-email" class="hub-account-email"></span>
+      </div>
+      <button id="hub-signout" type="button" class="btn btn-outline-dark btn-sm">
+        <i class="fas fa-sign-out-alt mr-1" aria-hidden="true"></i>Sign out
+      </button>
+    </div>
+
+    <div class="hub-grid">
+      <article class="hub-card">
+        <i class="fas fa-utensils hub-card-icon" aria-hidden="true"></i>
+        <h3>Mess Menu</h3>
+        <p>This week's menus and mess updates.</p>
+        <span class="hub-soon">Coming soon</span>
+      </article>
+
+      <article class="hub-card">
+        <i class="fas fa-users hub-card-icon" aria-hidden="true"></i>
+        <h3>Club Updates</h3>
+        <p>Announcements and events from IISc clubs.</p>
+        <span class="hub-soon">Coming soon</span>
+      </article>
+
+      <article class="hub-card">
+        <i class="fas fa-book hub-card-icon" aria-hidden="true"></i>
+        <h3>Course Reviews</h3>
+        <p>Student reviews of courses and professors.</p>
+        <a href="{{ site.baseurl }}/course-review/" class="hub-link">Open &rarr;</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hub-status {
+    text-align: center;
+    color: #6c757d;
+    margin: 3rem 0;
+  }
+  .hub-preview-banner {
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    background: #fff3cd;
+    color: #856404;
+    font-size: 0.9rem;
+  }
+  .hub-account {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  .hub-account-label,
+  .hub-account-email {
+    color: #6c757d;
+  }
+  .hub-account-label {
+    margin-right: 0.25rem;
+  }
+  .hub-account-email {
+    margin-left: 0.25rem;
+    word-break: break-all;
+  }
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .hub-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  .hub-card h3 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.3rem;
+    margin: 0.75rem 0 0.5rem;
+  }
+  .hub-card p {
+    color: #6c757d;
+    margin-bottom: 1rem;
+  }
+  .hub-card-icon {
+    font-size: 1.5rem;
+    color: #d9230f;
+  }
+  .hub-soon {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #adb5bd;
+  }
+  .hub-link {
+    font-weight: 600;
+    color: #d9230f;
+  }
+  .dark-mode .hub-preview-banner {
+    background: #3a3000;
+    color: #ffd966 !important;
+  }
+  .dark-mode .hub-account,
+  .dark-mode .hub-card {
+    border-color: #333;
+    background: #1e1e1e;
+  }
+  .dark-mode #hub-signout {
+    color: #e0e0e0;
+    border-color: #777;
+  }
+</style>
+
+<script type="module">
+  const HOME = {{ "/" | prepend: site.baseurl | jsonify }};
+  const AUTH_MODULE = {{ "/assets/js/student-hub-auth.js" | prepend: site.baseurl | jsonify }};
+
+  // Local preview: http://localhost:4000/student-hub/?preview shows the
+  // signed-in page with a fake user, for working on the layout. Only
+  // `jekyll serve` builds include it: the GitHub Actions build sets
+  // JEKYLL_ENV=production, which turns this into `false`.
+  const PREVIEW = {% if jekyll.environment == "production" %}false{% else %}
+    ["localhost", "127.0.0.1"].includes(window.location.hostname) &&
+    new URLSearchParams(window.location.search).has("preview"){% endif %};
+
+  let auth = null;
+  let student = null; // set only when Supabase confirms an IISc account
+
+  if (PREVIEW) {
+    student = { name: "Preview Student", email: "preview@iisc.ac.in" };
+    document.getElementById("hub-preview-banner").hidden = false;
+  } else {
+    try {
+      auth = await import(AUTH_MODULE);
+
+      // STEP 1 (MSAL): the Microsoft ID token, or null if not signed in.
+      const idToken = await auth.getMicrosoftIdToken();
+
+      if (idToken) {
+        // STEP 2 (Supabase): the server verifies the token.
+        const result = await auth.verifyWithSupabase(idToken);
+        if (result.authorized) {
+          student = result.user;
+        } else {
+          // Signed in, but not an IISc account. Forget that session so the
+          // next navbar click offers the account picker again.
+          await auth.signOut();
+        }
+      }
+    } catch (err) {
+      // MSAL failed to load, or Supabase was unreachable: fail closed.
+      console.error("Student Hub: sign-in check failed", err);
+    }
+  }
+
+  if (!student) {
+    // STEP 3 (REDIRECT): not signed in, not IISc, or the check failed.
+    // replace() keeps this page out of history, so Back doesn't bounce here.
+    window.location.replace(HOME);
+  } else {
+    document.getElementById("hub-user-name").textContent = student.name || student.email;
+    document.getElementById("hub-user-email").textContent = student.name ? `(${student.email})` : "";
+    document.getElementById("hub-status").hidden = true;
+    document.getElementById("hub-content").hidden = false;
+
+    document.getElementById("hub-signout").addEventListener("click", async () => {
+      try {
+        if (auth) await auth.signOut();
+      } finally {
+        window.location.replace(HOME);
+      }
+    });
+  }
+</script>

@@ -184,6 +184,17 @@
               <a class="nav-link" href="{{ site.baseurl }}/news/">News</a>
             </li>
 
+            <li class="nav-item {% if page.url contains 'student-hub' %}active{% endif %}">
+              <a
+                class="nav-link"
+                id="student-hub-link"
+                href="{{ site.baseurl }}/student-hub/"
+                data-auth-module="{{ site.baseurl }}/assets/js/student-hub-auth.js"
+                title="Student Hub (IISc sign-in required)"
+                ><i class="fas fa-lock fa-xs mr-1" aria-hidden="true"></i>Student Hub</a
+              >
+            </li>
+
             <li class="nav-item dropdown {% if page.url contains 'aboutus' or page.url contains 'previous-editions' or page.url contains 'course-review' %}active{% endif %}">
               <a
                 class="nav-link dropdown-toggle"
@@ -494,6 +505,16 @@
 
     <!-- Scroll Fade Up Logic -->
     <script src="{{ site.baseurl }}/assets/js/fade-up-observer.js"></script>
+
+    <!-- Student Hub sign-in settings (from _config.yml), read by student-hub-auth.js -->
+    <script>
+      window.STUDENT_HUB = {
+        msalClientId: {{ site.student_hub.msal_client_id | jsonify }},
+        verifySessionUrl: {{ site.student_hub.verify_session_url | jsonify }},
+        hubPath: {{ "/student-hub/" | prepend: site.baseurl | jsonify }}
+      };
+    </script>
+    <script src="{{ site.baseurl }}/assets/js/student-hub-nav.js"></script>
     <!-- Handle Featured Image Fade -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {

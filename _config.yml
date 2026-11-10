@@ -75,4 +75,17 @@ adsense-data-ad-slot: "1363087678"
 # Lazy Images ("enabled" or "disabled")
 lazyimages: "disabled"
 
-exclude: [changelog.md, LICENSE.txt, README.md, Gemfile, Gemfile.lock]
+# Student Hub sign-in: Microsoft login (MSAL) checked by a Supabase Edge
+# Function. Code: assets/js/student-hub-auth.js, supabase/functions/verify-session.
+student_hub:
+  # Microsoft Entra app shared with course-review. Logins only work once that
+  # app lists these as "Single-page application" redirect URIs
+  # (otherwise Microsoft shows error AADSTS50011):
+  #   https://quarks.ug.iisc.ac.in/student-hub/
+  #   http://localhost:4000/student-hub/
+  msal_client_id: "2b7a3439-67d5-4cb0-b8d1-a244078196e3"
+  # Supabase project shared with course-review. verify-session must be
+  # deployed there (see supabase/functions/verify-session/README.md).
+  verify_session_url: "https://hojlmrrgkqvchqyggmbb.supabase.co/functions/v1/verify-session"
+
+exclude: [changelog.md, LICENSE.txt, README.md, Gemfile, Gemfile.lock, supabase]
