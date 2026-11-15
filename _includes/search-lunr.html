@@ -32,9 +32,20 @@
     position: absolute;
     top: 100%;
     right: 0;
-    z-index: 1020;
+    z-index: 1040;
     width: 600px;
     max-width: 90vw;
+}
+@media (max-width: 991px) {
+    #lunrsearchresults {
+        position: fixed;
+        top: auto;
+        right: 5vw;
+        left: 5vw;
+        width: auto;
+        max-width: none;
+        margin-top: 8px;
+    }
 }
 
 /* search box above everything */

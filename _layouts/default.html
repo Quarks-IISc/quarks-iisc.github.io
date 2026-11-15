@@ -160,6 +160,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarMediumish">
+          <button class="nav-scroll-arrow nav-scroll-left" aria-label="Scroll left">&lsaquo;</button>
           <!-- Begin Menu -->
 
           <ul class="navbar-nav ml-auto">
@@ -255,7 +256,7 @@
               </div>
             </li>
 
-            <li class="nav-item d-flex align-items-center ml-4">
+            <li class="nav-item d-flex align-items-center ml-lg-4">
               {% include search-lunr.html %}
               <a
                 class="nav-link dark-mode-toggle ml-1"
@@ -269,11 +270,37 @@
           </ul>
 
           <!-- End Menu -->
+          <button class="nav-scroll-arrow nav-scroll-right" aria-label="Scroll right">&rsaquo;</button>
         </div>
       </div>
     </nav>
+
     <!-- End Navigation
 ================================================== -->
+
+    <!-- The bar is position:fixed, so its height has to be handed to the layout
+         as a number. Measuring it beats hardcoding one: it changes with the
+         breakpoint, the webfont swap, the logo loading and text zoom. Runs here
+         rather than on DOMContentLoaded so .site-content gets the value in its
+         first layout and never visibly jumps. -->
+    <script>
+      (function () {
+        var nav = document.querySelector("nav.mediumnavigation");
+        if (!nav) return;
+        function sync() {
+          // offsetHeight ignores the nav-up scroll offset, so this stays
+          // correct while the bar is parked off-screen mid-scroll.
+          document.documentElement.style.setProperty(
+            "--navbar-height",
+            nav.offsetHeight + "px"
+          );
+        }
+        sync();
+        window.addEventListener("resize", sync);
+        window.addEventListener("load", sync);
+        if (window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+      })();
+    </script>
 
     <div class="site-content">
       <div class="container">
@@ -481,6 +508,35 @@
           }
         }
       });
+    </script>
+    <!-- Nav scroll arrows + mobile submenu toggle -->
+    <script>
+    (function(){
+      var nav = document.querySelector('.navbar-collapse .navbar-nav');
+      var left = document.querySelector('.nav-scroll-left');
+      var right = document.querySelector('.nav-scroll-right');
+      if(nav&&left&&right){
+        left.addEventListener('click',function(){ nav.scrollBy({left:-120,behavior:'smooth'}); });
+        right.addEventListener('click',function(){ nav.scrollBy({left:120,behavior:'smooth'}); });
+      }
+      var sub = document.querySelector('.dropdown-submenu .dropdown-toggle-side');
+      var subMenu = sub ? sub.nextElementSibling : null;
+      if(sub&&subMenu){
+        sub.addEventListener('click',function(e){
+          if(window.innerWidth<992){
+            e.preventDefault();
+            e.stopPropagation();
+            subMenu.classList.toggle('show');
+          }
+        });
+      }
+      // When the parent UG@IISc dropdown closes, also close the Clubs submenu
+      if(subMenu && window.jQuery){
+        $('.navbar-nav .dropdown').on('hide.bs.dropdown',function(){
+          subMenu.classList.remove('show');
+        });
+      }
+    })();
     </script>
   </body>
 </html>

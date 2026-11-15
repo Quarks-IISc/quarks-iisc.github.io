@@ -64,12 +64,8 @@ permalink: /clubs/
     height: 560px;
   }
   @media (max-width: 959px) {
-    /* no road to ride down here, so no pin either */
     .aascend-runway {
-      display: none;
-    }
-    .aascend-track {
-      position: static !important;
+      display: block;
     }
   }
 
@@ -384,70 +380,24 @@ permalink: /clubs/
     }
   }
 
-  /* ---------- Mobile: stacked pipeline ---------- */
+  /* ---------- Mobile: scale the desktop animation to fit ---------- */
+  .aascend-mobile-pipe, .aascend-mobile-skater { display: none; }
   @media (max-width: 959px) {
-    .aascend-track {
-      width: 100%;
-      height: auto;
-      padding-left: 6px;
-    }
-    .aascend-snake {
-      display: none;
-    }
-    .aascend-track::before {
-      content: "";
-      position: absolute;
-      left: 50px;
-      top: 40px;
-      bottom: 40px;
-      width: 4px;
-      border-radius: 2px;
-      background: linear-gradient(
-        180deg,
-        #7c3aed,
-        #e07b39,
-        #f2b705,
-        #38bdf8,
-        #e63946,
-        #21a35a,
-        #4f46e5,
-        #06b6d4,
-        #d6457d
-      );
-      z-index: 0;
-    }
-    .aascend-node {
-      position: static !important;
-      transform: none !important;
-      left: auto !important;
-      flex-direction: row !important;
-      width: 100%;
-      margin-bottom: 32px;
-      gap: 18px;
-      z-index: 2;
-    }
+    .aascend-page { overflow-x: clip; }
     .aascend-node .aascend-badge {
-      width: 92px;
-      height: 92px;
-      font-size: 2.5rem;
+      width: 88px;
+      height: 88px;
+      font-size: 2.4rem;
     }
     .aascend-badge-logo {
-      width: 74px;
-      height: 74px;
+      width: 70px;
+      height: 70px;
     }
     .aascend-info {
-      width: auto;
-      flex: 1 1 auto;
-      align-items: flex-start !important;
-      text-align: left !important;
+      width: 200px;
     }
-    .aascend-node.left .aascend-info .aascend-name::after {
-      left: 0;
-      right: auto;
-    }
-    .aascend-node.left .aascend-info .aascend-go {
-      flex-direction: row;
-    }
+    .aascend-name { font-size: 1.5rem; }
+    .aascend-desc { font-size: 0.82rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -479,6 +429,7 @@ permalink: /clubs/
       clubs, each with its own colour and its own kind of curious.
     </p>
     <div class="aascend-hint">&darr; scroll to ride</div>
+
 
     <div class="aascend-stage">
       <div class="aascend-track">
@@ -893,7 +844,6 @@ permalink: /clubs/
     // Below 960px the snake is swapped for a plain stacked pipe, so there's no
     // path to ride. Same for anyone who asked for reduced motion.
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const small = window.matchMedia("(max-width: 959px)");
 
     const VIEW_H = 2300; // must match the SVG viewBox height
     // Where on screen he rides — 0.5 would be dead centre.
@@ -924,7 +874,7 @@ permalink: /clubs/
     const flatAt = distanceAtY(yRamp);
 
     function draw() {
-      if (small.matches || reduced.matches) {
+      if (reduced.matches) {
         skater.style.display = "none";
         return;
       }
@@ -991,5 +941,22 @@ permalink: /clubs/
       draw();
       requestAnimationFrame(loop);
     })();
+  })();
+
+  // Scale the track to fit mobile viewports — zoom preserves layout & sticky
+  (function() {
+    var track = document.querySelector('.aascend-track');
+    var stage = document.querySelector('.aascend-stage');
+    if (!track || !stage) return;
+    function resize() {
+      var w = stage.clientWidth;
+      if (w >= 960) {
+        track.style.zoom = '';
+        return;
+      }
+      track.style.zoom = w / 920;
+    }
+    resize();
+    window.addEventListener('resize', resize);
   })();
 </script>
