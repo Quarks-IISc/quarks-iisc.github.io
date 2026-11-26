@@ -13,12 +13,12 @@ all: true
 It smells of ashes; i gasp for air, <br>
 floor barren with planted seeds of hope <br>
 No sign of life, it was my home. <br>
-I touch the wall; bewildered by memories, <br> 
+I touch the wall; bewildered by memories, <br>
 It's now wailing a ghostly cry <br>
 but how can I be scared of my own voice? <br><br>
 
 I stare at hanging frames, <br>
-they are hammered scorecards, not a face. <br>  
+they are hammered scorecards, not a face. <br>
 Dying lamps, grey sky  <br>
 I look out the window; it's an apocalypse wry. <br> <br>
 
@@ -27,7 +27,7 @@ attempt to console its poisoned heart, <br>
 It's time to pace back, <br>
 head down, i walked out. <br><br>
 
-But I wish, it had looked more green and alive, <br> 
+But I wish, it had looked more green and alive, <br>
 echoing her laughter and framed smiles. <br>
 Wish it hadn't maimed her innocence <br>
 I realized, I'm a visitor to my own creation.  
