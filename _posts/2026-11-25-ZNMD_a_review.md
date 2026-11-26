@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Zindagi Na Milegi Doobara - A review
-author: Sreeja Pulipati 
+author: Nabhuraj Kachari
 categories: [stories]
-image: "/assets/images/Stories/znmd.jpeg"
+image: "/assets/images/Stories/znmd.jpg"
 excerpt: "A film that feels like a holiday, celebrates the beauty of friendship, and reminds us that every moment deserves to be lived with open arms."
 all: true
 ---
