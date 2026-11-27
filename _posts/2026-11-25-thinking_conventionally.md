@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/thinking-conventionally.jpg"
 excerpt: "The first draft, the messy, crossed-out, arrows-everywhere first draft? That one's mine."
 all: true
+featured: true
 ---
 
 *Why I still think with a pen, in an age where thinking comes pre-cooked.*

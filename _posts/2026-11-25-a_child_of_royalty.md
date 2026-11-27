@@ -8,6 +8,7 @@ categories: [poems]
 image: "/assets/images/Poems/a-child-of-royalty.jpg"
 excerpt: "A child raised in luxury, yet imprisoned by expectations, carrying a graveyard of dreams in a life where everything is provided but freedom remains out of reach."
 all: true
+featured: true
 ---
 
 *I crave my existence.* <br>

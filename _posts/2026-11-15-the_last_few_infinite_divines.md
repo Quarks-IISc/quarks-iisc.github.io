@@ -6,6 +6,7 @@ categories: [pictures]
 image: "/assets/images/Pictures/infinite_divines.jpg"
 excerpt: ""
 description: ""
+featured: true
 ---
 
 This painting honours a rare, surviving art form: the making of Maa Durga idols during Navratri in the Bundelkhandi style. One of the oldest idol-making traditions of Central India, it uses only soil to shape the idols. The style has almost vanished everywhere else, but in Jabalpur (Madhya Pradesh) it is preserved and celebrated.

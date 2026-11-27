@@ -6,5 +6,6 @@ categories: [pictures]
 image: "/assets/images/Pictures/stranger-within.jpg"
 excerpt: ""
 description: ""
+featured: true
 ---
 

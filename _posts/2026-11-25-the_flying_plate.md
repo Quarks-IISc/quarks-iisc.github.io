@@ -6,6 +6,7 @@ categories: [stories]
 image: "/assets/images/Stories/flying-plate.jpg"
 excerpt: "On curiosity, creativity and the unpredictable beginnings of discovery"
 all: true
+featured: true
 ---
 
 One afternoon at Cornell University, a student tossed a dinner plate into the air. Most  

@@ -6,5 +6,6 @@ categories: [pictures]
 image: "/assets/images/Pictures/orion-nebula.jpg"
 excerpt: ""
 description: ""
+featured: true
 ---
 

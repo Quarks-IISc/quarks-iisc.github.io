@@ -7,6 +7,7 @@ image: "/assets/images/Stories/second-thought.jpg"
 desc: "INSPIRED BY TRUE EVENTS"
 excerpt: "Sometimes, all it takes is a second thought to see things differently. And sometimes, that little change in thinking is all we need to give someone the freedom to become who they truly want to be."
 all: true
+featured: true
 ---
 
 **Date:** 24072020  

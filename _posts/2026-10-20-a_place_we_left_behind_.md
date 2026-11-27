@@ -6,7 +6,6 @@ categories: [stories]
 image: "/assets/images/Pictures/old_amenities_centre.jpg"
 excerpt: "One day, even the last person who remembers this place may forget the colour of its doors, the sound of its corridors, or where exactly it stood. But for a while longer, it remains here—in photographs, in stories, and in the lives that once passed through it."
 all: true
-featured: true
 ---
 
 There are so many places on the campus that disappear long before they are   

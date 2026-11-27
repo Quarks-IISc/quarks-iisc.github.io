@@ -7,6 +7,7 @@ categories: [poems]
 image: "/assets/images/Poems/waiting-for-silence.jpg"
 excerpt: "I run into crowded rooms, into laughter that isn’t mine, into noise loud enough to drown the one within me."
 all: true
+featured: true
 ---
 It feels as if silence speaks to me, <br>
 like it knows my name. <br><br>
